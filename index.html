@@ -673,15 +673,19 @@
   }, {threshold: .2});
   revealTargets.forEach(el => obs.observe(el));
 
-  // Hide anchored ornaments once scrolled past hero
-  const heroSection = document.querySelector("section.hero");
-  const heroObserver = new IntersectionObserver(
+  const flyerDetalles = document.getElementById("flyerDetalles");
+
+  const detallesObserver = new IntersectionObserver(
     ([entry]) => {
-      document.body.classList.toggle("past-hero", !entry.isIntersecting);
+      document.body.classList.toggle("past-hero", entry.isIntersecting);
     },
-    { threshold: 0.05 }
+    {
+      threshold: 0.01,
+      rootMargin: "0px 0px -65% 0px"
+    }
   );
-  if (heroSection) heroObserver.observe(heroSection);
+
+if (flyerDetalles) detallesObserver.observe(flyerDetalles);
 
   // RSVP confetti
   function confirmar(){
