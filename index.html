@@ -673,19 +673,20 @@
   }, {threshold: .2});
   revealTargets.forEach(el => obs.observe(el));
 
-  const flyerDetalles = document.getElementById("flyerDetalles");
-
+  // Hide anchored ornaments when "Detalles del Carnaval" starts showing
+  const detallesSection = document.querySelector("#detalles"); // or #flyerDetalles
+  
   const detallesObserver = new IntersectionObserver(
     ([entry]) => {
+      // When Detalles enters view -> hide ornaments
       document.body.classList.toggle("past-hero", entry.isIntersecting);
     },
     {
-      threshold: 0.01,
-      rootMargin: "0px 0px -65% 0px"
+      threshold: 0.05 // triggers as soon as a little bit of Detalles is visible
     }
   );
-
-if (flyerDetalles) detallesObserver.observe(flyerDetalles);
+  
+  if (detallesSection) detallesObserver.observe(detallesSection);
 
   // RSVP confetti
   function confirmar(){
