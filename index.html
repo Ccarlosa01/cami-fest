@@ -46,12 +46,6 @@
        Peru: 51987654321
        ============================ */
     --wa-host: 17183507066;
-
-    /* ============================
-       MUSIC (NEW)
-       Put your mp3 filename here
-       ============================ */
-    --music-file: "music.mp3"; /* <- change to your exact filename */
   }
 
   /* Optional: Parade (brighter) theme */
@@ -172,6 +166,21 @@
     100%{ filter: hue-rotate(360deg) blur(2px); }
   }
 
+  /* ============================
+     NEW: STATIC BACKGROUND MODE
+     (to reduce lag)
+     ============================ */
+  body.bg-static{
+    animation: none;
+    background-size: 100% 100%;
+    background-position: 50% 50%;
+  }
+  body.bg-static::before,
+  body.bg-static::after{
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
   /* D) Reduce Motion support (iOS/Accessibility) */
   @media (prefers-reduced-motion: reduce){
     body{ animation: none; background-size: 320% 320%; }
@@ -190,14 +199,14 @@
     justify-content:center;
   }
 
-  /* Top-right theme toggle */
+  /* Top-right buttons */
   .topBar{
     position: fixed;
     top: 14px;
     right: 14px;
     z-index: 9999;
     display:flex;
-    flex-direction: column; /* NEW: stack buttons */
+    flex-direction: column;     /* 👈 stack buttons */
     gap:10px;
     align-items:flex-end;
   }
@@ -211,32 +220,12 @@
     font-weight: 900;
     cursor: pointer;
     box-shadow: 0 10px 26px rgba(0,0,0,.25);
-    transition: transform .15s ease, background .15s ease, opacity .15s ease;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+    transition: transform .15s ease, background .15s ease;
+    text-align: left;
+    white-space: nowrap;
   }
   .pill:hover{ transform: scale(1.04); }
   .pill small{opacity:.85;font-weight:800}
-
-  /* Music button state */
-  .pill.musicBtn{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .pill.musicBtn .dot{
-    width:10px;height:10px;border-radius:999px;
-    background: rgba(255,255,255,.55);
-    box-shadow: 0 0 14px rgba(255,255,255,.35);
-    transition: background .2s ease, box-shadow .2s ease;
-  }
-  .pill.musicBtn.isOn .dot{
-    background: #00c853;
-    box-shadow: 0 0 18px rgba(0,200,83,.65);
-  }
-  .pill.musicBtn.isOff{
-    opacity: .92;
-  }
 
   /* HERO SCENE */
   .scene{
@@ -283,64 +272,27 @@
   /* ============================
      POSITIONING (VIEWPORT) + clamp
      ============================ */
-
-  .leafTL{
-    left: 0;
-    top: 0;
-    width: clamp(220px, 32vw, 520px);
-  }
+  .leafTL{ left: 0; top: 0; width: clamp(220px, 32vw, 520px); }
 
   /* Stamp: behind leaf AND moved more right */
-  .stamp{
-    left: 16%;
-    top: 18%;
-    width: clamp(120px, 14vw, 220px);
-  }
+  .stamp{ left: 16%; top: 18%; width: clamp(120px, 14vw, 220px); }
 
-  .orange{
-    left: 45%;
-    top: 4%;
-    width: clamp(180px, 22vw, 360px);
-  }
+  .orange{ left: 45%; top: 4%; width: clamp(180px, 22vw, 360px); }
 
   /* Hibiscus: behind glass */
-  .flower{
-    right: 120px;
-    top: 10px;
-    width: clamp(160px, 22vw, 320px);
-  }
+  .flower{ right: 120px; top: 10px; width: clamp(160px, 22vw, 320px); }
 
   /* Glass: above hibiscus */
-  .glass{
-    right: 18px;
-    top: 88px;
-    width: clamp(110px, 16vw, 220px);
-  }
+  .glass{ right: 18px; top: 88px; width: clamp(110px, 16vw, 220px); }
 
   /* Blue bird: in front of hibiscus + glass */
-  .bird{
-    right: 6%;
-    top: 28%;
-    width: clamp(120px, 18vw, 260px);
-  }
+  .bird{ right: 6%; top: 28%; width: clamp(120px, 18vw, 260px); }
 
-  .toucan{
-    left: 0;
-    bottom: 0;
-    width: clamp(160px, 22vw, 320px);
-  }
+  .toucan{ left: 0; bottom: 0; width: clamp(160px, 22vw, 320px); }
 
-  .cristo{
-    left: 35%;
-    bottom: 3%;
-    width: clamp(140px, 18vw, 280px);
-  }
+  .cristo{ left: 35%; bottom: 3%; width: clamp(140px, 18vw, 280px); }
 
-  .crates{
-    right: 0;
-    bottom: 0;
-    width: clamp(260px, 42vw, 620px);
-  }
+  .crates{ right: 0; bottom: 0; width: clamp(260px, 42vw, 620px); }
 
   /* ============================
      LAYERING HIERARCHY
@@ -473,7 +425,6 @@
   /* ========================== */
   /* NIGHTCLUB FLYER: DETALLES  */
   /* ========================== */
-
   .flyer{
     position: relative;
     width: min(920px, 95vw);
@@ -745,15 +696,20 @@
       Modo: <small id="themeLabel">Noche Neón</small>
     </button>
 
-    <!-- NEW: Music toggle under Modo -->
-    <button class="pill musicBtn isOff" id="toggleMusic" aria-label="Música">
-      <span class="dot" aria-hidden="true"></span>
-      Música: <small id="musicLabel">OFF</small>
+    <!-- NEW: background performance toggle -->
+    <button class="pill" id="toggleBg" aria-label="Cambiar fondo">
+      Si hay lag Presiona Aqui: <small id="bgLabel">Vivo</small>
+    </button>
+
+    <!-- NEW: music toggle (under Fondo) -->
+    <button class="pill" id="toggleMusic" aria-label="Música">
+      Música: <small id="musicLabel">On</small>
     </button>
   </div>
 
-  <!-- NEW: Background music element -->
-  <audio id="bgMusic" preload="auto" loop></audio>
+  <!-- AUDIO (put your mp3 filename here) -->
+  <!-- Example: src="carnaval.mp3" -->
+  <audio id="bgMusic" src="carnaval.mp3" preload="auto" playsinline></audio>
 
   <!-- HERO -->
   <section class="hero" id="inicio">
@@ -878,111 +834,107 @@
   </section>
 
 <script>
-  // ==========================
-  // MUSIC (NEW): Toggle + Fade-in volume
-  // ==========================
+  /* ============================
+     MUSIC SETTINGS
+     ============================ */
+  const MUSIC_START_AT = 7; // seconds (starts at 7s)
+
   const bgMusic = document.getElementById("bgMusic");
-  const musicBtn = document.getElementById("toggleMusic");
+  const toggleMusicBtn = document.getElementById("toggleMusic");
   const musicLabel = document.getElementById("musicLabel");
-  const MUSIC_START_AT = 7; // seconds
 
-  // Set your file from CSS var --music-file
-  function getCssVar(name){
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  }
-  const musicFile = getCssVar("--music-file").replace(/^"|"$/g, ""); // remove quotes if present
-  bgMusic.src = musicFile || "music.mp3";
+  let musicEnabled = true;     // default On
+  let fading = false;
 
-  let musicOn = false;
-  let fading = null;
+  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
 
-  function setMusicUI(on){
-    musicOn = on;
-    musicLabel.textContent = on ? "ON" : "OFF";
-    musicBtn.classList.toggle("isOn", on);
-    musicBtn.classList.toggle("isOff", !on);
-    musicBtn.setAttribute("aria-pressed", on ? "true" : "false");
-  }
+  function fadeVolumeTo(targetVol, durationMs){
+    if(!bgMusic) return;
+    if(fading) return;
+    fading = true;
 
-  function fadeTo(target, ms=900){
-    if(fading) cancelAnimationFrame(fading);
-    const start = bgMusic.volume;
-    const delta = target - start;
-    const t0 = performance.now();
+    const startVol = bgMusic.volume;
+    const start = performance.now();
+    const dur = Math.max(80, durationMs);
 
     function step(t){
-      const p = Math.min(1, (t - t0) / ms);
-      // easeOutQuad
-      const eased = 1 - (1 - p) * (1 - p);
-      bgMusic.volume = Math.max(0, Math.min(1, start + delta * eased));
-      if(p < 1) fading = requestAnimationFrame(step);
+      const p = clamp((t - start) / dur, 0, 1);
+      bgMusic.volume = startVol + (targetVol - startVol) * p;
+      if(p < 1){
+        requestAnimationFrame(step);
+      }else{
+        fading = false;
+      }
     }
-    fading = requestAnimationFrame(step);
+    requestAnimationFrame(step);
   }
 
   async function startMusicWithFade(){
+    if(!bgMusic) return;
+
     try{
+      // Jump to 7s (or as close as allowed)
+      bgMusic.currentTime = MUSIC_START_AT;
+
+      bgMusic.loop = true;
       bgMusic.volume = 0;
-  
-      // jump to 7s once metadata is ready (more reliable on some browsers)
-      const seekToStart = () => {
-        try { bgMusic.currentTime = MUSIC_START_AT; } catch(e) {}
-      };
-      if (bgMusic.readyState >= 1) { // HAVE_METADATA
-        seekToStart();
-      } else {
-        bgMusic.addEventListener("loadedmetadata", seekToStart, { once:true });
-      }
-  
-      await bgMusic.play();          // may be blocked unless user tapped/clicked
-      fadeTo(1, 1200);               // fade in to full volume
-      setMusicUI(true);
+      await bgMusic.play();
+
+      fadeVolumeTo(1.0, 1400); // fade in
+      musicEnabled = true;
+      musicLabel.textContent = "On";
     }catch(err){
-      setMusicUI(false);
+      // Autoplay might be blocked until user gesture.
+      musicEnabled = false;
+      musicLabel.textContent = "Tap";
     }
   }
 
   function stopMusicWithFade(){
-    fadeTo(0, 600);
+    if(!bgMusic) return;
+    fadeVolumeTo(0.0, 700);
     setTimeout(()=>{
-      bgMusic.pause();
-      bgMusic.currentTime = 0;
-    }, 650);
-    setMusicUI(false);
+      try{ bgMusic.pause(); }catch(e){}
+    }, 750);
+    musicEnabled = false;
+    musicLabel.textContent = "Off";
   }
 
-  musicBtn.addEventListener("click", ()=>{
-    if(!musicOn){
-      startMusicWithFade();
-    }else{
+  toggleMusicBtn.addEventListener("click", async ()=>{
+    if(!bgMusic) return;
+
+    // If currently playing -> fade out and stop
+    if(!bgMusic.paused && musicEnabled){
       stopMusicWithFade();
+      return;
     }
+
+    // Otherwise start from 7s with fade in
+    await startMusicWithFade();
   });
 
-  // Optional: try to start on first interaction anywhere (still respects browser rules)
-  function firstInteractionAutoStart(){
-    // only if user hasn't turned it on/off yet
-    if(!musicOn){
+  // Try to autoplay on load (may fail on desktop browsers with strict policies)
+  // If blocked, it will show "Tap" and will start on first click/scroll/touch.
+  startMusicWithFade();
+
+  // If autoplay blocked, start when user interacts (first gesture)
+  function oneGestureStart(){
+    if(bgMusic && (bgMusic.paused || !musicEnabled)){
       startMusicWithFade();
     }
-    document.removeEventListener("click", firstInteractionAutoStart);
-    document.removeEventListener("touchstart", firstInteractionAutoStart);
+    window.removeEventListener("pointerdown", oneGestureStart);
+    window.removeEventListener("touchstart", oneGestureStart);
+    window.removeEventListener("keydown", oneGestureStart);
+    window.removeEventListener("scroll", oneGestureStart);
   }
-  document.addEventListener("click", firstInteractionAutoStart, {once:true});
-  document.addEventListener("touchstart", firstInteractionAutoStart, {once:true});
+  window.addEventListener("pointerdown", oneGestureStart, {once:true});
+  window.addEventListener("touchstart", oneGestureStart, {once:true, passive:true});
+  window.addEventListener("keydown", oneGestureStart, {once:true});
+  window.addEventListener("scroll", oneGestureStart, {once:true, passive:true});
 
-  // Pause music when tab hidden (nice behavior)
-  document.addEventListener("visibilitychange", ()=>{
-    if(document.hidden && musicOn){
-      bgMusic.pause();
-    } else if(!document.hidden && musicOn){
-      bgMusic.play().catch(()=>{});
-    }
-  });
-
-  // ==========================
-  // Reveal panels/flyer smoothly
-  // ==========================
+  /* ============================
+     Reveal panels/flyer smoothly
+     ============================ */
   const revealTargets = [ ...document.querySelectorAll(".panel"), document.getElementById("flyerDetalles") ].filter(Boolean);
   const obs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{
@@ -991,7 +943,9 @@
   }, {threshold: .2});
   revealTargets.forEach(el => obs.observe(el));
 
-  // Dim + blur ornaments + send behind when "Detalles del Carnaval" starts showing
+  /* ============================
+     Dim ornaments on Detalles
+     ============================ */
   const detallesSection = document.querySelector("#detalles");
   const detallesObserver = new IntersectionObserver(
     ([entry]) => {
@@ -1001,9 +955,9 @@
   );
   if (detallesSection) detallesObserver.observe(detallesSection);
 
-  // ==========================
-  // RSVP plus-one fields
-  // ==========================
+  /* ============================
+     RSVP plus-one fields
+     ============================ */
   function updatePlusOnes(){
     const count = parseInt(document.getElementById("plusOnes").value, 10);
     const container = document.getElementById("plusOneFields");
@@ -1018,9 +972,10 @@
   }
   updatePlusOnes();
 
-  // ==========================
-  // RSVP -> WhatsApp message
-  // ==========================
+  function getCssVar(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
   function confirmar(){
     const nombre = document.getElementById("nombre").value.trim();
     const plusCount = parseInt(document.getElementById("plusOnes").value, 10);
@@ -1074,7 +1029,6 @@
       waWrap.innerHTML = `No se abrió WhatsApp automáticamente. Toca aquí: <a href="${waUrl}" target="_blank">Enviar RSVP por WhatsApp</a>`;
     }
 
-    // Confetti
     const colors = ["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
     for(let i=0;i<90;i++){
       const c=document.createElement("div");
@@ -1087,9 +1041,9 @@
     }
   }
 
-  // ==========================
-  // Theme toggle: Noche Neón <-> Parade
-  // ==========================
+  /* ============================
+     Theme toggle
+     ============================ */
   const toggleBtn = document.getElementById("toggleTheme");
   const themeLabel = document.getElementById("themeLabel");
   toggleBtn.addEventListener("click", ()=>{
@@ -1098,9 +1052,22 @@
     themeLabel.textContent = isParade ? "Parade" : "Noche Neón";
   });
 
-  // ==========================
-  // PARTY-ENERGY scroll parallax (works on fixed layers)
-  // ==========================
+  /* ============================
+     NEW: Background performance toggle
+     ============================ */
+  const toggleBgBtn = document.getElementById("toggleBg");
+  const bgLabel = document.getElementById("bgLabel");
+
+  // default is "Vivo" (animated). Click -> "Estático" (no lag)
+  toggleBgBtn.addEventListener("click", ()=>{
+    document.body.classList.toggle("bg-static");
+    const isStatic = document.body.classList.contains("bg-static");
+    bgLabel.textContent = isStatic ? "Estático" : "Vivo";
+  });
+
+  /* ============================
+     PARTY-ENERGY scroll parallax
+     ============================ */
   const layers = Array.from(document.querySelectorAll(".parallax"));
   const heroText = document.getElementById("heroText");
   let latestY = 0;
