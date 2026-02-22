@@ -26,6 +26,7 @@
 
     /* ============================
        EASY SCALE CONTROLS
+       Adjust these anytime 🔧
        ============================ */
     --s-leaf: 1.00;
     --s-stamp: 1.00;
@@ -40,11 +41,14 @@
     /* ============================
        WhatsApp RSVP (HOST)
        Put your number here in international format (NO +, NO spaces)
-       US example: 13475551234
+       Examples:
+       US: 13475551234
+       Peru: 51987654321
        ============================ */
     --wa-host: 17183507066;
   }
 
+  /* Optional: Parade (brighter) theme */
   body.theme-parade{
     --bg1:#ff007f;
     --bg2:#ff6a00;
@@ -65,11 +69,21 @@
     overflow-x:hidden;
     scroll-behavior:smooth;
 
-    background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3),var(--bg4),var(--bg5),var(--bg6));
+    /* ONE CONTINUOUS ANIMATED RIO GRADIENT (alive) */
+    background: linear-gradient(
+      135deg,
+      var(--bg1),
+      var(--bg2),
+      var(--bg3),
+      var(--bg4),
+      var(--bg5),
+      var(--bg6)
+    );
     background-size: 420% 420%;
-    animation: gradientMove 10s ease-in-out infinite;
+    animation: gradientMove 10s ease-in-out infinite; /* faster */
   }
 
+  /* Organic gradient motion */
   @keyframes gradientMove{
     0%   { background-position: 0% 50%; }
     25%  { background-position: 100% 40%; }
@@ -78,7 +92,12 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Alive background layers */
+  /* ============================
+     ALIVE BACKGROUND LAYERS ONLY
+     (does NOT affect content)
+     ============================ */
+
+  /* A) drifting neon lights */
   body::after{
     content:"";
     position: fixed;
@@ -95,14 +114,17 @@
     filter: blur(2px);
     mix-blend-mode: screen;
     opacity: .95;
-    animation: lightDrift 16s ease-in-out infinite alternate;
+
+    animation: lightDrift 16s ease-in-out infinite alternate; /* slightly faster */
   }
+
   @keyframes lightDrift{
     0%   { transform: translate3d(0,0,0) scale(1); }
     50%  { transform: translate3d(0,-28px,0) scale(1.06); }
     100% { transform: translate3d(0,18px,0) scale(1.10); }
   }
 
+  /* B) subtle moving grain (no external image) */
   body::before{
     content:"";
     position: fixed;
@@ -112,38 +134,82 @@
 
     opacity: .07;
     background-image:
-      repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0px, rgba(255,255,255,.04) 1px, rgba(0,0,0,0) 2px, rgba(0,0,0,0) 6px),
-      repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px, rgba(0,0,0,0) 2px, rgba(0,0,0,0) 7px);
-    animation: grainMove 7s steps(10) infinite;
+      repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,.04) 0px,
+        rgba(255,255,255,.04) 1px,
+        rgba(0,0,0,0) 2px,
+        rgba(0,0,0,0) 6px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,.03) 0px,
+        rgba(255,255,255,.03) 1px,
+        rgba(0,0,0,0) 2px,
+        rgba(0,0,0,0) 7px
+      );
+
+    animation: grainMove 7s steps(10) infinite; /* slightly faster */
   }
+
   @keyframes grainMove{
     0%   { transform: translate3d(0,0,0); }
     100% { transform: translate3d(-30px,18px,0); }
   }
 
-  /* Static mode for performance */
+  /* C) OPTIONAL: hue shift ONLY on background layers */
+  body.hue-bg::after{
+    animation: lightDrift 16s ease-in-out infinite alternate, hueShift 26s linear infinite; /* faster */
+  }
+  @keyframes hueShift{
+    0%{ filter: hue-rotate(0deg) blur(2px); }
+    100%{ filter: hue-rotate(360deg) blur(2px); }
+  }
+
+  /* ============================
+     STATIC BACKGROUND MODE
+     (to reduce lag)
+     ============================ */
   body.bg-static{
-    animation:none;
+    animation: none;
     background-size: 100% 100%;
     background-position: 50% 50%;
   }
   body.bg-static::before,
   body.bg-static::after{
-    animation:none !important;
-    opacity:0 !important;
+    animation: none !important;
+    opacity: 0 !important;
   }
 
+  /* D) Reduce Motion support (iOS/Accessibility) */
   @media (prefers-reduced-motion: reduce){
-    body{ animation:none; }
-    body::before, body::after{ animation:none; }
+    body{ animation: none; background-size: 320% 320%; }
+    body::after, body::before{ animation: none; }
   }
 
-  section{ padding:120px 20px 80px; position:relative; }
-  .hero{ min-height:100vh; display:flex; align-items:center; justify-content:center; }
+  /* Continuous-flow sections */
+  section{
+    padding: 120px 20px 80px 20px;
+    position: relative;
+  }
+  .hero{
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
-  /* ============================
-     CONTROLS: countdown button on top, controls under it
-     ============================ */
+  /* Top-right buttons */
+  .topBar{
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 9999;
+    display:flex;
+    flex-direction: column;
+    gap:10px;
+    align-items:flex-end;
+  }
   .pill{
     border: 1px solid rgba(255,255,255,.22);
     background: rgba(0,0,0,.25);
@@ -154,74 +220,15 @@
     font-weight: 900;
     cursor: pointer;
     box-shadow: 0 10px 26px rgba(0,0,0,.25);
-    transition: transform .15s ease;
+    transition: transform .15s ease, background .15s ease;
+    text-align: left;
     white-space: nowrap;
-    text-align: right;
   }
-  .pill:hover{ transform: scale(1.03); }
+  .pill:hover{ transform: scale(1.04); }
   .pill small{opacity:.85;font-weight:800}
 
-  .controlDock{
-    position: fixed;
-    top: 14px;
-    right: 14px;
-    z-index: 9999;
-    display:flex;
-    flex-direction: column;
-    gap:10px;
-    align-items:flex-end;
-  }
-
-  /* Countdown button (top) */
-  #countdownBtn{
-    display:flex;
-    align-items:center;
-    justify-content:flex-end;
-    gap:10px;
-  }
-  #countdownBtn .cdText{
-    display:flex;
-    flex-direction:column;
-    line-height:1.15;
-  }
-  #countdownBtn .cdTitle{
-    font-size:.78rem;
-    letter-spacing:.7px;
-    text-transform:uppercase;
-    opacity:.9;
-    font-weight:900;
-  }
-  #countdownBtn .cdTime{
-    font-family:'Bangers',cursive;
-    font-size: 1.05rem;
-    letter-spacing:.6px;
-  }
-
-  /* Sidebar panel */
-  .sidebar{
-    width: 260px;
-    border-radius: 22px;
-    border: 1px solid rgba(255,255,255,.18);
-    background: rgba(0,0,0,.22);
-    backdrop-filter: blur(14px);
-    box-shadow: 0 18px 50px rgba(0,0,0,.35);
-    padding: 10px;
-    display:grid;
-    gap:10px;
-
-    transform: translateX(18px);
-    opacity: 0;
-    pointer-events:none;
-    transition: transform .18s ease, opacity .18s ease;
-  }
-  .controlDock.open .sidebar{
-    transform: translateX(0);
-    opacity: 1;
-    pointer-events:auto;
-  }
-
-  /* Countdown OUTSIDE sidebar (the bigger readout) */
-  .countdownPanel{
+  /* NEW: countdown chip (under Música) */
+  .countdown{
     border: 1px solid rgba(255,255,255,.22);
     background: rgba(0,0,0,.22);
     backdrop-filter: blur(12px);
@@ -229,35 +236,32 @@
     border-radius: 18px;
     padding: 10px 12px;
     box-shadow: 0 10px 26px rgba(0,0,0,.25);
-    min-width: 260px;
-    text-align:right;
-    display:none;
+    min-width: 190px;
+    text-align: right;
   }
-  .controlDock.showCountdown .countdownPanel{ display:block; }
-
-  .countdownPanel .label{
-    font-weight:900;
-    font-size:.78rem;
-    opacity:.9;
-    letter-spacing:.7px;
-    text-transform:uppercase;
-    margin-bottom:2px;
+  .countdown .label{
+    font-weight: 900;
+    font-size: .78rem;
+    opacity: .9;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
   }
-  .countdownPanel .time{
-    font-weight:900;
-    font-size:.95rem;
-    line-height:1.15;
+  .countdown .time{
+    font-weight: 900;
+    font-size: .95rem;
+    line-height: 1.15;
   }
-  .countdownPanel .time strong{
-    font-family:'Bangers',cursive;
-    font-size:1.15rem;
-    letter-spacing:.6px;
+  .countdown .time strong{
+    font-family: 'Bangers', cursive;
+    font-size: 1.15rem;
+    letter-spacing: .6px;
   }
-  .countdownPanel .sub{
-    font-size:.78rem;
-    opacity:.88;
-    margin-top:2px;
-    font-weight:800;
+  .countdown .sub{
+    font-size: .78rem;
+    opacity: .88;
+    margin-top: 2px;
+    font-weight: 800;
   }
 
   /* HERO SCENE */
@@ -267,6 +271,9 @@
     height: min(82vh, 780px);
   }
 
+  /* =========================================
+     ALL IMAGES VIEWPORT-ANCHORED + DIM/BLUR
+     ========================================= */
   .parallax{
     position: fixed;
     pointer-events:none;
@@ -277,40 +284,57 @@
     z-index: 6;
   }
 
-  .flyer, .panel{ position: relative; z-index: 50; }
+  /* Flyer + RSVP must always stay above ornaments */
+  .flyer, .panel{
+    position: relative;
+    z-index: 50;
+  }
 
+  /* When Detalles appears: dim to 10% + blur + send behind flyer + rsvp */
   body.dim-ornaments .parallax{
     opacity: 0.10;
     filter: blur(10px) drop-shadow(0 16px 34px rgba(0,0,0,.35));
     z-index: 1 !important;
   }
 
-  .floaty{ width:100%; height:auto; transform-origin:center; will-change: transform; }
+  /* Wrapper that holds the image */
+  .floaty{
+    width:100%;
+    height:auto;
+    transform-origin:center;
+    will-change: transform;
+  }
   .floaty img{ width:100%; display:block; }
 
-  /* Positions */
-  .leafTL{ left:0; top:0; width:clamp(220px, 32vw, 520px); }
-  .stamp{ left:16%; top:18%; width:clamp(120px, 14vw, 220px); }
-  .orange{ left:45%; top:4%; width:clamp(180px, 22vw, 360px); }
-  .flower{ right:120px; top:10px; width:clamp(160px, 22vw, 320px); }
-  .glass{ right:18px; top:88px; width:clamp(110px, 16vw, 220px); }
-  .bird{ right:6%; top:28%; width:clamp(120px, 18vw, 260px); }
-  .toucan{ left:0; bottom:0; width:clamp(160px, 22vw, 320px); }
-  .cristo{ left:35%; bottom:3%; width:clamp(140px, 18vw, 280px); }
-  .crates{ right:0; bottom:0; width:clamp(260px, 42vw, 620px); }
+  /* ============================
+     POSITIONING (VIEWPORT) + clamp
+     ============================ */
+  .leafTL{ left: 0; top: 0; width: clamp(220px, 32vw, 520px); }
+  .stamp{ left: 16%; top: 18%; width: clamp(120px, 14vw, 220px); }
+  .orange{ left: 45%; top: 4%; width: clamp(180px, 22vw, 360px); }
+  .flower{ right: 120px; top: 10px; width: clamp(160px, 22vw, 320px); }
+  .glass{ right: 18px; top: 88px; width: clamp(110px, 16vw, 220px); }
+  .bird{ right: 6%; top: 28%; width: clamp(120px, 18vw, 260px); }
+  .toucan{ left: 0; bottom: 0; width: clamp(160px, 22vw, 320px); }
+  .cristo{ left: 35%; bottom: 3%; width: clamp(140px, 18vw, 280px); }
+  .crates{ right: 0; bottom: 0; width: clamp(260px, 42vw, 620px); }
 
-  /* Layers */
-  .stamp{ z-index:3; }
-  .leafTL{ z-index:5; }
-  .flower{ z-index:6; }
-  .glass{ z-index:7; }
-  .bird{ z-index:8; }
-  .orange{ z-index:4; }
-  .toucan{ z-index:6; }
-  .crates{ z-index:4; }
-  .cristo{ z-index:6; }
+  /* ============================
+     LAYERING HIERARCHY
+     ============================ */
+  .stamp{ z-index: 3; }
+  .leafTL{ z-index: 5; }
+  .flower{ z-index: 6; }
+  .glass{  z-index: 7; }
+  .bird{   z-index: 8; }
+  .orange{ z-index: 4; }
+  .toucan{ z-index: 6; }
+  .crates{ z-index: 4; }
+  .cristo{ z-index: 6; }
 
-  /* Scaling */
+  /* ============================
+     SCALE PER IMAGE
+     ============================ */
   .leafTL  .floaty{ transform: scale(var(--s-leaf)); }
   .stamp   .floaty{ transform: scale(var(--s-stamp)); }
   .orange  .floaty{ transform: scale(var(--s-orange)); }
@@ -321,7 +345,7 @@
   .cristo  .floaty{ transform: scale(var(--s-cristo)); }
   .crates  .floaty{ transform-origin: bottom right; transform: scale(var(--s-crates)); }
 
-  /* Wiggles */
+  /* Loop animations */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
   @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
   @keyframes breathe{ 0%,100%{transform:scale(1) rotate(-1deg)} 50%{transform:scale(1.03) rotate(1deg)} }
@@ -338,30 +362,31 @@
   .stamp   .wiggle{ animation: wobbleIn 1s ease-out both; }
   .cristo  .wiggle{ animation: riseIn 1.2s ease-out both; }
 
-  /* Hero text */
+  /* HERO TEXT + GLOW PULSE */
   .heroText{
-    position:absolute; left:0; right:0;
+    position:absolute;
+    left:0; right:0;
     top:45%;
     transform: translateY(-50%);
     text-align:center;
-    z-index:20;
+    z-index: 20;
     pointer-events:none;
   }
-
   .heroText::before{
     content:"";
     position:absolute;
-    left:50%; top:50%;
-    width:min(560px, 86vw);
-    height:240px;
+    left:50%;
+    top:50%;
+    width: min(560px, 86vw);
+    height: 240px;
     transform: translate(-50%,-55%);
-    border-radius:999px;
+    border-radius: 999px;
     background:
       radial-gradient(circle at 30% 40%, rgba(255,0,127,.55), transparent 55%),
       radial-gradient(circle at 70% 30%, rgba(0,176,255,.45), transparent 55%),
       radial-gradient(circle at 55% 75%, rgba(0,200,83,.35), transparent 60%);
     filter: blur(18px);
-    opacity:.95;
+    opacity: .95;
     animation: glowPulse 2.4s ease-in-out infinite;
     z-index:-1;
   }
@@ -369,35 +394,38 @@
     0%,100%{ transform: translate(-50%,-55%) scale(1); opacity:.85; }
     50%{ transform: translate(-50%,-55%) scale(1.08); opacity:1; }
   }
-
   .heroText h1{
     font-family:'Bangers',cursive;
     font-size: clamp(90px, 10vw, 180px);
-    margin:0;
-    letter-spacing:2px;
+    margin: 0;
+    letter-spacing: 2px;
     text-shadow: 6px 6px 0 #000;
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:14px;
+    gap: 14px;
   }
-  .heroText .age{ font-size:.55em; color:#ff3d3d; line-height:1; }
+  .heroText .age{
+    font-size: 0.55em;
+    color: #ff3d3d;
+    line-height: 1;
+  }
   .heroText h2{
     font-family:'Bangers',cursive;
     font-size: clamp(90px, 10vw, 180px);
-    margin:10px 0 0 0;
-    letter-spacing:2px;
-    color:#ffd000;
+    margin: 10px 0 0 0;
+    letter-spacing: 2px;
+    color: #ffd000;
     text-shadow: 6px 6px 0 #000;
   }
 
   .scrollHint{
     position:absolute;
-    bottom:10px;
+    bottom: 10px;
     left:0; right:0;
     text-align:center;
-    font-weight:900;
-    opacity:.92;
+    font-weight: 900;
+    opacity: .92;
     animation: hintFloat 2s ease-in-out infinite;
   }
   @keyframes hintFloat{
@@ -405,30 +433,51 @@
     50%{ transform: translateY(-8px); }
   }
 
-  /* Flyer + panel reveal */
+  /* ========================== */
+  /* NIGHTCLUB FLYER: DETALLES  */
+  /* ========================== */
   .flyer{
     position: relative;
     width: min(920px, 95vw);
     margin: 0 auto;
     padding: 40px;
     border-radius: 34px;
-
     background:
       radial-gradient(900px 420px at 20% 10%, rgba(255,0,127,.35), transparent 60%),
       radial-gradient(900px 420px at 85% 20%, rgba(0,176,255,.28), transparent 60%),
       radial-gradient(900px 420px at 50% 90%, rgba(0,200,83,.22), transparent 65%),
       rgba(0,0,0,.30);
-
     border: 1px solid rgba(255,255,255,.16);
     box-shadow: 0 35px 90px rgba(0,0,0,.55);
     backdrop-filter: blur(18px);
-
     transform: translateY(30px);
     opacity: 0;
     transition: transform .6s ease, opacity .6s ease;
     overflow:hidden;
   }
   .flyer.reveal{ transform: translateY(0); opacity: 1; }
+
+  .flyer::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius: 36px;
+    padding:2px;
+    background: linear-gradient(90deg, rgba(255,0,127,.9), rgba(0,176,255,.9), rgba(0,200,83,.85), rgba(255,106,0,.9));
+    background-size: 300% 300%;
+    animation: borderMove 4.5s linear infinite;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity:.9;
+    pointer-events:none;
+  }
+  @keyframes borderMove{
+    0%{background-position:0% 50%}
+    100%{background-position:100% 50%}
+  }
 
   .sparkle{
     position:absolute;
@@ -449,48 +498,79 @@
     50%{ transform: translateY(-10px); opacity:.7; }
   }
 
-  .flyerTop{ display:flex; gap:14px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
+  .flyerTop{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+
   .flyerTitle{
     margin:0;
     font-family:'Bangers',cursive;
     font-size: clamp(40px, 4.8vw, 64px);
-    letter-spacing:2px;
+    letter-spacing: 2px;
     text-shadow: 6px 6px 0 #000;
   }
 
-  .tagRow{ margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; }
+  .tagRow{
+    margin-top: 8px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
   .tag{
-    font-weight:900;
-    border-radius:999px;
-    padding:10px 12px;
+    font-weight: 900;
+    border-radius: 999px;
+    padding: 10px 12px;
     background: rgba(255,255,255,.10);
     border: 1px solid rgba(255,255,255,.14);
     box-shadow: 0 10px 26px rgba(0,0,0,.25);
     text-transform: uppercase;
-    letter-spacing:.8px;
-    font-size:.82rem;
+    letter-spacing: .8px;
+    font-size: .82rem;
   }
   .tag.hot{ background: rgba(255,0,127,.18); border-color: rgba(255,0,127,.35); }
   .tag.neon{ background: rgba(0,176,255,.16); border-color: rgba(0,176,255,.34); }
   .tag.vip{ background: rgba(255,208,0,.16); border-color: rgba(255,208,0,.34); }
 
   .flyerBlurb{
-    margin:14px 0 0 0;
+    margin: 14px 0 0 0;
     opacity:.95;
     font-weight:700;
     line-height:1.45;
-    max-width:640px;
+    max-width: 640px;
   }
 
   .flyerDivider{
-    height:2px;
-    margin:18px 0 16px;
+    height: 2px;
+    margin: 18px 0 16px;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
-    position:relative;
+    position: relative;
+  }
+  .flyerDivider::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width: 120px;
+    height: 10px;
+    transform: translate(-50%,-50%);
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(255,0,127,.55), transparent 65%);
+    filter: blur(6px);
   }
 
-  .infoGrid{ display:grid; grid-template-columns: 1fr; gap:14px; margin-top:6px; }
-  @media (min-width:780px){ .infoGrid{ grid-template-columns: 1fr 1fr; } }
+  .infoGrid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 6px;
+  }
+  @media (min-width: 780px){
+    .infoGrid{ grid-template-columns: 1fr 1fr; }
+  }
 
   .flyCard{
     background: rgba(0,0,0,.22);
@@ -498,22 +578,52 @@
     border-radius: 22px;
     padding: 16px 16px 14px;
     box-shadow: 0 18px 40px rgba(0,0,0,.28);
-    position:relative;
+    position: relative;
     overflow:hidden;
   }
+  .flyCard::before{
+    content:"";
+    position:absolute;
+    inset:-60px -40px auto auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,176,255,.22), transparent 60%);
+    filter: blur(14px);
+  }
 
-  .flyLabel{ font-size:.86rem; letter-spacing:.9px; text-transform:uppercase; opacity:.9; font-weight:900; }
-  .flyValue{ margin-top:6px; font-size:1.15rem; font-weight:900; line-height:1.25; }
-  .flyValue small{ display:block; margin-top:6px; font-weight:700; opacity:.9; }
+  .flyLabel{
+    font-size:.86rem;
+    letter-spacing:.9px;
+    text-transform:uppercase;
+    opacity:.9;
+    font-weight:900;
+  }
+  .flyValue{
+    margin-top:6px;
+    font-size: 1.15rem;
+    font-weight: 900;
+    line-height:1.25;
+  }
+  .flyValue small{
+    display:block;
+    margin-top: 6px;
+    font-weight:700;
+    opacity:.9;
+  }
 
-  .flyCTA{ display:flex; justify-content:center; margin-top:18px; }
+  .flyCTA{
+    display:flex;
+    justify-content:center;
+    margin-top: 18px;
+  }
   .flyBtn{
     display:inline-block;
     border:none;
-    padding:14px 22px;
-    border-radius:999px;
-    font-weight:900;
-    color:#111;
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-weight: 900;
+    color: #111;
     background: var(--gold);
     cursor:pointer;
     text-decoration:none;
@@ -521,6 +631,7 @@
   }
   .flyBtn:hover{ transform: scale(1.05); }
 
+  /* RSVP panel */
   .panel{
     width: min(880px, 95vw);
     margin: 0 auto;
@@ -530,37 +641,39 @@
     padding: 40px;
     border-radius: 30px;
     box-shadow: var(--shadow);
-
     transform: translateY(30px);
     opacity: 0;
     transition: transform .6s ease, opacity .6s ease;
   }
   .panel.reveal{ transform: translateY(0); opacity: 1; }
+  .panel h2{ margin: 0 0 14px 0; font-size: 2rem; }
 
-  .panel h2{ margin:0 0 14px 0; font-size:2rem; }
   input, select{
-    width:100%;
-    padding:14px 14px;
-    border-radius:999px;
-    border:none;
-    outline:none;
-    font-size:1rem;
-    margin-top:10px;
+    width: 100%;
+    padding: 14px 14px;
+    border-radius: 999px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    margin-top: 10px;
   }
+
   button{
-    margin-top:15px;
-    padding:14px 22px;
-    border-radius:999px;
-    border:none;
-    font-weight:900;
+    margin-top: 15px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: none;
+    font-weight: 900;
     background: var(--gold);
-    cursor:pointer;
+    cursor: pointer;
     transition: transform .18s ease;
   }
   button:hover{ transform: scale(1.05); }
 
+  /* WhatsApp fallback link */
   #waLinkWrap a{ color:#ffd700; text-decoration:underline; }
 
+  /* Confetti */
   .confetti{
     position:fixed;
     top:-10px;
@@ -571,50 +684,36 @@
     pointer-events:none;
     opacity:.95;
   }
-  @keyframes fall{ to{ transform: translateY(110vh) rotate(720deg); } }
+  @keyframes fall{
+    to{ transform: translateY(110vh) rotate(720deg); }
+  }
 </style>
 </head>
 
 <body>
-  <!-- Controls dock -->
-  <div class="controlDock" id="controlDock">
-    <!-- TOP RIGHT: Cuenta Regresiva button -->
-    <button class="pill" id="countdownBtn" type="button" aria-label="Cuenta regresiva">
-      <span class="cdText">
-        <span class="cdTitle">Cuenta regresiva</span>
-        <span class="cdTime" id="countdownMini">—</span>
-      </span>
+  <div class="topBar">
+    <button class="pill" id="toggleTheme" aria-label="Cambiar tema">
+      Modo: <small id="themeLabel">Noche Neón</small>
     </button>
 
-    <!-- Under it: Controles button -->
-    <button class="pill" id="controlsBtn" type="button" aria-label="Abrir controles">
-      ☰ Controles
+    <button class="pill" id="toggleBg" aria-label="Cambiar fondo">
+      Fondo: <small id="bgLabel">Vivo</small>
     </button>
 
-    <!-- Sidebar (buttons inside) -->
-    <div class="sidebar" id="sidebar">
-      <button class="pill" id="toggleTheme" type="button">
-        Modo: <small id="themeLabel">Noche Neón</small>
-      </button>
+    <button class="pill" id="toggleMusic" aria-label="Música">
+      Música: <small id="musicLabel">On</small>
+    </button>
 
-      <button class="pill" id="toggleBg" type="button">
-        Fondo: <small id="bgLabel">Vivo</small>
-      </button>
-
-      <button class="pill" id="toggleMusic" type="button">
-        Música: <small id="musicLabel">On</small>
-      </button>
-    </div>
-
-    <!-- Countdown OUTSIDE sidebar -->
-    <div class="countdownPanel" id="countdownPanel">
+    <!-- NEW: Countdown to March 21 -->
+    <div class="countdown" id="countdown">
       <div class="label">Cuenta regresiva</div>
       <div class="time" id="countdownTime"><strong>—</strong></div>
+      <div class="sub" id="countdownSub">hasta 21 de marzo</div>
     </div>
   </div>
 
-  <!-- Audio: change carnaval.mp3 to your exact filename -->
-  <audio id="bgMusic" src="music.mp3" preload="auto" playsinline></audio>
+  <!-- AUDIO (put your mp3 filename here) -->
+  <audio id="bgMusic" src="carnaval.mp3" preload="auto" playsinline></audio>
 
   <!-- HERO -->
   <section class="hero" id="inicio">
@@ -644,7 +743,10 @@
       </div>
 
       <div class="heroText" id="heroText">
-        <h1>Camila <span class="age">#22</span></h1>
+        <h1>
+          Camila
+          <span class="age">#22</span>
+        </h1>
         <h2>CARNAVAL</h2>
       </div>
 
@@ -715,7 +817,7 @@
 
   <!-- RSVP -->
   <section id="rsvp">
-    <div class="panel" id="rsvpPanel">
+    <div class="panel">
       <h2>🎟️ RSVP</h2>
 
       <input id="nombre" placeholder="Tu nombre">
@@ -736,307 +838,313 @@
   </section>
 
 <script>
-  function forceRevealFallback(){
-    const flyer = document.getElementById("flyerDetalles");
-    const panel = document.getElementById("rsvpPanel");
-    if(flyer) flyer.classList.add("reveal");
-    if(panel) panel.classList.add("reveal");
+  /* ============================
+     MUSIC SETTINGS
+     ============================ */
+  const MUSIC_START_AT = 7; // seconds (starts at 7s)
+
+  const bgMusic = document.getElementById("bgMusic");
+  const toggleMusicBtn = document.getElementById("toggleMusic");
+  const musicLabel = document.getElementById("musicLabel");
+
+  let musicEnabled = true;
+  let fading = false;
+
+  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+  function fadeVolumeTo(targetVol, durationMs){
+    if(!bgMusic) return;
+    if(fading) return;
+    fading = true;
+
+    const startVol = bgMusic.volume;
+    const start = performance.now();
+    const dur = Math.max(80, durationMs);
+
+    function step(t){
+      const p = clamp((t - start) / dur, 0, 1);
+      bgMusic.volume = startVol + (targetVol - startVol) * p;
+      if(p < 1){
+        requestAnimationFrame(step);
+      }else{
+        fading = false;
+      }
+    }
+    requestAnimationFrame(step);
   }
 
-  (function init(){
+  async function startMusicWithFade(){
+    if(!bgMusic) return;
+
     try{
-      /* ============================
-         Dock + Sidebar toggles
-         ============================ */
-      const dock = document.getElementById("controlDock");
-      const controlsBtn = document.getElementById("controlsBtn");
-      const countdownBtn = document.getElementById("countdownBtn");
+      bgMusic.currentTime = MUSIC_START_AT;
+      bgMusic.loop = true;
+      bgMusic.volume = 0;
+      await bgMusic.play();
 
-      controlsBtn.addEventListener("click", (e)=>{
-        e.stopPropagation();
-        dock.classList.toggle("open");
-      });
-
-      // Countdown button toggles showing the countdown panel (outside sidebar)
-      countdownBtn.addEventListener("click", (e)=>{
-        e.stopPropagation();
-        dock.classList.toggle("showCountdown");
-      });
-
-      // Close sidebar when clicking outside
-      document.addEventListener("click", (e)=>{
-        if(!dock.contains(e.target)){
-          dock.classList.remove("open");
-        }
-      });
-
-      /* ============================
-         Countdown to March 21 (next occurrence)
-         ============================ */
-      const countdownMiniEl = document.getElementById("countdownMini");
-      const countdownTimeEl = document.getElementById("countdownTime");
-      const countdownSubEl  = document.getElementById("countdownSub");
-
-      function getNextMarch21(){
-        const now = new Date();
-        const year = now.getFullYear();
-        let target = new Date(year, 2, 21, 0, 0, 0); // March 21
-        if(now > target) target = new Date(year + 1, 2, 21, 0, 0, 0);
-        return target;
-      }
-      const targetDate = getNextMarch21();
-      function pad2(n){ return String(n).padStart(2,"0"); }
-
-      function updateCountdown(){
-        const now = new Date();
-        const diff = targetDate - now;
-
-        if(diff <= 0){
-          countdownMiniEl.textContent = "¡HOY!";
-          countdownTimeEl.innerHTML = "<strong>¡HOY!</strong>";
-          countdownSubEl.textContent = "🎉 Es 21 de marzo";
-          return;
-        }
-
-        const totalSeconds = Math.floor(diff/1000);
-        const days = Math.floor(totalSeconds/86400);
-        const hours = Math.floor((totalSeconds%86400)/3600);
-        const mins = Math.floor((totalSeconds%3600)/60);
-        const secs = totalSeconds%60;
-
-        countdownMiniEl.textContent = `${days}d ${pad2(hours)}h`;
-        countdownTimeEl.innerHTML = `<strong>${days}d</strong> ${pad2(hours)}h ${pad2(mins)}m ${pad2(secs)}s`;
-        countdownSubEl.textContent = "hasta 21 de marzo";
-      }
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-
-      /* ============================
-         Theme + Background toggle (FIXED + obvious)
-         ============================ */
-      const toggleThemeBtn = document.getElementById("toggleTheme");
-      const themeLabel = document.getElementById("themeLabel");
-
-      toggleThemeBtn.addEventListener("click", (e)=>{
-        e.stopPropagation();
-        document.body.classList.toggle("theme-parade");
-        themeLabel.textContent = document.body.classList.contains("theme-parade") ? "Parade" : "Noche Neón";
-      });
-
-      const toggleBgBtn = document.getElementById("toggleBg");
-      const bgLabel = document.getElementById("bgLabel");
-
-      toggleBgBtn.addEventListener("click", (e)=>{
-        e.stopPropagation();
-        document.body.classList.toggle("bg-static");
-        bgLabel.textContent = document.body.classList.contains("bg-static") ? "Estático" : "Vivo";
-      });
-
-      /* ============================
-         Music (start at 7s + fade)
-         ============================ */
-      const MUSIC_START_AT = 7; // seconds
-      const bgMusic = document.getElementById("bgMusic");
-      const toggleMusicBtn = document.getElementById("toggleMusic");
-      const musicLabel = document.getElementById("musicLabel");
-
-      let fading = false;
-
-      function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
-
-      function fadeVolumeTo(targetVol, durationMs){
-        if(!bgMusic || fading) return;
-        fading = true;
-
-        const startVol = bgMusic.volume;
-        const start = performance.now();
-        const dur = Math.max(80, durationMs);
-
-        function step(t){
-          const p = clamp((t - start)/dur, 0, 1);
-          bgMusic.volume = startVol + (targetVol - startVol) * p;
-          if(p < 1) requestAnimationFrame(step);
-          else fading = false;
-        }
-        requestAnimationFrame(step);
-      }
-
-      async function startMusicWithFade(){
-        try{
-          bgMusic.currentTime = MUSIC_START_AT;
-          bgMusic.loop = true;
-          bgMusic.volume = 0;
-          await bgMusic.play();
-          fadeVolumeTo(1.0, 1400);
-          musicLabel.textContent = "On";
-        }catch(err){
-          musicLabel.textContent = "Tap";
-        }
-      }
-
-      function stopMusicWithFade(){
-        fadeVolumeTo(0.0, 700);
-        setTimeout(()=>{ try{ bgMusic.pause(); }catch(e){} }, 750);
-        musicLabel.textContent = "Off";
-      }
-
-      toggleMusicBtn.addEventListener("click", (e)=>{
-        e.stopPropagation();
-        if(bgMusic.paused) startMusicWithFade();
-        else stopMusicWithFade();
-      });
-
-      // attempt autoplay
-      startMusicWithFade();
-
-      // start on first gesture if blocked
-      function oneGestureStart(){
-        if(bgMusic && bgMusic.paused) startMusicWithFade();
-        window.removeEventListener("pointerdown", oneGestureStart);
-        window.removeEventListener("touchstart", oneGestureStart);
-        window.removeEventListener("keydown", oneGestureStart);
-      }
-      window.addEventListener("pointerdown", oneGestureStart, {once:true});
-      window.addEventListener("touchstart", oneGestureStart, {once:true, passive:true});
-      window.addEventListener("keydown", oneGestureStart, {once:true});
-
-      /* ============================
-         Reveal panels safely
-         ============================ */
-      const flyer = document.getElementById("flyerDetalles");
-      const panel = document.getElementById("rsvpPanel");
-
-      if("IntersectionObserver" in window){
-        const obs = new IntersectionObserver(entries=>{
-          entries.forEach(e=>{
-            if(e.isIntersecting) e.target.classList.add("reveal");
-          });
-        }, {threshold: .15});
-        if(flyer) obs.observe(flyer);
-        if(panel) obs.observe(panel);
-      } else {
-        forceRevealFallback();
-      }
-
-      setTimeout(()=>{
-        if(flyer && !flyer.classList.contains("reveal")) flyer.classList.add("reveal");
-        if(panel && !panel.classList.contains("reveal")) panel.classList.add("reveal");
-      }, 800);
-
-      /* Dim ornaments on Detalles */
-      const detallesSection = document.querySelector("#detalles");
-      if("IntersectionObserver" in window && detallesSection){
-        const detallesObserver = new IntersectionObserver(
-          ([entry]) => document.body.classList.toggle("dim-ornaments", entry.isIntersecting),
-          { threshold: 0.15 }
-        );
-        detallesObserver.observe(detallesSection);
-      }
-
-      /* RSVP plus-one fields */
-      window.updatePlusOnes = function(){
-        const count = parseInt(document.getElementById("plusOnes").value, 10);
-        const container = document.getElementById("plusOneFields");
-        container.innerHTML = "";
-        for(let i=1;i<=count;i++){
-          const input = document.createElement("input");
-          input.placeholder = "Nombre del invitado " + i;
-          input.className = "plusGuest";
-          container.appendChild(input);
-        }
-      }
-      window.updatePlusOnes();
-
-      function getCssVar(name){
-        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-      }
-
-      /* RSVP -> WhatsApp */
-      window.confirmar = function(){
-        const nombre = document.getElementById("nombre").value.trim();
-        const plusCount = parseInt(document.getElementById("plusOnes").value, 10);
-        const invitados = Array.from(document.querySelectorAll(".plusGuest")).map(i=>i.value.trim()).filter(Boolean);
-
-        const msg = document.getElementById("mensaje");
-        const waWrap = document.getElementById("waLinkWrap");
-        waWrap.style.display = "none";
-        waWrap.innerHTML = "";
-
-        if(!nombre){ msg.textContent="Escribe tu nombre 👀"; return; }
-        if(invitados.length !== plusCount){ msg.textContent="Escribe los nombres de tus invitados 👀"; return; }
-
-        msg.textContent = "🔥 " + nombre + " oficialmente está en el CARNAVAL 🔥";
-
-        const invitadosTxt = plusCount===0 ? "0 acompañantes" : `Acompañantes (${plusCount}): ${invitados.join(", ")}`;
-        const detalles = [
-          "🎭 *RSVP CARNAVAL — CAMILA #22*",
-          `✅ Confirmo: *${nombre}*`,
-          `👥 ${invitadosTxt}`,
-          "",
-          "💃 Lista para sambarear 🔥"
-        ].join("\n");
-
-        const encoded = encodeURIComponent(detalles);
-        const host = getCssVar("--wa-host").replace(/[^0-9]/g,"");
-
-        const waUrl = (host && host.length>=8)
-          ? `https://wa.me/${host}?text=${encoded}`
-          : `https://api.whatsapp.com/send?text=${encoded}`;
-
-        const opened = window.open(waUrl, "_blank");
-        if(!opened){
-          waWrap.style.display="block";
-          waWrap.innerHTML = `No se abrió WhatsApp automáticamente. Toca aquí: <a href="${waUrl}" target="_blank">Enviar RSVP por WhatsApp</a>`;
-        }
-
-        const colors=["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
-        for(let i=0;i<90;i++){
-          const c=document.createElement("div");
-          c.className="confetti";
-          c.style.left=(Math.random()*100)+"vw";
-          c.style.background=colors[Math.floor(Math.random()*colors.length)];
-          c.style.animationDuration=(Math.random()*1.6+2.4)+"s";
-          document.body.appendChild(c);
-          setTimeout(()=>c.remove(), 3800);
-        }
-      }
-
-      /* Parallax */
-      const layers = Array.from(document.querySelectorAll(".parallax"));
-      const heroText = document.getElementById("heroText");
-      let latestY=0, ticking=false;
-
-      function applyParallax(){
-        const y = latestY;
-        layers.forEach(el=>{
-          const speed = parseFloat(el.dataset.speed || "1");
-          const xAmt  = parseFloat(el.dataset.x || "0.2");
-          const rAmt  = parseFloat(el.dataset.r || "0.1");
-          const ty = (y * speed) * 0.10;
-          const tx = Math.sin(y * 0.004) * 18 * xAmt;
-          const rot = Math.sin(y * 0.003) * 6 * rAmt;
-          el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg)`;
-        });
-
-        const fade = Math.max(0, 1 - (y / 520));
-        if(heroText) heroText.style.opacity = fade.toFixed(3);
-        ticking=false;
-      }
-
-      window.addEventListener("scroll", ()=>{
-        latestY = window.scrollY;
-        if(!ticking){
-          requestAnimationFrame(applyParallax);
-          ticking=true;
-        }
-      }, {passive:true});
-
-      applyParallax();
-
+      fadeVolumeTo(1.0, 1400);
+      musicEnabled = true;
+      musicLabel.textContent = "On";
     }catch(err){
-      forceRevealFallback();
+      musicEnabled = false;
+      musicLabel.textContent = "Tap";
     }
-  })();
+  }
+
+  function stopMusicWithFade(){
+    if(!bgMusic) return;
+    fadeVolumeTo(0.0, 700);
+    setTimeout(()=>{
+      try{ bgMusic.pause(); }catch(e){}
+    }, 750);
+    musicEnabled = false;
+    musicLabel.textContent = "Off";
+  }
+
+  toggleMusicBtn.addEventListener("click", async ()=>{
+    if(!bgMusic) return;
+
+    if(!bgMusic.paused && musicEnabled){
+      stopMusicWithFade();
+      return;
+    }
+    await startMusicWithFade();
+  });
+
+  // Try to autoplay on load (may be blocked)
+  startMusicWithFade();
+
+  // If autoplay blocked, start when user interacts (first gesture)
+  function oneGestureStart(){
+    if(bgMusic && (bgMusic.paused || !musicEnabled)){
+      startMusicWithFade();
+    }
+    window.removeEventListener("pointerdown", oneGestureStart);
+    window.removeEventListener("touchstart", oneGestureStart);
+    window.removeEventListener("keydown", oneGestureStart);
+    window.removeEventListener("scroll", oneGestureStart);
+  }
+  window.addEventListener("pointerdown", oneGestureStart, {once:true});
+  window.addEventListener("touchstart", oneGestureStart, {once:true, passive:true});
+  window.addEventListener("keydown", oneGestureStart, {once:true});
+  window.addEventListener("scroll", oneGestureStart, {once:true, passive:true});
+
+  /* ============================
+     COUNTDOWN to March 21
+     ============================ */
+  const countdownTimeEl = document.getElementById("countdownTime");
+  const countdownSubEl  = document.getElementById("countdownSub");
+
+  // Uses viewer's local time zone; March 21 at 00:00:00
+  function getNextMarch21(){
+    const now = new Date();
+    const year = now.getFullYear();
+
+    let target = new Date(year, 2, 21, 0, 0, 0); // month=2 => March
+    if(now > target){
+      target = new Date(year + 1, 2, 21, 0, 0, 0);
+    }
+    return target;
+  }
+
+  const targetDate = getNextMarch21();
+
+  function pad2(n){ return String(n).padStart(2, "0"); }
+
+  function updateCountdown(){
+    const now = new Date();
+    let diff = targetDate - now;
+
+    if(diff <= 0){
+      countdownTimeEl.innerHTML = `<strong>¡HOY!</strong>`;
+      countdownSubEl.textContent = "🎉 Es 21 de marzo";
+      return;
+    }
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+
+    countdownTimeEl.innerHTML =
+      `<strong>${days}d</strong> ${pad2(hours)}h ${pad2(mins)}m ${pad2(secs)}s`;
+
+    countdownSubEl.textContent = "hasta 21 de marzo";
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  /* ============================
+     Reveal panels/flyer smoothly
+     ============================ */
+  const revealTargets = [ ...document.querySelectorAll(".panel"), document.getElementById("flyerDetalles") ].filter(Boolean);
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add("reveal");
+    });
+  }, {threshold: .2});
+  revealTargets.forEach(el => obs.observe(el));
+
+  /* ============================
+     Dim ornaments on Detalles
+     ============================ */
+  const detallesSection = document.querySelector("#detalles");
+  const detallesObserver = new IntersectionObserver(
+    ([entry]) => {
+      document.body.classList.toggle("dim-ornaments", entry.isIntersecting);
+    },
+    { threshold: 0.15 }
+  );
+  if (detallesSection) detallesObserver.observe(detallesSection);
+
+  /* ============================
+     RSVP plus-one fields
+     ============================ */
+  function updatePlusOnes(){
+    const count = parseInt(document.getElementById("plusOnes").value, 10);
+    const container = document.getElementById("plusOneFields");
+    container.innerHTML = "";
+
+    for(let i = 1; i <= count; i++){
+      const input = document.createElement("input");
+      input.placeholder = "Nombre del invitado " + i;
+      input.className = "plusGuest";
+      container.appendChild(input);
+    }
+  }
+  updatePlusOnes();
+
+  function getCssVar(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  function confirmar(){
+    const nombre = document.getElementById("nombre").value.trim();
+    const plusCount = parseInt(document.getElementById("plusOnes").value, 10);
+    const guestInputs = document.querySelectorAll(".plusGuest");
+    const invitados = Array.from(guestInputs).map(i => i.value.trim()).filter(Boolean);
+
+    const msg = document.getElementById("mensaje");
+    const waWrap = document.getElementById("waLinkWrap");
+    waWrap.style.display = "none";
+    waWrap.innerHTML = "";
+
+    if(!nombre){
+      msg.textContent = "Escribe tu nombre 👀";
+      return;
+    }
+    if(invitados.length !== plusCount){
+      msg.textContent = "Escribe los nombres de tus invitados 👀";
+      return;
+    }
+
+    msg.textContent = "🔥 " + nombre + " oficialmente está en el CARNAVAL 🔥";
+
+    const invitadosTxt = plusCount === 0
+      ? "0 acompañantes"
+      : `Acompañantes (${plusCount}): ${invitados.join(", ")}`;
+
+    const detalles = [
+      "🎭 *RSVP CARNAVAL — CAMILA #22*",
+      `✅ Confirmo: *${nombre}*`,
+      `👥 ${invitadosTxt}`,
+      "",
+      "💃 Lista para sambarear 🔥"
+    ].join("\n");
+
+    const encoded = encodeURIComponent(detalles);
+
+    const host = getCssVar("--wa-host").replace(/[^0-9]/g, "");
+    let waUrl = "";
+
+    if(host && host.length >= 8){
+      waUrl = `https://wa.me/${host}?text=${encoded}`;
+    } else {
+      waUrl = `https://api.whatsapp.com/send?text=${encoded}`;
+    }
+
+    const opened = window.open(waUrl, "_blank");
+
+    if(!opened){
+      waWrap.style.display = "block";
+      waWrap.innerHTML = `No se abrió WhatsApp automáticamente. Toca aquí: <a href="${waUrl}" target="_blank">Enviar RSVP por WhatsApp</a>`;
+    }
+
+    const colors = ["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
+    for(let i=0;i<90;i++){
+      const c=document.createElement("div");
+      c.className="confetti";
+      c.style.left = (Math.random()*100) + "vw";
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration = (Math.random()*1.6 + 2.4) + "s";
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(), 3800);
+    }
+  }
+
+  /* ============================
+     Theme toggle
+     ============================ */
+  const toggleBtn = document.getElementById("toggleTheme");
+  const themeLabel = document.getElementById("themeLabel");
+  toggleBtn.addEventListener("click", ()=>{
+    document.body.classList.toggle("theme-parade");
+    const isParade = document.body.classList.contains("theme-parade");
+    themeLabel.textContent = isParade ? "Parade" : "Noche Neón";
+  });
+
+  /* ============================
+     Background performance toggle
+     ============================ */
+  const toggleBgBtn = document.getElementById("toggleBg");
+  const bgLabel = document.getElementById("bgLabel");
+
+  toggleBgBtn.addEventListener("click", ()=>{
+    document.body.classList.toggle("bg-static");
+    const isStatic = document.body.classList.contains("bg-static");
+    bgLabel.textContent = isStatic ? "Estático" : "Vivo";
+  });
+
+  /* ============================
+     PARTY-ENERGY scroll parallax
+     ============================ */
+  const layers = Array.from(document.querySelectorAll(".parallax"));
+  const heroText = document.getElementById("heroText");
+  let latestY = 0;
+  let ticking = false;
+
+  function applyParallax(){
+    const y = latestY;
+
+    layers.forEach(el=>{
+      const speed = parseFloat(el.dataset.speed || "1");
+      const xAmt  = parseFloat(el.dataset.x || "0.2");
+      const rAmt  = parseFloat(el.dataset.r || "0.1");
+
+      const ty = (y * speed) * 0.10;
+      const tx = Math.sin(y * 0.004) * 18 * xAmt;
+      const rot = Math.sin(y * 0.003) * 6 * rAmt;
+
+      el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg)`;
+    });
+
+    const fade = Math.max(0, 1 - (y / 520));
+    heroText.style.opacity = (fade).toFixed(3);
+
+    ticking = false;
+  }
+
+  window.addEventListener("scroll", ()=>{
+    latestY = window.scrollY;
+    if(!ticking){
+      window.requestAnimationFrame(applyParallax);
+      ticking = true;
+    }
+  }, {passive:true});
+
+  applyParallax();
 </script>
 </body>
 </html>
