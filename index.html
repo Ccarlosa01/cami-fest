@@ -23,6 +23,20 @@
 
     --gold: linear-gradient(45deg,#ffd700,#ffb300);
     --shadow: 0 25px 70px rgba(0,0,0,.45);
+
+    /* ============================
+       EASY SCALE CONTROLS (NEW)
+       Adjust these anytime 🔧
+       ============================ */
+    --s-leaf: 1.00;
+    --s-stamp: 1.00;
+    --s-orange: 1.00;
+    --s-flower: 1.00; /* hibiscus */
+    --s-glass: 1.00;
+    --s-bird: 1.00;
+    --s-toucan: 1.00;
+    --s-cristo: 1.00;
+    --s-crates: 1.00;
   }
 
   /* Optional: Parade (brighter) theme */
@@ -113,15 +127,14 @@
   /* =========================================
      ALL IMAGES VIEWPORT-ANCHORED + DIM/BLUR
      ========================================= */
-
   .parallax{
-    position: fixed;                 /* ✅ all viewport anchored */
+    position: fixed;
     pointer-events:none;
     will-change: transform;
     transform-origin: center;
     filter: drop-shadow(0 16px 34px rgba(0,0,0,.35));
     transition: opacity .7s ease, filter .7s ease;
-    z-index: 6;                      /* base layer (in hero) */
+    z-index: 6; /* base layer, overridden per-class below */
   }
 
   /* Flyer + RSVP must always stay above ornaments */
@@ -132,18 +145,58 @@
 
   /* When Detalles appears: dim to 10% + blur + send behind flyer + rsvp */
   body.dim-ornaments .parallax{
-    opacity: 0.25;
+    opacity: 0.10;
     filter: blur(8px) drop-shadow(0 16px 34px rgba(0,0,0,.35));
-    z-index: 1 !important;           /* ✅ force behind content */
+    z-index: 1 !important;
   }
 
+  /* Wrapper that holds the image */
+  .floaty{
+    width:100%;
+    height:auto;
+    transform-origin:center;
+    will-change: transform;
+  }
   .floaty img{ width:100%; display:block; }
 
-  /* Positions (REQUESTED LAYOUT) */
+  /* ============================
+     POSITIONING (VIEWPORT)
+     ============================ */
+
   .leafTL{
     left: 0;
     top: 0;
     width: clamp(220px, 32vw, 520px);
+  }
+
+  /* Stamp: behind leaf AND moved more right */
+  .stamp {
+    left: 16%;             /* was 6% -> pushed right */
+    top: 18%;
+    width: 18%;
+  }
+
+  .orange{ left:45%; top:4%; width:22%; }
+
+  /* Hibiscus: behind glass */
+  .flower{
+    right: 120px;
+    top: 10px;
+    width: clamp(160px, 22vw, 320px);
+  }
+
+  /* Glass: above hibiscus */
+  .glass{
+    right: 18px;
+    top: 88px;
+    width: clamp(110px, 16vw, 220px);
+  }
+
+  /* Blue bird: in front of hibiscus + glass */
+  .bird{
+    right: 6%;
+    top: 28%;
+    width: 20%;
   }
 
   .toucan{
@@ -152,29 +205,51 @@
     width: clamp(160px, 22vw, 320px);
   }
 
+  .cristo{
+    left:35%;
+    bottom:3%;
+    width:22%;
+  }
+
   .crates{
     right: 0;
     bottom: 0;
     width: clamp(260px, 42vw, 620px);
   }
 
-  .flower{
-    right: 120px;     /* left of the toggle */
-    top: 10px;
-    width: clamp(160px, 22vw, 320px);
-  }
+  /* ============================
+     LAYERING HIERARCHY (NEW)
+     Rules:
+     - stamp behind leaf
+     - hibiscus behind glass
+     - blue-bird in front of hibiscus & glass
+     ============================ */
+  .stamp{ z-index: 3; }   /* behind leaf */
+  .leafTL{ z-index: 5; }
 
-  .glass{
-    right: 18px;      /* below the toggle */
-    top: 88px;
-    width: clamp(110px, 16vw, 220px);
-  }
+  .flower{ z-index: 6; } /* hibiscus */
+  .glass{  z-index: 7; } /* glass above hibiscus */
+  .bird{   z-index: 8; } /* bird above both */
 
-  /* Other assets (also viewport-anchored now) */
-  .stamp { left:6%;  top:18%;  width:18%; }
-  .orange{ left:45%; top:4%;   width:22%; }
-  .bird  { right:6%; top:28%;  width:20%; }
-  .cristo{ left:35%; bottom:3%; width:22%; }
+  /* Other sensible ordering */
+  .orange{ z-index: 4; }
+  .cristo{ z-index: 4; }
+  .toucan{ z-index: 6; }
+  .crates{ z-index: 4; }
+
+  /* ============================
+     SCALE PER IMAGE (NEW)
+     Adjust via :root variables
+     ============================ */
+  .leafTL  .floaty{ transform: scale(var(--s-leaf)); }
+  .stamp   .floaty{ transform: scale(var(--s-stamp)); }
+  .orange  .floaty{ transform: scale(var(--s-orange)); }
+  .flower  .floaty{ transform: scale(var(--s-flower)); }
+  .glass   .floaty{ transform: scale(var(--s-glass)); }
+  .bird    .floaty{ transform: scale(var(--s-bird)); }
+  .toucan  .floaty{ transform: scale(var(--s-toucan)); }
+  .cristo  .floaty{ transform: scale(var(--s-cristo)); }
+  .crates  .floaty{ transform: scale(var(--s-crates)); }
 
   /* Loop animations (inner) */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
@@ -184,14 +259,15 @@
   @keyframes wobbleIn{ 0%{transform:scale(.6) rotate(-10deg);opacity:0} 70%{transform:scale(1.1) rotate(5deg);opacity:1} 100%{transform:scale(1) rotate(0)} }
   @keyframes riseIn{ 0%{transform:translateY(40px);opacity:0} 100%{transform:translateY(0);opacity:1} }
 
-  .leafTL .floaty{ animation: sway 6s ease-in-out infinite; }
-  .orange .floaty{ animation: float 5s ease-in-out infinite; }
-  .flower .floaty{ animation: breathe 7s ease-in-out infinite; }
-  .glass  .floaty{ animation: float 6s ease-in-out infinite; }
-  .bird   .floaty{ animation: bob 4s ease-in-out infinite; }
-  .toucan .floaty{ animation: bob 5s ease-in-out infinite; }
-  .stamp  .floaty{ animation: wobbleIn 1s ease-out both; }
-  .cristo .floaty{ animation: riseIn 1.2s ease-out both; }
+  /* NOTE: these animate the wrapper INSIDE .floaty via an extra inner div */
+  .leafTL  .wiggle{ animation: sway 6s ease-in-out infinite; }
+  .orange  .wiggle{ animation: float 5s ease-in-out infinite; }
+  .flower  .wiggle{ animation: breathe 7s ease-in-out infinite; }
+  .glass   .wiggle{ animation: float 6s ease-in-out infinite; }
+  .bird    .wiggle{ animation: bob 4s ease-in-out infinite; }
+  .toucan  .wiggle{ animation: bob 5s ease-in-out infinite; }
+  .stamp   .wiggle{ animation: wobbleIn 1s ease-out both; }
+  .cristo  .wiggle{ animation: riseIn 1.2s ease-out both; }
 
   /* HERO TEXT + GLOW PULSE */
   .heroText{
@@ -263,6 +339,7 @@
   /* ========================== */
 
   .flyer{
+    position: relative;
     width: min(920px, 95vw);
     margin: 0 auto;
     padding: 40px;
@@ -533,27 +610,27 @@
   <section class="hero" id="inicio">
     <div class="scene" id="scene">
       <div class="parallax leafTL" data-speed="0.55" data-x="0.30" data-r="0.10">
-        <div class="floaty"><img src="leaf-top-left.png" alt=""></div>
+        <div class="floaty"><div class="wiggle"><img src="leaf-top-left.png" alt=""></div></div>
       </div>
 
       <div class="parallax stamp" data-speed="0.95" data-x="-0.25" data-r="-0.18">
-        <div class="floaty"><img src="stamp-brasil.png" alt=""></div>
+        <div class="floaty"><div class="wiggle"><img src="stamp-brasil.png" alt=""></div></div>
       </div>
 
       <div class="parallax orange" data-speed="0.65" data-x="0.20" data-r="0.12">
-        <div class="floaty"><img src="orange-swoosh.png" alt=""></div>
+        <div class="floaty"><div class="wiggle"><img src="orange-swoosh.png" alt=""></div></div>
       </div>
 
       <div class="parallax flower" data-speed="0.85" data-x="-0.18" data-r="-0.10">
-        <div class="floaty"><img src="hibiscus.png" alt=""></div>
+        <div class="floaty"><div class="wiggle"><img src="hibiscus.png" alt=""></div></div>
       </div>
 
       <div class="parallax glass" data-speed="1.05" data-x="-0.22" data-r="0.14">
-        <div class="floaty"><img src="lime-glass.png" alt=""></div>
+        <div class="floaty"><div class="wiggle"><img src="lime-glass.png" alt=""></div></div>
       </div>
 
       <div class="parallax bird" data-speed="1.15" data-x="0.28" data-r="-0.16">
-        <div class="floaty"><img src="blue-bird.png" alt=""></div>
+        <div class="floaty"><div class="wiggle"><img src="blue-bird.png" alt=""></div></div>
       </div>
 
       <div class="heroText" id="heroText">
@@ -562,15 +639,15 @@
       </div>
 
       <div class="parallax toucan" data-speed="1.25" data-x="0.35" data-r="0.18">
-        <div class="floaty"><img src="toucan.png" alt=""></div>
+        <div class="floaty"><div class="wiggle"><img src="toucan.png" alt=""></div></div>
       </div>
 
       <div class="parallax cristo" data-speed="0.55" data-x="-0.08" data-r="-0.06">
-        <div class="floaty"><img src="cristo.png" alt=""></div>
+        <div class="floaty"><div class="wiggle"><img src="cristo.png" alt=""></div></div>
       </div>
 
       <div class="parallax crates" data-speed="1.55" data-x="-0.40" data-r="-0.12">
-        <div class="floaty"><img src="beer-crates.png" alt=""></div>
+        <div class="floaty"><div class="wiggle"><img src="beer-crates.png" alt=""></div></div>
       </div>
 
       <div class="scrollHint">Desliza ↓</div>
@@ -647,15 +724,13 @@
   revealTargets.forEach(el => obs.observe(el));
 
   // Dim + blur ornaments + send behind when "Detalles del Carnaval" starts showing
-  const detallesSection = document.querySelector("#detalles"); // or #flyerDetalles
-
+  const detallesSection = document.querySelector("#detalles");
   const detallesObserver = new IntersectionObserver(
     ([entry]) => {
       document.body.classList.toggle("dim-ornaments", entry.isIntersecting);
     },
     { threshold: 0.15 }
   );
-
   if (detallesSection) detallesObserver.observe(detallesSection);
 
   // RSVP confetti
