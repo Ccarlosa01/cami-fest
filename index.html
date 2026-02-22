@@ -1,442 +1,275 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Camila #22 — Carnaval</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Camila #22 — Carnaval</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --pink:#ff007f;
-      --orange:#ff6a00;
-      --yellow:#ffd000;
-      --green:#00c853;
-      --purple:#8e24aa;
-      --blue:#00b0ff;
-      --paper:#f7f1e8;
-      --ink:#141414;
-      --shadow: 0 16px 50px rgba(0,0,0,.16);
-      --gold: linear-gradient(45deg,#ffd700,#ffb300);
-    }
+<style>
+:root{
+  --pink:#ff007f;
+  --orange:#ff6a00;
+  --yellow:#ffd000;
+  --green:#00c853;
+  --blue:#00b0ff;
+  --purple:#8e24aa;
+}
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 600px at 20% 0%, rgba(255,0,127,.20), transparent 55%),
-        radial-gradient(1200px 700px at 90% 10%, rgba(0,176,255,.18), transparent 55%),
-        radial-gradient(900px 600px at 10% 80%, rgba(0,200,83,.16), transparent 55%),
-        linear-gradient(180deg, #f6fbff, #fff6fb 30%, #fffef5 60%, #f4fff9);
-      overflow-x:hidden;
-      scroll-behavior:smooth;
-    }
+*{box-sizing:border-box}
+html,body{height:100%}
 
-    /* Smooth sections */
-    section{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 70px 18px;
-    }
+body{
+  margin:0;
+  font-family:'Montserrat',sans-serif;
+  color:white;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
 
-    .container{
-      width:min(980px, 92vw);
-      margin:0 auto;
-    }
+  /* 🔥 RIO CARNAVAL GRADIENT */
+  background:
+    linear-gradient(120deg,
+      var(--pink),
+      var(--orange),
+      var(--yellow),
+      var(--green),
+      var(--blue),
+      var(--purple)
+    );
+  background-size: 300% 300%;
+  animation: gradientMove 15s ease infinite;
+}
 
-    /* ---------- HERO (continuous collage) ---------- */
-    .hero{
-      position:relative;
-    }
+/* Subtle animated gradient */
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
 
-    /* soft paper band behind the hero so collage pops */
-    .heroBand{
-      position:absolute;
-      inset: 60px 0 60px 0;
-      background: rgba(247,241,232,.72);
-      border-radius: 34px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,0,0,.06);
-      backdrop-filter: blur(10px);
-    }
+section{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 20px;
+}
 
-    .scene{
-      position:relative;
-      height: min(78vh, 720px);
-      border-radius: 34px;
-      overflow:hidden;
-    }
+.container{
+  width:min(1000px,95vw);
+  margin:auto;
+  position:relative;
+}
 
-    /* texture overlay (no external image needed) */
-    .scene::before{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(1px 1px at 20% 30%, rgba(0,0,0,.06), transparent 60%),
-        radial-gradient(1px 1px at 70% 20%, rgba(0,0,0,.05), transparent 60%),
-        radial-gradient(1px 1px at 40% 80%, rgba(0,0,0,.05), transparent 60%);
-      opacity:.30;
-      pointer-events:none;
-    }
+/* HERO SCENE */
+.scene{
+  position:relative;
+  height:min(80vh,750px);
+}
 
-    .layer{
-      position:absolute;
-      user-select:none;
-      pointer-events:none;
-      will-change: transform, opacity;
-      transform-origin:center;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.15));
-    }
-    .layer img{width:100%; height:100%; display:block;}
+/* Layers */
+.layer{
+  position:absolute;
+  pointer-events:none;
+  filter:drop-shadow(0 12px 25px rgba(0,0,0,.25));
+}
+.layer img{width:100%;display:block}
 
-    /* Positions (tweak if needed) */
-    .leafTL{ left:-4%; top:-8%; width:48%; }
-    .stamp{ left:6%; top:16%; width:17%; }
-    .orange{ left:46%; top:3%; width:22%; }
-    .flower{ right:9%; top:-2%; width:30%; }
-    .glass{ right:-3%; top:10%; width:22%; }
-    .bird{ right:6%; top:26%; width:20%; }
-    .toucan{ left:-3%; bottom:6%; width:26%; }
-    .cristo{ left:34%; bottom:4%; width:22%; }
-    .crates{ right:-4%; bottom:-2%; width:58%; }
+/* Positions */
+.leafTL{ left:-5%; top:-10%; width:48%; }
+.stamp{ left:6%; top:18%; width:18%; }
+.orange{ left:45%; top:4%; width:22%; }
+.flower{ right:10%; top:-3%; width:30%; }
+.glass{ right:-3%; top:12%; width:22%; }
+.bird{ right:6%; top:28%; width:20%; }
+.toucan{ left:-3%; bottom:5%; width:26%; }
+.cristo{ left:35%; bottom:3%; width:22%; }
+.crates{ right:-4%; bottom:-2%; width:58%; }
 
-    /* Hero text */
-    .heroText{
-      position:absolute;
-      left: 7%;
-      right: 7%;
-      top: 44%;
-      transform: translateY(-50%);
-      text-align:center;
-      z-index:5;
-    }
-    .heroText .title{
-      font-family:'Bangers',cursive;
-      font-size: clamp(44px, 6vw, 96px);
-      letter-spacing: 2px;
-      color:#1b2a7a;
-      text-shadow: 4px 4px 0 #000;
-      line-height:1.0;
-      margin:0;
-      opacity:0;
-      animation: fadeUp 900ms ease-out 120ms both;
-    }
-    .heroText .title .red{ color:#e53935; }
+/* Title */
+.heroText{
+  position:absolute;
+  left:0; right:0;
+  top:45%;
+  transform:translateY(-50%);
+  text-align:center;
+}
 
-    .heroText .subtitle{
-      font-family:'Bangers',cursive;
-      font-size: clamp(34px, 5.2vw, 78px);
-      letter-spacing: 2px;
-      color:#1b8f3a;
-      text-shadow: 4px 4px 0 #000;
-      margin: 12px 0 0 0;
-      opacity:0;
-      animation: fadeUp 1000ms ease-out 260ms both;
-    }
+.heroText h1{
+  font-family:'Bangers',cursive;
+  font-size:clamp(50px,7vw,100px);
+  margin:0;
+  text-shadow:5px 5px 0 #000;
+}
 
-    .hint{
-      position:absolute;
-      left:0; right:0;
-      bottom:16px;
-      display:flex;
-      justify-content:center;
-      z-index:6;
-      pointer-events:none;
-    }
-    .hint span{
-      background: rgba(255,255,255,.65);
-      padding: 10px 14px;
-      border-radius: 999px;
-      backdrop-filter: blur(10px);
-      font-weight: 900;
-      color: rgba(0,0,0,.62);
-      box-shadow: 0 10px 22px rgba(0,0,0,.12);
-      animation: float 2.2s ease-in-out infinite;
-    }
+.heroText h2{
+  font-family:'Bangers',cursive;
+  font-size:clamp(40px,6vw,80px);
+  margin:10px 0 0 0;
+  text-shadow:5px 5px 0 #000;
+  color:#ffd000;
+}
 
-    /* ---------- DETAILS + RSVP panels ---------- */
-    .panel{
-      width:min(820px, 94vw);
-      background: rgba(255,255,255,0.92);
-      border-radius: 26px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.12);
-      padding: 22px 18px;
-      border: 1px solid rgba(0,0,0,.06);
-      backdrop-filter: blur(12px);
-      transform: translateY(18px);
-      opacity: 0;
-      transition: transform 650ms ease, opacity 650ms ease;
-    }
-    .panel.reveal{
-      transform: translateY(0);
-      opacity: 1;
-    }
+.scrollHint{
+  position:absolute;
+  bottom:20px;
+  left:0; right:0;
+  text-align:center;
+  font-weight:800;
+  animation:float 2s infinite;
+}
 
-    h2{
-      margin: 0 0 12px 0;
-      font-size: 1.9rem;
-    }
-    p{margin: 0 0 10px 0; font-size:1.05rem;}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 10px;
-    }
-    @media(min-width:720px){
-      .grid{ grid-template-columns: 1fr 1fr; }
-    }
+/* DETAILS + RSVP PANELS */
+.panel{
+  width:min(850px,95vw);
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(12px);
+  padding:30px;
+  border-radius:25px;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+  transform:translateY(30px);
+  opacity:0;
+  transition:all .6s ease;
+}
 
-    .card{
-      background: rgba(0,0,0,.06);
-      border-radius: 18px;
-      padding: 14px 14px;
-      text-align:left;
-    }
-    .card h3{
-      margin:0 0 6px 0;
-      font-size: 1rem;
-    }
-    .card p{ margin:0; }
+.panel.reveal{
+  transform:translateY(0);
+  opacity:1;
+}
 
-    .ctaRow{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-      justify-content:center;
-    }
+.panel h2{
+  margin-top:0;
+  font-size:2rem;
+}
 
-    .cta, .btn{
-      display:inline-block;
-      border:none;
-      padding: 12px 16px;
-      border-radius: 999px;
-      font-weight: 900;
-      cursor:pointer;
-      text-decoration:none;
-      color:#111;
-      background: var(--gold);
-      transition: transform .18s ease;
-    }
-    .cta:hover, .btn:hover{ transform: scale(1.05); }
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:15px;
+}
+@media(min-width:750px){
+  .grid{grid-template-columns:1fr 1fr}
+}
 
-    /* RSVP */
-    .rsvpRow{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:10px;
-      margin-top: 14px;
-    }
-    input{
-      width:min(420px, 92vw);
-      padding: 12px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,0,0,.12);
-      outline:none;
-      font-size: 1rem;
-    }
+.card{
+  background:rgba(255,255,255,.1);
+  padding:15px;
+  border-radius:18px;
+}
 
-    /* Confetti */
-    .confetti{
-      position:fixed;
-      top:-10px;
-      width:9px;
-      height:9px;
-      border-radius:2px;
-      animation: fall 3.8s linear forwards;
-      z-index:9999;
-      pointer-events:none;
-      opacity:.9;
-    }
-    @keyframes fall{
-      to{ transform: translateY(110vh) rotate(720deg); opacity: 1; }
-    }
+.card h3{margin:0 0 5px 0}
 
-    /* Animations for collage layers */
-    @keyframes sway {
-      0%,100%{ transform: rotate(-2deg) translateY(0); }
-      50%{ transform: rotate(2deg) translateY(4px); }
-    }
-    @keyframes float {
-      0%,100%{ transform: translateY(0); }
-      50%{ transform: translateY(-12px); }
-    }
-    @keyframes breathe {
-      0%,100%{ transform: scale(1) rotate(-1deg); }
-      50%{ transform: scale(1.03) rotate(1deg); }
-    }
-    @keyframes bob {
-      0%,100%{ transform: translateY(0) rotate(0deg); }
-      50%{ transform: translateY(-8px) rotate(-1deg); }
-    }
-    @keyframes wobbleIn {
-      0%{ transform: scale(.65) rotate(-10deg); opacity:0; }
-      70%{ transform: scale(1.08) rotate(5deg); opacity:1; }
-      100%{ transform: scale(1) rotate(0deg); opacity:1; }
-    }
-    @keyframes riseIn {
-      0%{ transform: translateY(40px); opacity:0; }
-      100%{ transform: translateY(0); opacity:1; }
-    }
-    @keyframes fadeUp {
-      0%{ transform: translateY(16px); opacity:0; }
-      100%{ transform: translateY(0); opacity:1; }
-    }
+input{
+  width:100%;
+  padding:12px;
+  border-radius:999px;
+  border:none;
+  font-size:1rem;
+}
 
-    /* Assign per-object motion (subtle but alive) */
-    .leafTL{ animation: sway 6.2s ease-in-out infinite; }
-    .orange{ animation: float 5.2s ease-in-out infinite; }
-    .flower{ animation: breathe 7.0s ease-in-out infinite; }
-    .glass{ animation: float 6.0s ease-in-out infinite; }
-    .bird{ animation: bob 4.0s ease-in-out infinite; }
-    .toucan{ animation: bob 5.0s ease-in-out infinite; }
-    .stamp{ animation: wobbleIn 1.0s ease-out both; }
-    .cristo{ animation: riseIn 1.2s ease-out both; }
+button{
+  margin-top:10px;
+  padding:12px 20px;
+  border-radius:999px;
+  border:none;
+  font-weight:900;
+  background:linear-gradient(45deg,#ffd700,#ffb300);
+  cursor:pointer;
+  transition:.2s;
+}
+button:hover{transform:scale(1.05)}
 
-    /* Footer */
-    .footer{
-      min-height: 40vh;
-      padding-bottom: 90px;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      color: rgba(0,0,0,.60);
-      font-weight: 800;
-    }
-  </style>
+.confetti{
+  position:fixed;
+  top:-10px;
+  width:8px;height:8px;
+  animation:fall 3.5s linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(720deg)}
+}
+</style>
 </head>
 
 <body>
 
-  <!-- HERO -->
-  <section class="hero" id="inicio">
-    <div class="container" style="position:relative;">
-      <div class="heroBand"></div>
+<section>
+<div class="container">
+  <div class="scene">
 
-      <div class="scene">
-        <!-- Collage layers (YOUR FILES IN ROOT) -->
-        <div class="layer leafTL"><img src="leaf-top-left.png" alt=""></div>
+    <div class="layer leafTL"><img src="leaf-top-left.png"></div>
+    <div class="layer stamp"><img src="stamp-brasil.png"></div>
+    <div class="layer orange"><img src="orange-swoosh.png"></div>
+    <div class="layer flower"><img src="hibiscus.png"></div>
+    <div class="layer glass"><img src="lime-glass.png"></div>
+    <div class="layer bird"><img src="blue-bird.png"></div>
+    <div class="layer toucan"><img src="toucan.png"></div>
+    <div class="layer cristo"><img src="cristo.png"></div>
+    <div class="layer crates"><img src="beer-crates.png"></div>
 
-        <!-- pick stamp-brasil.png or stamp-brasil2.png -->
-        <div class="layer stamp"><img src="stamp-brasil.png" alt=""></div>
-
-        <div class="layer orange"><img src="orange-swoosh.png" alt=""></div>
-
-        <!-- pick hibiscus.png or hibiscus2.png -->
-        <div class="layer flower"><img src="hibiscus.png" alt=""></div>
-
-        <div class="layer glass"><img src="lime-glass.png" alt=""></div>
-        <div class="layer bird"><img src="blue-bird.png" alt=""></div>
-
-        <div class="heroText">
-          <h1 class="title">Camila <span class="red">#22</span></h1>
-          <h2 class="subtitle">CARNAVAL</h2>
-        </div>
-
-        <div class="layer toucan"><img src="toucan.png" alt=""></div>
-        <div class="layer cristo"><img src="cristo.png" alt=""></div>
-        <div class="layer crates"><img src="beer-crates.png" alt=""></div>
-
-        <div class="hint"><span>Desliza ↓ para ver detalles</span></div>
-      </div>
+    <div class="heroText">
+      <h1>Camila <span style="color:#ff3d3d">#22</span></h1>
+      <h2>CARNAVAL</h2>
     </div>
-  </section>
 
-  <!-- DETAILS -->
-  <section id="detalles">
-    <div class="panel">
-      <h2>📍 Detalles del Carnaval</h2>
-      <p>Guárdate esta info porque esa noche… se va a poner seria. 🔥</p>
+    <div class="scrollHint">Desliza ↓</div>
 
-      <div class="grid">
-        <div class="card">
-          <h3>🗓️ Fecha</h3>
-          <p>REEMPLAZA AQUÍ</p>
-        </div>
-        <div class="card">
-          <h3>⏰ Hora</h3>
-          <p>REEMPLAZA AQUÍ</p>
-        </div>
-        <div class="card">
-          <h3>📌 Lugar</h3>
-          <p>REEMPLAZA AQUÍ</p>
-        </div>
-        <div class="card">
-          <h3>👗 Dress Code</h3>
-          <p>Brillo, colores, plumas, glitter. Full Río. 💃✨</p>
-        </div>
-      </div>
+  </div>
+</div>
+</section>
 
-      <div class="ctaRow">
-        <a class="cta" href="#rsvp">🎟️ Ir al RSVP</a>
-      </div>
-    </div>
-  </section>
+<section id="detalles">
+<div class="panel">
+  <h2>📍 Detalles del Carnaval</h2>
+  <div class="grid">
+    <div class="card"><h3>🗓 Fecha</h3><p>REEMPLAZA</p></div>
+    <div class="card"><h3>⏰ Hora</h3><p>REEMPLAZA</p></div>
+    <div class="card"><h3>📌 Lugar</h3><p>REEMPLAZA</p></div>
+    <div class="card"><h3>👗 Dress Code</h3><p>Brillo, colores, plumas, glitter 🔥</p></div>
+  </div>
+</div>
+</section>
 
-  <!-- RSVP -->
-  <section id="rsvp">
-    <div class="panel">
-      <h2>🎟️ RSVP</h2>
-      <p>Confirma tu nombre y te guardo tu lugar en el desfile.</p>
+<section id="rsvp">
+<div class="panel">
+  <h2>🎟️ RSVP</h2>
+  <input id="nombre" placeholder="Tu nombre">
+  <button onclick="confirmar()">🔥 YO VOY A SAMBAREAR</button>
+  <div id="mensaje" style="margin-top:10px;font-weight:900"></div>
+</div>
+</section>
 
-      <div class="rsvpRow">
-        <input id="nombre" type="text" placeholder="Tu nombre" />
-        <button class="btn" id="btnConfirmar">🔥 YO VOY A SAMBAREAR</button>
-        <div id="mensaje" style="font-weight:900;"></div>
-      </div>
+<script>
+const panels=document.querySelectorAll(".panel");
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add("reveal")}
+  })
+},{threshold:.2});
+panels.forEach(p=>observer.observe(p));
 
-      <div class="ctaRow" style="margin-top:16px;">
-        <a class="cta" href="#inicio">⬆️ Volver arriba</a>
-      </div>
-    </div>
-  </section>
+function confirmar(){
+  const nombre=document.getElementById("nombre").value.trim();
+  const msg=document.getElementById("mensaje");
+  if(!nombre){msg.textContent="Escribe tu nombre 👀";return}
+  msg.textContent="🔥 "+nombre+" oficialmente está en el CARNAVAL 🔥";
+  const colors=["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
+  for(let i=0;i<80;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3500);
+  }
+}
+</script>
 
-  <section class="footer">
-    <div>Nos vemos bajo las luces de Río 🌴✨</div>
-  </section>
-
-  <script>
-    // Reveal panels on scroll
-    const panels = document.querySelectorAll(".panel");
-    const panelObserver = new IntersectionObserver((entries) => {
-      entries.forEach(e => e.target.classList.toggle("reveal", e.isIntersecting));
-    }, { threshold: 0.25 });
-    panels.forEach(p => panelObserver.observe(p));
-
-    // RSVP Confetti (visual only)
-    const btn = document.getElementById("btnConfirmar");
-    btn.addEventListener("click", () => {
-      const nombre = document.getElementById("nombre").value.trim();
-      const msg = document.getElementById("mensaje");
-
-      if(!nombre){
-        msg.textContent = "Escribe tu nombre primero 👀";
-        return;
-      }
-
-      msg.textContent = `🔥 ${nombre} oficialmente está en el CARNAVAL 🔥`;
-
-      const colors = ["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
-      for(let i=0;i<90;i++){
-        const conf = document.createElement("div");
-        conf.className = "confetti";
-        conf.style.left = (Math.random()*100) + "vw";
-        conf.style.background = colors[Math.floor(Math.random()*colors.length)];
-        conf.style.animationDuration = (Math.random()*1.6 + 2.6) + "s";
-        conf.style.opacity = (Math.random()*0.4 + 0.6);
-        document.body.appendChild(conf);
-        setTimeout(()=>conf.remove(), 4500);
-      }
-    });
-  </script>
 </body>
 </html>
