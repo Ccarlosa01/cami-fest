@@ -309,17 +309,21 @@
 
   .heroText h1{
     font-family:'Bangers',cursive;
-    font-size: clamp(72px, 8vw, 140px); /* 👈 bigger Camila */
+    font-size: clamp(72px, 8vw, 140px);
     margin: 0;
     letter-spacing: 2px;
     text-shadow: 6px 6px 0 #000;
+  
+    display: flex;          /* 👈 NEW */
+    align-items: center;    /* 👈 centers #22 vertically */
+    justify-content: center;
+    gap: 14px;              /* spacing between Camila and #22 */
   }
   
   /* Make #22 smaller */
   .heroText .age{
     font-size: 0.55em;   /* 👈 relative to Camila size */
     color: #ff3d3d;
-    vertical-align: top; /* optional: slight lift */
   }
   .heroText h2{
     font-family:'Bangers',cursive;
