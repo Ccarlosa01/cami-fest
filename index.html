@@ -3,15 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Camila Carnaval #22</title>
+  <title>Camila #22 — Carnaval</title>
 
-  <!-- Fonts (safe for GitHub Pages) -->
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --paper:#f6f0e6;
-      --shadow: 0 18px 60px rgba(0,0,0,.18);
+      --pink:#ff007f;
+      --orange:#ff6a00;
+      --yellow:#ffd000;
+      --green:#00c853;
+      --purple:#8e24aa;
+      --blue:#00b0ff;
+      --paper:#f7f1e8;
+      --ink:#141414;
+      --shadow: 0 16px 50px rgba(0,0,0,.16);
       --gold: linear-gradient(45deg,#ffd700,#ffb300);
     }
 
@@ -20,105 +26,121 @@
     body{
       margin:0;
       font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:#e9eef3;
-      color:#111;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(255,0,127,.20), transparent 55%),
+        radial-gradient(1200px 700px at 90% 10%, rgba(0,176,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 10% 80%, rgba(0,200,83,.16), transparent 55%),
+        linear-gradient(180deg, #f6fbff, #fff6fb 30%, #fffef5 60%, #f4fff9);
       overflow-x:hidden;
       scroll-behavior:smooth;
     }
 
-    /* One-pager wrapper */
-    .wrap{
-      width:min(980px, 92vw);
-      margin: 0 auto;
-      padding: 18px 0 90px;
-    }
-
-    /* Each section is full screen */
-    .screen{
+    /* Smooth sections */
+    section{
       min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: 20px 0;
+      padding: 70px 18px;
     }
 
-    /* HERO / Postcard */
-    .postcard{
+    .container{
+      width:min(980px, 92vw);
+      margin:0 auto;
+    }
+
+    /* ---------- HERO (continuous collage) ---------- */
+    .hero{
       position:relative;
-      width:min(560px, 92vw);
-      aspect-ratio: 3/4;
-      border-radius:22px;
-      overflow:hidden;
+    }
+
+    /* soft paper band behind the hero so collage pops */
+    .heroBand{
+      position:absolute;
+      inset: 60px 0 60px 0;
+      background: rgba(247,241,232,.72);
+      border-radius: 34px;
       box-shadow: var(--shadow);
-      background: var(--paper);
-      transform-origin:center;
-      transition: transform 520ms ease, opacity 520ms ease, filter 520ms ease;
+      border: 1px solid rgba(0,0,0,.06);
+      backdrop-filter: blur(10px);
     }
 
-    /* Paper texture (optional) */
-    .paper{
+    .scene{
+      position:relative;
+      height: min(78vh, 720px);
+      border-radius: 34px;
+      overflow:hidden;
+    }
+
+    /* texture overlay (no external image needed) */
+    .scene::before{
+      content:"";
       position:absolute; inset:0;
-      background: url("assets/bg-paper.jpg") center/cover no-repeat;
-      filter:saturate(1.06) contrast(1.03);
-      transform:scale(1.02);
+      background:
+        radial-gradient(1px 1px at 20% 30%, rgba(0,0,0,.06), transparent 60%),
+        radial-gradient(1px 1px at 70% 20%, rgba(0,0,0,.05), transparent 60%),
+        radial-gradient(1px 1px at 40% 80%, rgba(0,0,0,.05), transparent 60%);
+      opacity:.30;
+      pointer-events:none;
     }
 
-    /* Layer base */
     .layer{
       position:absolute;
-      will-change: transform, opacity;
       user-select:none;
       pointer-events:none;
+      will-change: transform, opacity;
       transform-origin:center;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.15));
     }
     .layer img{width:100%; height:100%; display:block;}
 
-    /* ---- Positions (tune if needed) ---- */
-    .leafTL{ left:-2%; top:-2%; width:46%; }
-    .stamp { left:8%; top:18%; width:18%; }
-    .orange{ left:44%; top:4%; width:22%; }
-    .flower{ right:10%; top:1%; width:30%; }
-    .glass { right:-2%; top:8%; width:22%; }
-    .birdBlue{ right:6%; top:22%; width:20%; }
+    /* Positions (tweak if needed) */
+    .leafTL{ left:-4%; top:-8%; width:48%; }
+    .stamp{ left:6%; top:16%; width:17%; }
+    .orange{ left:46%; top:3%; width:22%; }
+    .flower{ right:9%; top:-2%; width:30%; }
+    .glass{ right:-3%; top:10%; width:22%; }
+    .bird{ right:6%; top:26%; width:20%; }
+    .toucan{ left:-3%; bottom:6%; width:26%; }
+    .cristo{ left:34%; bottom:4%; width:22%; }
+    .crates{ right:-4%; bottom:-2%; width:58%; }
 
-    .toucan{ left:-2%; bottom:10%; width:26%; }
-    .cristo{ left:33%; bottom:6%; width:22%; }
-    .crates{ right:-2%; bottom:0%; width:55%; }
-
-    /* Title */
-    .titleBlock{
+    /* Hero text */
+    .heroText{
       position:absolute;
-      left:8%; right:8%;
-      top:40%;
+      left: 7%;
+      right: 7%;
+      top: 44%;
+      transform: translateY(-50%);
       text-align:center;
-      color:#1b2a7a;
       z-index:5;
     }
-    .titleBlock .name{
+    .heroText .title{
       font-family:'Bangers',cursive;
-      font-size: clamp(44px, 6vw, 92px);
-      letter-spacing:2px;
+      font-size: clamp(44px, 6vw, 96px);
+      letter-spacing: 2px;
+      color:#1b2a7a;
       text-shadow: 4px 4px 0 #000;
-      line-height:1.05;
+      line-height:1.0;
+      margin:0;
       opacity:0;
-      transform:translateY(16px);
       animation: fadeUp 900ms ease-out 120ms both;
     }
-    .titleBlock .red{ color:#e53935; }
-    .titleBlock .sub{
-      margin-top:12px;
+    .heroText .title .red{ color:#e53935; }
+
+    .heroText .subtitle{
       font-family:'Bangers',cursive;
-      font-size: clamp(34px, 5.2vw, 74px);
-      letter-spacing:2px;
+      font-size: clamp(34px, 5.2vw, 78px);
+      letter-spacing: 2px;
       color:#1b8f3a;
       text-shadow: 4px 4px 0 #000;
+      margin: 12px 0 0 0;
       opacity:0;
-      transform:translateY(16px);
       animation: fadeUp 1000ms ease-out 260ms both;
     }
 
-    /* Scroll hint */
-    .scrollHint{
+    .hint{
       position:absolute;
       left:0; right:0;
       bottom:16px;
@@ -127,26 +149,119 @@
       z-index:6;
       pointer-events:none;
     }
-    .scrollHint span{
-      background: rgba(255,255,255,.55);
-      padding:10px 14px;
-      border-radius:999px;
-      backdrop-filter: blur(8px);
-      font-weight:800;
+    .hint span{
+      background: rgba(255,255,255,.65);
+      padding: 10px 14px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+      font-weight: 900;
       color: rgba(0,0,0,.62);
       box-shadow: 0 10px 22px rgba(0,0,0,.12);
       animation: float 2.2s ease-in-out infinite;
     }
 
-    /* Postcard exits when scrolling away */
-    .postcard.exit{
-      opacity:0;
-      transform: translateY(-40px) scale(0.92);
-      filter: blur(2px);
-      pointer-events:none;
+    /* ---------- DETAILS + RSVP panels ---------- */
+    .panel{
+      width:min(820px, 94vw);
+      background: rgba(255,255,255,0.92);
+      border-radius: 26px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.12);
+      padding: 22px 18px;
+      border: 1px solid rgba(0,0,0,.06);
+      backdrop-filter: blur(12px);
+      transform: translateY(18px);
+      opacity: 0;
+      transition: transform 650ms ease, opacity 650ms ease;
+    }
+    .panel.reveal{
+      transform: translateY(0);
+      opacity: 1;
     }
 
-    /* ---- Animations ---- */
+    h2{
+      margin: 0 0 12px 0;
+      font-size: 1.9rem;
+    }
+    p{margin: 0 0 10px 0; font-size:1.05rem;}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media(min-width:720px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .card{
+      background: rgba(0,0,0,.06);
+      border-radius: 18px;
+      padding: 14px 14px;
+      text-align:left;
+    }
+    .card h3{
+      margin:0 0 6px 0;
+      font-size: 1rem;
+    }
+    .card p{ margin:0; }
+
+    .ctaRow{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      justify-content:center;
+    }
+
+    .cta, .btn{
+      display:inline-block;
+      border:none;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 900;
+      cursor:pointer;
+      text-decoration:none;
+      color:#111;
+      background: var(--gold);
+      transition: transform .18s ease;
+    }
+    .cta:hover, .btn:hover{ transform: scale(1.05); }
+
+    /* RSVP */
+    .rsvpRow{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      margin-top: 14px;
+    }
+    input{
+      width:min(420px, 92vw);
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.12);
+      outline:none;
+      font-size: 1rem;
+    }
+
+    /* Confetti */
+    .confetti{
+      position:fixed;
+      top:-10px;
+      width:9px;
+      height:9px;
+      border-radius:2px;
+      animation: fall 3.8s linear forwards;
+      z-index:9999;
+      pointer-events:none;
+      opacity:.9;
+    }
+    @keyframes fall{
+      to{ transform: translateY(110vh) rotate(720deg); opacity: 1; }
+    }
+
+    /* Animations for collage layers */
     @keyframes sway {
       0%,100%{ transform: rotate(-2deg) translateY(0); }
       50%{ transform: rotate(2deg) translateY(4px); }
@@ -177,230 +292,127 @@
       100%{ transform: translateY(0); opacity:1; }
     }
 
-    /* Assign each object animation */
+    /* Assign per-object motion (subtle but alive) */
     .leafTL{ animation: sway 6.2s ease-in-out infinite; }
     .orange{ animation: float 5.2s ease-in-out infinite; }
     .flower{ animation: breathe 7.0s ease-in-out infinite; }
     .glass{ animation: float 6.0s ease-in-out infinite; }
-    .birdBlue{ animation: bob 4.0s ease-in-out infinite; }
+    .bird{ animation: bob 4.0s ease-in-out infinite; }
     .toucan{ animation: bob 5.0s ease-in-out infinite; }
     .stamp{ animation: wobbleIn 1.0s ease-out both; }
     .cristo{ animation: riseIn 1.2s ease-out both; }
-    .crates{ animation: fadeUp 900ms ease-out 180ms both; }
 
-    /* ---- Next sections ---- */
-    .panel{
-      width:min(760px, 92vw);
-      background: rgba(255,255,255,0.92);
-      border-radius:22px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.12);
-      padding: 22px 18px;
-      backdrop-filter: blur(10px);
-      transform: translateY(18px);
-      opacity: 0;
-      transition: transform 600ms ease, opacity 600ms ease;
-    }
-    .panel.reveal{
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    .panel h2{
-      margin: 0 0 14px 0;
-      font-size: 1.8rem;
-    }
-    .panel p{ margin: 0 0 10px 0; }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:12px;
-      margin-top: 10px;
-    }
-    @media (min-width: 700px){
-      .grid{ grid-template-columns: 1fr 1fr; }
-    }
-    .infoCard{
-      background: rgba(0,0,0,0.06);
-      border-radius: 16px;
-      padding: 14px 14px;
-      text-align:left;
-    }
-    .infoCard h3{
-      margin:0 0 6px 0;
-      font-size: 1rem;
-    }
-    .infoCard p{
-      margin:0;
-      font-size: 1rem;
-    }
-
-    .cta{
-      display:inline-block;
-      margin-top:14px;
-      padding: 12px 16px;
-      border-radius: 999px;
-      text-decoration:none;
-      font-weight:900;
-      color:#111;
-      background: var(--gold);
-      transition: transform .2s ease;
-    }
-    .cta:hover{ transform: scale(1.05); }
-
-    /* RSVP input/button */
-    .rsvpRow{
+    /* Footer */
+    .footer{
+      min-height: 40vh;
+      padding-bottom: 90px;
       display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:14px;
-      align-items:center;
-    }
-    input{
-      width:min(360px, 86vw);
-      padding:12px 14px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.12);
-      outline:none;
-      font-size:1rem;
-    }
-    .btn{
-      border:none;
-      padding:12px 16px;
-      border-radius:999px;
-      font-weight:900;
-      cursor:pointer;
-      background: var(--gold);
-      transition: transform .2s ease;
-    }
-    .btn:hover{ transform: scale(1.05); }
-
-    /* Confetti bits for RSVP */
-    .confetti{
-      position:fixed;
-      top:-10px;
-      width:9px;
-      height:9px;
-      border-radius:2px;
-      animation: fall 3.8s linear forwards;
-      z-index:9999;
-      pointer-events:none;
-    }
-    @keyframes fall{
-      to{ transform: translateY(110vh) rotate(720deg); opacity: 0.9; }
-    }
-
-    footer{
-      text-align:center;
-      padding: 18px 0 0;
-      color: rgba(0,0,0,.6);
-      font-weight:700;
+      align-items:flex-end;
+      justify-content:center;
+      color: rgba(0,0,0,.60);
+      font-weight: 800;
     }
   </style>
 </head>
 
 <body>
-  <main class="wrap">
 
-    <!-- SECTION 1: POSTCARD COVER -->
-    <section class="screen hero" id="hero">
-      <div class="postcard" id="heroPostcard">
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="container" style="position:relative;">
+      <div class="heroBand"></div>
 
-        <!-- Optional paper texture -->
-        <div class="paper"></div>
+      <div class="scene">
+        <!-- Collage layers (YOUR FILES IN ROOT) -->
+        <div class="layer leafTL"><img src="leaf-top-left.png" alt=""></div>
 
-        <!-- LAYERS (update file names to match yours) -->
-        <div class="layer leafTL"><img src="leaf-top-left.png"></div>
-        <div class="layer stamp"><img src="stamp-brasil.png"></div>
-        <div class="layer orange"><img src="orange-swoosh.png"></div>
-        <div class="layer flower"><img src="hibiscus.png"></div>
-        <div class="layer glass"><img src="lime-glass.png"></div>
-        <div class="layer birdBlue"><img src="blue-bird.png"></div>
+        <!-- pick stamp-brasil.png or stamp-brasil2.png -->
+        <div class="layer stamp"><img src="stamp-brasil.png" alt=""></div>
 
-        <!-- Text -->
-        <div class="titleBlock">
-          <div class="name">Camila <span class="red">#22</span></div>
-          <div class="sub">CARNAVAL</div>
+        <div class="layer orange"><img src="orange-swoosh.png" alt=""></div>
+
+        <!-- pick hibiscus.png or hibiscus2.png -->
+        <div class="layer flower"><img src="hibiscus.png" alt=""></div>
+
+        <div class="layer glass"><img src="lime-glass.png" alt=""></div>
+        <div class="layer bird"><img src="blue-bird.png" alt=""></div>
+
+        <div class="heroText">
+          <h1 class="title">Camila <span class="red">#22</span></h1>
+          <h2 class="subtitle">CARNAVAL</h2>
         </div>
 
-        <div class="layer toucan"><img src="toucan.png"></div>
-        <div class="layer cristo"><img src="cristo.png"></div>
-        <div class="layer crates"><img src="beer-crates.png"></div>
+        <div class="layer toucan"><img src="toucan.png" alt=""></div>
+        <div class="layer cristo"><img src="cristo.png" alt=""></div>
+        <div class="layer crates"><img src="beer-crates.png" alt=""></div>
 
-        <div class="scrollHint"><span>Desliza ↓</span></div>
+        <div class="hint"><span>Desliza ↓ para ver detalles</span></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- SECTION 2: DETAILS -->
-    <section class="screen details" id="detalles">
-      <div class="panel">
-        <h2>📍 Detalles del Carnaval</h2>
+  <!-- DETAILS -->
+  <section id="detalles">
+    <div class="panel">
+      <h2>📍 Detalles del Carnaval</h2>
+      <p>Guárdate esta info porque esa noche… se va a poner seria. 🔥</p>
 
-        <div class="grid">
-          <div class="infoCard">
-            <h3>🗓️ Fecha</h3>
-            <p>PON AQUÍ LA FECHA</p>
-          </div>
-
-          <div class="infoCard">
-            <h3>⏰ Hora</h3>
-            <p>PON AQUÍ LA HORA</p>
-          </div>
-
-          <div class="infoCard">
-            <h3>📌 Lugar</h3>
-            <p>PON AQUÍ EL LUGAR</p>
-          </div>
-
-          <div class="infoCard">
-            <h3>👗 Dress Code</h3>
-            <p>Brillo, colores, plumas, glitter. Full Río. 🔥</p>
-          </div>
+      <div class="grid">
+        <div class="card">
+          <h3>🗓️ Fecha</h3>
+          <p>REEMPLAZA AQUÍ</p>
         </div>
-
-        <a class="cta" href="#rsvp">🎟️ Confirmar asistencia</a>
-      </div>
-    </section>
-
-    <!-- SECTION 3: RSVP -->
-    <section class="screen rsvp" id="rsvp">
-      <div class="panel">
-        <h2>🎟️ RSVP</h2>
-        <p>Confirma tu nombre y te guardo tu lugar en el desfile.</p>
-
-        <div class="rsvpRow">
-          <input id="nombre" type="text" placeholder="Tu nombre" />
-          <button class="btn" id="btnConfirmar">🔥 YO VOY A SAMBAREAR</button>
-          <div id="mensaje" style="font-weight:900;"></div>
+        <div class="card">
+          <h3>⏰ Hora</h3>
+          <p>REEMPLAZA AQUÍ</p>
         </div>
-
-        <footer>Nos vemos bajo las luces de Río 🌴✨</footer>
+        <div class="card">
+          <h3>📌 Lugar</h3>
+          <p>REEMPLAZA AQUÍ</p>
+        </div>
+        <div class="card">
+          <h3>👗 Dress Code</h3>
+          <p>Brillo, colores, plumas, glitter. Full Río. 💃✨</p>
+        </div>
       </div>
-    </section>
 
-  </main>
+      <div class="ctaRow">
+        <a class="cta" href="#rsvp">🎟️ Ir al RSVP</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RSVP -->
+  <section id="rsvp">
+    <div class="panel">
+      <h2>🎟️ RSVP</h2>
+      <p>Confirma tu nombre y te guardo tu lugar en el desfile.</p>
+
+      <div class="rsvpRow">
+        <input id="nombre" type="text" placeholder="Tu nombre" />
+        <button class="btn" id="btnConfirmar">🔥 YO VOY A SAMBAREAR</button>
+        <div id="mensaje" style="font-weight:900;"></div>
+      </div>
+
+      <div class="ctaRow" style="margin-top:16px;">
+        <a class="cta" href="#inicio">⬆️ Volver arriba</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer">
+    <div>Nos vemos bajo las luces de Río 🌴✨</div>
+  </section>
 
   <script>
-    // --- Postcard disappears when you scroll away ---
-    const heroPostcard = document.getElementById("heroPostcard");
-    const heroSection = document.getElementById("hero");
-
-    const heroObserver = new IntersectionObserver(([entry]) => {
-      const heroMostlyVisible = entry.intersectionRatio > 0.55;
-      heroPostcard.classList.toggle("exit", !heroMostlyVisible);
-    }, { threshold: [0, 0.2, 0.55, 0.8, 1] });
-
-    heroObserver.observe(heroSection);
-
-    // --- Reveal panels when they enter view ---
+    // Reveal panels on scroll
     const panels = document.querySelectorAll(".panel");
     const panelObserver = new IntersectionObserver((entries) => {
       entries.forEach(e => e.target.classList.toggle("reveal", e.isIntersecting));
     }, { threshold: 0.25 });
-
     panels.forEach(p => panelObserver.observe(p));
 
-    // --- RSVP Confetti ---
+    // RSVP Confetti (visual only)
     const btn = document.getElementById("btnConfirmar");
     btn.addEventListener("click", () => {
       const nombre = document.getElementById("nombre").value.trim();
@@ -413,7 +425,6 @@
 
       msg.textContent = `🔥 ${nombre} oficialmente está en el CARNAVAL 🔥`;
 
-      // Confetti burst
       const colors = ["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
       for(let i=0;i<90;i++){
         const conf = document.createElement("div");
