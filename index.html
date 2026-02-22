@@ -668,6 +668,16 @@
     margin-top: 10px;
   }
 
+  select{
+    width: 100%;
+    padding: 14px 14px;
+    border-radius: 999px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    margin-top: 10px;
+  }
+
   button{
     margin-top: 15px;
     padding: 14px 22px;
@@ -809,8 +819,19 @@
   <section id="rsvp">
     <div class="panel">
       <h2>🎟️ RSVP</h2>
+  
       <input id="nombre" placeholder="Tu nombre">
+  
+      <select id="plusOnes" onchange="updatePlusOnes()">
+        <option value="0">No traigo invitados</option>
+        <option value="1">+1 invitado</option>
+        <option value="2">+2 invitados</option>
+      </select>
+  
+      <div id="plusOneFields"></div>
+  
       <button onclick="confirmar()">🔥 YO VOY A SAMBAREAR</button>
+  
       <div id="mensaje" style="margin-top:10px;font-weight:900"></div>
     </div>
   </section>
@@ -836,12 +857,40 @@
   if (detallesSection) detallesObserver.observe(detallesSection);
 
   // RSVP confetti
+  function updatePlusOnes(){
+    const count = parseInt(document.getElementById("plusOnes").value);
+    const container = document.getElementById("plusOneFields");
+    container.innerHTML = "";
+  
+    for(let i = 1; i <= count; i++){
+      const input = document.createElement("input");
+      input.placeholder = "Nombre del invitado " + i;
+      input.className = "plusGuest";
+      input.style.marginTop = "10px";
+      container.appendChild(input);
+    }
+  }
+  
   function confirmar(){
     const nombre = document.getElementById("nombre").value.trim();
+    const plusCount = parseInt(document.getElementById("plusOnes").value);
+    const guestInputs = document.querySelectorAll(".plusGuest");
     const msg = document.getElementById("mensaje");
-    if(!nombre){ msg.textContent="Escribe tu nombre 👀"; return; }
+  
+    if(!nombre){
+      msg.textContent = "Escribe tu nombre 👀";
+      return;
+    }
+  
+    for(let input of guestInputs){
+      if(!input.value.trim()){
+        msg.textContent = "Escribe los nombres de tus invitados 👀";
+        return;
+      }
+    }
+  
     msg.textContent = "🔥 " + nombre + " oficialmente está en el CARNAVAL 🔥";
-
+  
     const colors = ["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
     for(let i=0;i<90;i++){
       const c=document.createElement("div");
