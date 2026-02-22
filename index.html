@@ -110,38 +110,29 @@
     height: min(82vh, 780px);
   }
 
+  /* =========================================
+     ALL IMAGES VIEWPORT-ANCHORED + DIM/BLUR
+     ========================================= */
+
   .parallax{
-    position:absolute;
+    position: fixed;                 /* ✅ all viewport anchored */
     pointer-events:none;
     will-change: transform;
     transform-origin: center;
     filter: drop-shadow(0 16px 34px rgba(0,0,0,.35));
+    transition: opacity .7s ease, filter .7s ease;
   }
+
+  /* When Detalles appears: dim to 10% + blur */
+  body.dim-ornaments .parallax{
+    opacity: 0.10;
+    filter: blur(8px) drop-shadow(0 16px 34px rgba(0,0,0,.35));
+  }
+
   .floaty img{ width:100%; display:block; }
 
-  /* ============================
-     VIEWPORT ANCHORS (NEW)
-     ============================ */
-
-  /* Smooth hide animation for anchored items */
-  .leafTL, .toucan, .crates, .flower, .glass{
-    transition: opacity .45s ease, filter .45s ease;
-  }
-
-  /* Hide anchored items once past hero */
-  body.past-hero .leafTL,
-  body.past-hero .toucan,
-  body.past-hero .crates,
-  body.past-hero .flower,
-  body.past-hero .glass{
-    opacity: 0;
-    filter: blur(2px);
-    pointer-events: none;
-  }
-
-  /* Positions (REQUESTED LAYOUT) — VIEWPORT-ANCHORED */
+  /* Positions (REQUESTED LAYOUT) */
   .leafTL{
-    position: fixed;
     left: 0;
     top: 0;
     width: clamp(220px, 32vw, 520px);
@@ -149,7 +140,6 @@
   }
 
   .toucan{
-    position: fixed;
     left: 0;
     bottom: 0;
     width: clamp(160px, 22vw, 320px);
@@ -157,7 +147,6 @@
   }
 
   .crates{
-    position: fixed;
     right: 0;
     bottom: 0;
     width: clamp(260px, 42vw, 620px);
@@ -165,7 +154,6 @@
   }
 
   .flower{
-    position: fixed;
     right: 120px;     /* left of the toggle */
     top: 10px;
     width: clamp(160px, 22vw, 320px);
@@ -173,18 +161,17 @@
   }
 
   .glass{
-    position: fixed;
     right: 18px;      /* below the toggle */
     top: 88px;
     width: clamp(110px, 16vw, 220px);
     z-index: 7;
   }
 
-  /* Keep these where they are (scene-relative) */
-  .stamp { left:6%;  top:18%;  width:18%; }
-  .orange{ left:45%; top:4%;   width:22%; }
-  .bird  { right:6%; top:28%;  width:20%; }
-  .cristo{ left:35%; bottom:3%; width:22%; }
+  /* The rest (now also viewport-anchored because .parallax is fixed) */
+  .stamp { left:6%;  top:18%;  width:18%; z-index: 6; }
+  .orange{ left:45%; top:4%;   width:22%; z-index: 6; }
+  .bird  { right:6%; top:28%;  width:20%; z-index: 6; }
+  .cristo{ left:35%; bottom:3%; width:22%; z-index: 6; }
 
   /* Loop animations (inner) */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
@@ -396,7 +383,6 @@
     max-width: 640px;
   }
 
-  /* Divider like a club flyer */
   .flyerDivider{
     height: 2px;
     margin: 18px 0 16px;
@@ -486,7 +472,6 @@
   }
   .flyBtn:hover{ transform: scale(1.05); }
 
-  /* RSVP panel (keep) */
   .panel{
     width: min(880px, 95vw);
     margin: 0 auto;
@@ -532,7 +517,6 @@
   }
   button:hover{ transform: scale(1.05); }
 
-  /* Confetti */
   .confetti{
     position:fixed;
     top:-10px;
@@ -673,19 +657,16 @@
   }, {threshold: .2});
   revealTargets.forEach(el => obs.observe(el));
 
-  // Hide anchored ornaments when "Detalles del Carnaval" starts showing
+  // Dim + blur ornaments when "Detalles del Carnaval" starts showing
   const detallesSection = document.querySelector("#detalles"); // or #flyerDetalles
-  
+
   const detallesObserver = new IntersectionObserver(
     ([entry]) => {
-      // When Detalles enters view -> hide ornaments
-      document.body.classList.toggle("past-hero", entry.isIntersecting);
+      document.body.classList.toggle("dim-ornaments", entry.isIntersecting);
     },
-    {
-      threshold: 0.15 // triggers as soon as a little bit of Detalles is visible
-    }
+    { threshold: 0.15 }
   );
-  
+
   if (detallesSection) detallesObserver.observe(detallesSection);
 
   // RSVP confetti
@@ -716,7 +697,7 @@
     themeLabel.textContent = isParade ? "Parade" : "Noche Neón";
   });
 
-  // PARTY-ENERGY scroll parallax
+  // PARTY-ENERGY scroll parallax (still works on fixed layers)
   const layers = Array.from(document.querySelectorAll(".parallax"));
   const heroText = document.getElementById("heroText");
   let latestY = 0;
