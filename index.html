@@ -309,10 +309,17 @@
 
   .heroText h1{
     font-family:'Bangers',cursive;
-    font-size: clamp(56px, 7vw, 118px);
+    font-size: clamp(72px, 8vw, 140px); /* 👈 bigger Camila */
     margin: 0;
     letter-spacing: 2px;
     text-shadow: 6px 6px 0 #000;
+  }
+  
+  /* Make #22 smaller */
+  .heroText .age{
+    font-size: 0.55em;   /* 👈 relative to Camila size */
+    color: #ff3d3d;
+    vertical-align: top; /* optional: slight lift */
   }
   .heroText h2{
     font-family:'Bangers',cursive;
@@ -637,7 +644,10 @@
       </div>
 
       <div class="heroText" id="heroText">
-        <h1>Camila <span style="color:#ff3d3d">#22</span></h1>
+        <h1>
+          Camila 
+          <span class="age">#22</span>
+        </h1>
         <h2>CARNAVAL</h2>
       </div>
 
