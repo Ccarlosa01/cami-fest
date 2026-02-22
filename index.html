@@ -679,7 +679,7 @@
     ([entry]) => {
       document.body.classList.toggle("past-hero", !entry.isIntersecting);
     },
-    { threshold: 0.12 }
+    { threshold: 0.05 }
   );
   if (heroSection) heroObserver.observe(heroSection);
 
