@@ -35,7 +35,7 @@
     --s-glass: 0.85;
     --s-bird: 1.25;
     --s-toucan: 1.75;
-    --s-cristo: 2.00;
+    --s-cristo: 1.25;
     --s-crates: 0.25;
   }
 
@@ -249,7 +249,10 @@
   .bird    .floaty{ transform: scale(var(--s-bird)); }
   .toucan  .floaty{ transform: scale(var(--s-toucan)); }
   .cristo  .floaty{ transform: scale(var(--s-cristo)); }
-  .crates  .floaty{ transform: scale(var(--s-crates)); }
+  .crates .floaty{
+    transform-origin: bottom right;   /* 👈 anchor point */
+    transform: scale(var(--s-crates));
+  }
 
   /* Loop animations (inner) */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
