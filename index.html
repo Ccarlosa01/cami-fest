@@ -24,11 +24,10 @@
     --gold: linear-gradient(45deg,#ffd700,#ffb300);
     --shadow: 0 25px 70px rgba(0,0,0,.45);
 
-    /* ==========================================================
-       CLAMP-ONLY RESPONSIVE SIZING + EASY SCALE CONTROLS 🔧
-       You ONLY touch the --s-* numbers to scale each image.
-       Positions will NOT drift when scaling.
-       ========================================================== */
+    /* ============================
+       EASY SCALE CONTROLS
+       Adjust these anytime 🔧
+       ============================ */
     --s-leaf: 1.00;
     --s-stamp: 1.00;
     --s-orange: 0.75;
@@ -37,11 +36,7 @@
     --s-bird: 1.25;
     --s-toucan: 1.75;
     --s-cristo: 1.25;
-    --s-crates: 0.50;
-
-    /* Dim/blur tuning (when Detalles shows) */
-    --dim-opacity: 0.10;  /* <-- requested 10% */
-    --dim-blur: 8px;
+    --s-crates: 0.75;
   }
 
   /* Optional: Parade (brighter) theme */
@@ -65,7 +60,7 @@
     overflow-x:hidden;
     scroll-behavior:smooth;
 
-    /* ONE CONTINUOUS ANIMATED RIO GRADIENT */
+    /* ONE CONTINUOUS ANIMATED RIO GRADIENT (alive) */
     background: linear-gradient(
       135deg,
       var(--bg1),
@@ -75,14 +70,97 @@
       var(--bg5),
       var(--bg6)
     );
-    background-size: 320% 320%;
-    animation: gradientMove 18s ease infinite;
+    background-size: 420% 420%;
+    animation: gradientMove 12s ease-in-out infinite;
   }
 
+  /* Organic gradient motion */
   @keyframes gradientMove{
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+    0%   { background-position: 0% 50%; }
+    25%  { background-position: 100% 40%; }
+    50%  { background-position: 80% 100%; }
+    75%  { background-position: 20% 60%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* ============================
+     ALIVE BACKGROUND LAYERS ONLY
+     (does NOT affect content)
+     ============================ */
+
+  /* A) drifting neon lights */
+  body::after{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -3;
+
+    background:
+      radial-gradient(circle at 18% 22%, rgba(255,0,127,.28), transparent 42%),
+      radial-gradient(circle at 82% 30%, rgba(0,176,255,.24), transparent 44%),
+      radial-gradient(circle at 55% 85%, rgba(0,200,83,.20), transparent 52%),
+      radial-gradient(circle at 35% 70%, rgba(255,208,0,.14), transparent 48%);
+
+    filter: blur(2px);
+    mix-blend-mode: screen;
+    opacity: .95;
+
+    animation: lightDrift 18s ease-in-out infinite alternate;
+  }
+
+  @keyframes lightDrift{
+    0%   { transform: translate3d(0,0,0) scale(1); }
+    50%  { transform: translate3d(0,-28px,0) scale(1.06); }
+    100% { transform: translate3d(0,18px,0) scale(1.10); }
+  }
+
+  /* B) subtle moving grain (no external image) */
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -2;
+
+    opacity: .07;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,.04) 0px,
+        rgba(255,255,255,.04) 1px,
+        rgba(0,0,0,0) 2px,
+        rgba(0,0,0,0) 6px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,.03) 0px,
+        rgba(255,255,255,.03) 1px,
+        rgba(0,0,0,0) 2px,
+        rgba(0,0,0,0) 7px
+      );
+
+    animation: grainMove 8s steps(10) infinite;
+  }
+
+  @keyframes grainMove{
+    0%   { transform: translate3d(0,0,0); }
+    100% { transform: translate3d(-30px,18px,0); }
+  }
+
+  /* C) OPTIONAL: hue shift ONLY on background layers */
+  body.hue-bg::after{
+    animation: lightDrift 18s ease-in-out infinite alternate, hueShift 30s linear infinite;
+  }
+  @keyframes hueShift{
+    0%{ filter: hue-rotate(0deg) blur(2px); }
+    100%{ filter: hue-rotate(360deg) blur(2px); }
+  }
+
+  /* D) Reduce Motion support (iOS/Accessibility) */
+  @media (prefers-reduced-motion: reduce){
+    body{ animation: none; background-size: 320% 320%; }
+    body::after, body::before{ animation: none; }
   }
 
   /* Continuous-flow sections */
@@ -150,109 +228,117 @@
 
   /* When Detalles appears: dim to 10% + blur + send behind flyer + rsvp */
   body.dim-ornaments .parallax{
-    opacity: var(--dim-opacity);
-    filter: blur(var(--dim-blur)) drop-shadow(0 16px 34px rgba(0,0,0,.35));
+    opacity: 0.10;
+    filter: blur(10px) drop-shadow(0 16px 34px rgba(0,0,0,.35));
     z-index: 1 !important;
   }
 
-  /* Wrapper / image */
-  .floaty{ width:100%; height:auto; }
+  /* Wrapper that holds the image */
+  .floaty{
+    width:100%;
+    height:auto;
+    transform-origin:center;
+    will-change: transform;
+  }
   .floaty img{ width:100%; display:block; }
 
-  /* ==========================================================
-     CLAMP-ONLY SIZING SYSTEM ✅
-     - We set each image's width using clamp() and multiply the
-       "ideal" (vw) term by its scale variable.
-     - No transform: scale() is used for sizing anymore.
-     ========================================================== */
+  /* ============================
+     POSITIONING (VIEWPORT) + clamp
+     ============================ */
 
-  /* Leaf: top-left */
   .leafTL{
     left: 0;
     top: 0;
-    width: clamp(220px, calc(32vw * var(--s-leaf)), 520px);
+    width: clamp(220px, 32vw, 520px);
   }
 
   /* Stamp: behind leaf AND moved more right */
   .stamp{
     left: 16%;
     top: 18%;
-    width: clamp(120px, calc(14vw * var(--s-stamp)), 260px);
+    width: clamp(120px, 14vw, 220px);
   }
 
-  /* Orange swoosh */
   .orange{
     left: 45%;
     top: 4%;
-    width: clamp(160px, calc(22vw * var(--s-orange)), 420px);
+    width: clamp(180px, 22vw, 360px);
   }
 
   /* Hibiscus: behind glass */
   .flower{
     right: 120px;
     top: 10px;
-    width: clamp(160px, calc(22vw * var(--s-flower)), 320px);
+    width: clamp(160px, 22vw, 320px);
   }
 
   /* Glass: above hibiscus */
   .glass{
     right: 18px;
     top: 88px;
-    width: clamp(90px, calc(16vw * var(--s-glass)), 220px);
+    width: clamp(110px, 16vw, 220px);
   }
 
   /* Blue bird: in front of hibiscus + glass */
   .bird{
     right: 6%;
     top: 28%;
-    width: clamp(140px, calc(16vw * var(--s-bird)), 300px);
+    width: clamp(120px, 18vw, 260px);
   }
 
-  /* Toucan: bottom-left */
   .toucan{
     left: 0;
     bottom: 0;
-    width: clamp(160px, calc(22vw * var(--s-toucan)), 360px);
+    width: clamp(160px, 22vw, 320px);
   }
 
-  /* Cristo */
   .cristo{
     left: 35%;
     bottom: 3%;
-    width: clamp(140px, calc(20vw * var(--s-cristo)), 320px);
+    width: clamp(140px, 18vw, 280px);
   }
 
-  /* Crates: bottom-right */
   .crates{
     right: 0;
     bottom: 0;
-    width: clamp(260px, calc(42vw * var(--s-crates)), 680px);
+    width: clamp(260px, 42vw, 620px);
   }
 
   /* ============================
      LAYERING HIERARCHY
-     Rules:
-     - stamp behind leaf
-     - hibiscus behind glass
-     - blue-bird in front of hibiscus & glass
      ============================ */
-  .stamp{ z-index: 3; }
+  .stamp{ z-index: 3; }     /* behind leaf */
   .leafTL{ z-index: 5; }
 
+  .flower{ z-index: 6; }    /* hibiscus behind glass */
+  .glass{  z-index: 7; }    /* glass above hibiscus */
+  .bird{   z-index: 8; }    /* bird above both */
+
+  /* Other sensible ordering */
   .orange{ z-index: 4; }
-  .cristo{ z-index: 5; }
+  .toucan{ z-index: 6; }
   .crates{ z-index: 4; }
 
-  .flower{ z-index: 6; } /* hibiscus */
-  .toucan{ z-index: 6; }
+  /* Cristo in FRONT of crates (you asked) */
+  .cristo{ z-index: 6; }
 
-  .glass{  z-index: 7; } /* glass above hibiscus */
-  .bird{   z-index: 8; } /* bird above both */
+  /* ============================
+     SCALE PER IMAGE
+     ============================ */
+  .leafTL  .floaty{ transform: scale(var(--s-leaf)); }
+  .stamp   .floaty{ transform: scale(var(--s-stamp)); }
+  .orange  .floaty{ transform: scale(var(--s-orange)); }
+  .flower  .floaty{ transform: scale(var(--s-flower)); }
+  .glass   .floaty{ transform: scale(var(--s-glass)); }
+  .bird    .floaty{ transform: scale(var(--s-bird)); }
+  .toucan  .floaty{ transform: scale(var(--s-toucan)); }
+  .cristo  .floaty{ transform: scale(var(--s-cristo)); }
+  .crates  .floaty{
+    transform-origin: bottom right;
+    transform: scale(var(--s-crates));
+  }
 
-  /* ==========================================================
-     MOTION ANIMATIONS (unchanged)
-     These animate the inner .wiggle only (not sizing).
-     ========================================================== */
+  /* Loop animations */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
   @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
   @keyframes breathe{ 0%,100%{transform:scale(1) rotate(-1deg)} 50%{transform:scale(1.03) rotate(1deg)} }
@@ -268,7 +354,6 @@
   .toucan  .wiggle{ animation: bob 5s ease-in-out infinite; }
   .stamp   .wiggle{ animation: wobbleIn 1s ease-out both; }
   .cristo  .wiggle{ animation: riseIn 1.2s ease-out both; }
-  .crates  .wiggle{ animation: bob 6s ease-in-out infinite; } /* subtle life */
 
   /* HERO TEXT + GLOW PULSE */
   .heroText{
@@ -312,15 +397,16 @@
     letter-spacing: 2px;
     text-shadow: 6px 6px 0 #000;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     gap: 14px;
   }
 
   .heroText .age{
     font-size: 0.55em;
     color: #ff3d3d;
+    line-height: 1; /* helps vertical centering */
   }
 
   .heroText h2{
@@ -551,7 +637,7 @@
   }
   .flyBtn:hover{ transform: scale(1.05); }
 
-  /* RSVP panel (keep) */
+  /* RSVP panel */
   .panel{
     width: min(880px, 95vw);
     margin: 0 auto;
@@ -611,6 +697,7 @@
 </style>
 </head>
 
+<!-- Add hue shift to background only by adding class "hue-bg" here if you want -->
 <body>
   <div class="topBar">
     <button class="pill" id="toggleTheme" aria-label="Cambiar tema">
@@ -647,7 +734,7 @@
 
       <div class="heroText" id="heroText">
         <h1>
-          Camila 
+          Camila
           <span class="age">#22</span>
         </h1>
         <h2>CARNAVAL</h2>
@@ -669,7 +756,7 @@
     </div>
   </section>
 
-  <!-- DETALLES (Nightclub flyer) -->
+  <!-- DETALLES -->
   <section id="detalles">
     <div class="flyer" id="flyerDetalles">
       <div class="sparkle"></div>
