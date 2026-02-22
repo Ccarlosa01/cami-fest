@@ -46,6 +46,12 @@
        Peru: 51987654321
        ============================ */
     --wa-host: 17183507066;
+
+    /* ============================
+       MUSIC (NEW)
+       Put your mp3 filename here
+       ============================ */
+    --music-file: "music.mp3"; /* <- change to your exact filename */
   }
 
   /* Optional: Parade (brighter) theme */
@@ -191,8 +197,9 @@
     right: 14px;
     z-index: 9999;
     display:flex;
+    flex-direction: column; /* NEW: stack buttons */
     gap:10px;
-    align-items:center;
+    align-items:flex-end;
   }
   .pill{
     border: 1px solid rgba(255,255,255,.22);
@@ -204,10 +211,32 @@
     font-weight: 900;
     cursor: pointer;
     box-shadow: 0 10px 26px rgba(0,0,0,.25);
-    transition: transform .15s ease, background .15s ease;
+    transition: transform .15s ease, background .15s ease, opacity .15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   .pill:hover{ transform: scale(1.04); }
   .pill small{opacity:.85;font-weight:800}
+
+  /* Music button state */
+  .pill.musicBtn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .pill.musicBtn .dot{
+    width:10px;height:10px;border-radius:999px;
+    background: rgba(255,255,255,.55);
+    box-shadow: 0 0 14px rgba(255,255,255,.35);
+    transition: background .2s ease, box-shadow .2s ease;
+  }
+  .pill.musicBtn.isOn .dot{
+    background: #00c853;
+    box-shadow: 0 0 18px rgba(0,200,83,.65);
+  }
+  .pill.musicBtn.isOff{
+    opacity: .92;
+  }
 
   /* HERO SCENE */
   .scene{
@@ -715,7 +744,16 @@
     <button class="pill" id="toggleTheme" aria-label="Cambiar tema">
       Modo: <small id="themeLabel">Noche Neón</small>
     </button>
+
+    <!-- NEW: Music toggle under Modo -->
+    <button class="pill musicBtn isOff" id="toggleMusic" aria-label="Música">
+      <span class="dot" aria-hidden="true"></span>
+      Música: <small id="musicLabel">OFF</small>
+    </button>
   </div>
+
+  <!-- NEW: Background music element -->
+  <audio id="bgMusic" preload="auto" loop></audio>
 
   <!-- HERO -->
   <section class="hero" id="inicio">
@@ -840,7 +878,100 @@
   </section>
 
 <script>
+  // ==========================
+  // MUSIC (NEW): Toggle + Fade-in volume
+  // ==========================
+  const bgMusic = document.getElementById("bgMusic");
+  const musicBtn = document.getElementById("toggleMusic");
+  const musicLabel = document.getElementById("musicLabel");
+
+  // Set your file from CSS var --music-file
+  function getCssVar(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+  const musicFile = getCssVar("--music-file").replace(/^"|"$/g, ""); // remove quotes if present
+  bgMusic.src = musicFile || "music.mp3";
+
+  let musicOn = false;
+  let fading = null;
+
+  function setMusicUI(on){
+    musicOn = on;
+    musicLabel.textContent = on ? "ON" : "OFF";
+    musicBtn.classList.toggle("isOn", on);
+    musicBtn.classList.toggle("isOff", !on);
+    musicBtn.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+
+  function fadeTo(target, ms=900){
+    if(fading) cancelAnimationFrame(fading);
+    const start = bgMusic.volume;
+    const delta = target - start;
+    const t0 = performance.now();
+
+    function step(t){
+      const p = Math.min(1, (t - t0) / ms);
+      // easeOutQuad
+      const eased = 1 - (1 - p) * (1 - p);
+      bgMusic.volume = Math.max(0, Math.min(1, start + delta * eased));
+      if(p < 1) fading = requestAnimationFrame(step);
+    }
+    fading = requestAnimationFrame(step);
+  }
+
+  async function startMusicWithFade(){
+    try{
+      bgMusic.volume = 0;
+      await bgMusic.play();                 // may be blocked unless user tapped/clicked
+      fadeTo(1, 1200);                      // fade in to full volume
+      setMusicUI(true);
+    }catch(err){
+      // If blocked, keep OFF and let user tap button again after interacting
+      setMusicUI(false);
+    }
+  }
+
+  function stopMusicWithFade(){
+    fadeTo(0, 600);
+    setTimeout(()=>{
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+    }, 650);
+    setMusicUI(false);
+  }
+
+  musicBtn.addEventListener("click", ()=>{
+    if(!musicOn){
+      startMusicWithFade();
+    }else{
+      stopMusicWithFade();
+    }
+  });
+
+  // Optional: try to start on first interaction anywhere (still respects browser rules)
+  function firstInteractionAutoStart(){
+    // only if user hasn't turned it on/off yet
+    if(!musicOn){
+      startMusicWithFade();
+    }
+    document.removeEventListener("click", firstInteractionAutoStart);
+    document.removeEventListener("touchstart", firstInteractionAutoStart);
+  }
+  document.addEventListener("click", firstInteractionAutoStart, {once:true});
+  document.addEventListener("touchstart", firstInteractionAutoStart, {once:true});
+
+  // Pause music when tab hidden (nice behavior)
+  document.addEventListener("visibilitychange", ()=>{
+    if(document.hidden && musicOn){
+      bgMusic.pause();
+    } else if(!document.hidden && musicOn){
+      bgMusic.play().catch(()=>{});
+    }
+  });
+
+  // ==========================
   // Reveal panels/flyer smoothly
+  // ==========================
   const revealTargets = [ ...document.querySelectorAll(".panel"), document.getElementById("flyerDetalles") ].filter(Boolean);
   const obs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{
@@ -859,7 +990,9 @@
   );
   if (detallesSection) detallesObserver.observe(detallesSection);
 
+  // ==========================
   // RSVP plus-one fields
+  // ==========================
   function updatePlusOnes(){
     const count = parseInt(document.getElementById("plusOnes").value, 10);
     const container = document.getElementById("plusOneFields");
@@ -874,12 +1007,9 @@
   }
   updatePlusOnes();
 
-  // Read CSS var from :root
-  function getCssVar(name){
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  }
-
+  // ==========================
   // RSVP -> WhatsApp message
+  // ==========================
   function confirmar(){
     const nombre = document.getElementById("nombre").value.trim();
     const plusCount = parseInt(document.getElementById("plusOnes").value, 10);
@@ -903,7 +1033,6 @@
 
     msg.textContent = "🔥 " + nombre + " oficialmente está en el CARNAVAL 🔥";
 
-    // Build WhatsApp text
     const invitadosTxt = plusCount === 0
       ? "0 acompañantes"
       : `Acompañantes (${plusCount}): ${invitados.join(", ")}`;
@@ -918,21 +1047,17 @@
 
     const encoded = encodeURIComponent(detalles);
 
-    // Host number from CSS var
     const host = getCssVar("--wa-host").replace(/[^0-9]/g, "");
     let waUrl = "";
 
     if(host && host.length >= 8){
       waUrl = `https://wa.me/${host}?text=${encoded}`;
     } else {
-      // fallback: user chooses recipient
       waUrl = `https://api.whatsapp.com/send?text=${encoded}`;
     }
 
-    // Try opening automatically
     const opened = window.open(waUrl, "_blank");
 
-    // If blocked, show clickable link
     if(!opened){
       waWrap.style.display = "block";
       waWrap.innerHTML = `No se abrió WhatsApp automáticamente. Toca aquí: <a href="${waUrl}" target="_blank">Enviar RSVP por WhatsApp</a>`;
@@ -951,7 +1076,9 @@
     }
   }
 
+  // ==========================
   // Theme toggle: Noche Neón <-> Parade
+  // ==========================
   const toggleBtn = document.getElementById("toggleTheme");
   const themeLabel = document.getElementById("themeLabel");
   toggleBtn.addEventListener("click", ()=>{
@@ -960,7 +1087,9 @@
     themeLabel.textContent = isParade ? "Parade" : "Noche Neón";
   });
 
+  // ==========================
   // PARTY-ENERGY scroll parallax (works on fixed layers)
+  // ==========================
   const layers = Array.from(document.querySelectorAll(".parallax"));
   const heroText = document.getElementById("heroText");
   let latestY = 0;
