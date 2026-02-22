@@ -66,7 +66,7 @@
     100%{background-position:0% 50%}
   }
 
-  /* Continuous-flow sections (no “slides”) */
+  /* Continuous-flow sections */
   section{
     padding: 120px 20px 80px 20px;
     position: relative;
@@ -103,110 +103,32 @@
   .pill:hover{ transform: scale(1.04); }
   .pill small{opacity:.85;font-weight:800}
 
-  /* =========================
-     HERO SCENE + POSITIONING
-     ========================= */
-
+  /* HERO SCENE */
   .scene{
     position: relative;
     width: min(1040px, 95vw);
     height: min(82vh, 780px);
   }
 
-  /* Each layer:
-     - OUTER .parallax => receives scroll-based transform
-     - INNER .floaty   => receives loop animation transform
-  */
   .parallax{
     position:absolute;
-    left: var(--x);
-    top: var(--y);
-    width: var(--w);
-    z-index: var(--z, 10);
     pointer-events:none;
     will-change: transform;
     transform-origin: center;
     filter: drop-shadow(0 16px 34px rgba(0,0,0,.35));
   }
+  .floaty img{ width:100%; display:block; }
 
-  .parallax .floaty{
-    transform: translate(var(--tx, 0), var(--ty, 0));
-  }
-
-  .floaty img{ width:100%; height:auto; display:block; }
-
-  /* DEBUG: add class="debug" on <body> to see boxes + labels */
-  body.debug .parallax{
-    outline: 2px dashed rgba(255,255,255,.55);
-    outline-offset: 6px;
-  }
-  body.debug .parallax::after{
-    content: attr(data-name);
-    position:absolute;
-    left:0; top:-24px;
-    font-size:12px;
-    font-weight:900;
-    background: rgba(0,0,0,.45);
-    border: 1px solid rgba(255,255,255,.25);
-    padding: 4px 8px;
-    border-radius: 999px;
-  }
-
-  /* ---- Default positions (tweak these numbers) ---- */
-  .leafTL{
-    --x: -6%;
-    --y: -14%;
-    --w: clamp(260px, 40vw, 520px);
-    --z: 6;
-  }
-  .stamp{
-    --x: 7%;
-    --y: 18%;
-    --w: clamp(92px, 14vw, 190px);
-    --z: 12;
-  }
-  .orange{
-    --x: 46%;
-    --y: 2%;
-    --w: clamp(140px, 20vw, 260px);
-    --z: 7;
-  }
-  .flower{
-    --x: 67%;
-    --y: -6%;
-    --w: clamp(180px, 26vw, 340px);
-    --z: 11;
-  }
-  .glass{
-    --x: 83%;
-    --y: 12%;
-    --w: clamp(120px, 18vw, 240px);
-    --z: 12;
-  }
-  .bird{
-    --x: 76%;
-    --y: 28%;
-    --w: clamp(110px, 16vw, 220px);
-    --z: 13;
-  }
-  .toucan{
-    --x: -3%;
-    --y: 66%;
-    --w: clamp(150px, 22vw, 300px);
-    --z: 14;
-  }
-  .cristo{
-    --x: 36%;
-    --y: 68%;
-    --w: clamp(120px, 18vw, 240px);
-    --z: 9;
-  }
-  .crates{
-    --x: 54%;
-    --y: 68%;
-    --w: clamp(260px, 44vw, 620px);
-    --z: 15;
-  }
+  /* Positions */
+  .leafTL{ left:-6%; top:-12%; width:48%; }
+  .stamp { left:6%;  top:18%;  width:18%; }
+  .orange{ left:45%; top:4%;   width:22%; }
+  .flower{ right:10%; top:-4%; width:30%; }
+  .glass { right:-3%; top:12%; width:22%; }
+  .bird  { right:6%; top:28%;  width:20%; }
+  .toucan{ left:-3%; bottom:5%; width:26%; }
+  .cristo{ left:35%; bottom:3%; width:22%; }
+  .crates{ right:-4%; bottom:-2%; width:58%; }
 
   /* Loop animations (inner) */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
@@ -232,7 +154,7 @@
     top:45%;
     transform: translateY(-50%);
     text-align:center;
-    z-index: 25;
+    z-index: 20;
     pointer-events:none;
   }
 
@@ -284,17 +206,15 @@
     font-weight: 900;
     opacity: .92;
     animation: hintFloat 2s ease-in-out infinite;
-    z-index: 30;
-    pointer-events:none;
   }
   @keyframes hintFloat{
     0%,100%{ transform: translateY(0); }
     50%{ transform: translateY(-8px); }
   }
 
-  /* ==========================
-     NIGHTCLUB FLYER: DETALLES
-     ========================== */
+  /* ========================== */
+  /* NIGHTCLUB FLYER: DETALLES  */
+  /* ========================== */
 
   .flyer{
     position: relative;
@@ -303,6 +223,7 @@
     padding: 40px;
     border-radius: 34px;
 
+    /* layered neon glass */
     background:
       radial-gradient(900px 420px at 20% 10%, rgba(255,0,127,.35), transparent 60%),
       radial-gradient(900px 420px at 85% 20%, rgba(0,176,255,.28), transparent 60%),
@@ -322,6 +243,7 @@
     opacity: 1;
   }
 
+  /* Animated neon border */
   .flyer::before{
     content:"";
     position:absolute;
@@ -344,6 +266,7 @@
     100%{background-position:100% 50%}
   }
 
+  /* Sparkle particles (pure CSS) */
   .sparkle{
     position:absolute;
     inset:0;
@@ -361,6 +284,14 @@
   @keyframes sparkleDrift{
     0%,100%{ transform: translateY(0); opacity:.45; }
     50%{ transform: translateY(-10px); opacity:.7; }
+  }
+
+  .flyerTop{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    justify-content:space-between;
+    flex-wrap:wrap;
   }
 
   .flyerTitle{
@@ -409,6 +340,7 @@
     max-width: 640px;
   }
 
+  /* Divider like a club flyer */
   .flyerDivider{
     height: 2px;
     margin: 18px 0 16px;
@@ -517,6 +449,47 @@
     opacity: 1;
   }
 
+  .panel h2{
+    margin: 0 0 14px 0;
+    font-size: 2rem;
+  }
+
+  input{
+    width: 100%;
+    padding: 14px 14px;
+    border-radius: 999px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    margin-top: 10px;
+  }
+
+  button{
+    margin-top: 15px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: none;
+    font-weight: 900;
+    background: var(--gold);
+    cursor: pointer;
+    transition: transform .18s ease;
+  }
+  button:hover{ transform: scale(1.05); }
+
+  /* Confetti */
+  .confetti{
+    position:fixed;
+    top:-10px;
+    width:8px;height:8px;
+    border-radius:2px;
+    animation: fall 3.5s linear forwards;
+    z-index: 9999;
+    pointer-events:none;
+    opacity:.95;
+  }
+  @keyframes fall{
+    to{ transform: translateY(110vh) rotate(720deg); }
+  }
 </style>
 </head>
 
@@ -530,28 +503,27 @@
   <!-- HERO -->
   <section class="hero" id="inicio">
     <div class="scene" id="scene">
-
-      <div class="parallax leafTL" data-name="leafTL" data-speed="0.55" data-x="0.30" data-r="0.10">
+      <div class="parallax leafTL" data-speed="0.55" data-x="0.30" data-r="0.10">
         <div class="floaty"><img src="leaf-top-left.png" alt=""></div>
       </div>
 
-      <div class="parallax stamp" data-name="stamp" data-speed="0.95" data-x="-0.25" data-r="-0.18">
+      <div class="parallax stamp" data-speed="0.95" data-x="-0.25" data-r="-0.18">
         <div class="floaty"><img src="stamp-brasil.png" alt=""></div>
       </div>
 
-      <div class="parallax orange" data-name="orange" data-speed="0.65" data-x="0.20" data-r="0.12">
+      <div class="parallax orange" data-speed="0.65" data-x="0.20" data-r="0.12">
         <div class="floaty"><img src="orange-swoosh.png" alt=""></div>
       </div>
 
-      <div class="parallax flower" data-name="flower" data-speed="0.85" data-x="-0.18" data-r="-0.10">
+      <div class="parallax flower" data-speed="0.85" data-x="-0.18" data-r="-0.10">
         <div class="floaty"><img src="hibiscus.png" alt=""></div>
       </div>
 
-      <div class="parallax glass" data-name="glass" data-speed="1.05" data-x="-0.22" data-r="0.14">
+      <div class="parallax glass" data-speed="1.05" data-x="-0.22" data-r="0.14">
         <div class="floaty"><img src="lime-glass.png" alt=""></div>
       </div>
 
-      <div class="parallax bird" data-name="bird" data-speed="1.15" data-x="0.28" data-r="-0.16">
+      <div class="parallax bird" data-speed="1.15" data-x="0.28" data-r="-0.16">
         <div class="floaty"><img src="blue-bird.png" alt=""></div>
       </div>
 
@@ -560,15 +532,15 @@
         <h2>CARNAVAL</h2>
       </div>
 
-      <div class="parallax toucan" data-name="toucan" data-speed="1.25" data-x="0.35" data-r="0.18">
+      <div class="parallax toucan" data-speed="1.25" data-x="0.35" data-r="0.18">
         <div class="floaty"><img src="toucan.png" alt=""></div>
       </div>
 
-      <div class="parallax cristo" data-name="cristo" data-speed="0.55" data-x="-0.08" data-r="-0.06">
+      <div class="parallax cristo" data-speed="0.55" data-x="-0.08" data-r="-0.06">
         <div class="floaty"><img src="cristo.png" alt=""></div>
       </div>
 
-      <div class="parallax crates" data-name="crates" data-speed="1.55" data-x="-0.40" data-r="-0.12">
+      <div class="parallax crates" data-speed="1.55" data-x="-0.40" data-r="-0.12">
         <div class="floaty"><img src="beer-crates.png" alt=""></div>
       </div>
 
@@ -581,17 +553,19 @@
     <div class="flyer" id="flyerDetalles">
       <div class="sparkle"></div>
 
-      <h2 class="flyerTitle">DETALLES DEL CARNAVAL</h2>
-
-      <div class="tagRow">
-        <span class="tag hot">RIO NIGHT</span>
-        <span class="tag neon">NEÓN</span>
-        <span class="tag vip">BRILLO O NADA</span>
+      <div class="flyerTop">
+        <div>
+          <h2 class="flyerTitle">DETALLES DEL CARNAVAL</h2>
+          <div class="tagRow">
+            <span class="tag hot">RIO NIGHT</span>
+            <span class="tag neon">NEÓN</span>
+            <span class="tag vip">BRILLO O NADA</span>
+          </div>
+          <p class="flyerBlurb">
+            Esta noche no se camina… <strong>se desfila</strong>. Trae tu energía, tu glitter y tu mejor vibe. 💃🔥
+          </p>
+        </div>
       </div>
-
-      <p class="flyerBlurb">
-        Esta noche no se camina… <strong>se desfila</strong>. Trae tu energía, tu glitter y tu mejor vibe. 💃🔥
-      </p>
 
       <div class="flyerDivider"></div>
 
@@ -625,7 +599,7 @@
 
   <!-- RSVP -->
   <section id="rsvp">
-    <div class="panel" id="panelRsvp">
+    <div class="panel">
       <h2>🎟️ RSVP</h2>
       <input id="nombre" placeholder="Tu nombre">
       <button onclick="confirmar()">🔥 YO VOY A SAMBAREAR</button>
@@ -634,8 +608,8 @@
   </section>
 
 <script>
-  // Reveal flyer + RSVP smoothly
-  const revealTargets = [document.getElementById("flyerDetalles"), document.getElementById("panelRsvp")].filter(Boolean);
+  // Reveal panels/flyer smoothly
+  const revealTargets = [ ...document.querySelectorAll(".panel"), document.getElementById("flyerDetalles") ].filter(Boolean);
   const obs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{
       if(e.isIntersecting) e.target.classList.add("reveal");
@@ -674,7 +648,6 @@
   // PARTY-ENERGY scroll parallax
   const layers = Array.from(document.querySelectorAll(".parallax"));
   const heroText = document.getElementById("heroText");
-
   let latestY = 0;
   let ticking = false;
 
