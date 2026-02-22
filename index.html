@@ -167,7 +167,7 @@
   }
 
   /* ============================
-     NEW: STATIC BACKGROUND MODE
+     STATIC BACKGROUND MODE
      (to reduce lag)
      ============================ */
   body.bg-static{
@@ -206,7 +206,7 @@
     right: 14px;
     z-index: 9999;
     display:flex;
-    flex-direction: column;     /* 👈 stack buttons */
+    flex-direction: column;
     gap:10px;
     align-items:flex-end;
   }
@@ -227,6 +227,43 @@
   .pill:hover{ transform: scale(1.04); }
   .pill small{opacity:.85;font-weight:800}
 
+  /* NEW: countdown chip (under Música) */
+  .countdown{
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(0,0,0,.22);
+    backdrop-filter: blur(12px);
+    color: #fff;
+    border-radius: 18px;
+    padding: 10px 12px;
+    box-shadow: 0 10px 26px rgba(0,0,0,.25);
+    min-width: 190px;
+    text-align: right;
+  }
+  .countdown .label{
+    font-weight: 900;
+    font-size: .78rem;
+    opacity: .9;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .countdown .time{
+    font-weight: 900;
+    font-size: .95rem;
+    line-height: 1.15;
+  }
+  .countdown .time strong{
+    font-family: 'Bangers', cursive;
+    font-size: 1.15rem;
+    letter-spacing: .6px;
+  }
+  .countdown .sub{
+    font-size: .78rem;
+    opacity: .88;
+    margin-top: 2px;
+    font-weight: 800;
+  }
+
   /* HERO SCENE */
   .scene{
     position: relative;
@@ -244,7 +281,7 @@
     transform-origin: center;
     filter: drop-shadow(0 16px 34px rgba(0,0,0,.35));
     transition: opacity .7s ease, filter .7s ease;
-    z-index: 6; /* base layer, overridden per-class below */
+    z-index: 6;
   }
 
   /* Flyer + RSVP must always stay above ornaments */
@@ -273,43 +310,26 @@
      POSITIONING (VIEWPORT) + clamp
      ============================ */
   .leafTL{ left: 0; top: 0; width: clamp(220px, 32vw, 520px); }
-
-  /* Stamp: behind leaf AND moved more right */
   .stamp{ left: 16%; top: 18%; width: clamp(120px, 14vw, 220px); }
-
   .orange{ left: 45%; top: 4%; width: clamp(180px, 22vw, 360px); }
-
-  /* Hibiscus: behind glass */
   .flower{ right: 120px; top: 10px; width: clamp(160px, 22vw, 320px); }
-
-  /* Glass: above hibiscus */
   .glass{ right: 18px; top: 88px; width: clamp(110px, 16vw, 220px); }
-
-  /* Blue bird: in front of hibiscus + glass */
   .bird{ right: 6%; top: 28%; width: clamp(120px, 18vw, 260px); }
-
   .toucan{ left: 0; bottom: 0; width: clamp(160px, 22vw, 320px); }
-
   .cristo{ left: 35%; bottom: 3%; width: clamp(140px, 18vw, 280px); }
-
   .crates{ right: 0; bottom: 0; width: clamp(260px, 42vw, 620px); }
 
   /* ============================
      LAYERING HIERARCHY
      ============================ */
-  .stamp{ z-index: 3; }     /* behind leaf */
+  .stamp{ z-index: 3; }
   .leafTL{ z-index: 5; }
-
-  .flower{ z-index: 6; }    /* hibiscus behind glass */
-  .glass{  z-index: 7; }    /* glass above hibiscus */
-  .bird{   z-index: 8; }    /* bird above both */
-
-  /* Other sensible ordering */
+  .flower{ z-index: 6; }
+  .glass{  z-index: 7; }
+  .bird{   z-index: 8; }
   .orange{ z-index: 4; }
   .toucan{ z-index: 6; }
   .crates{ z-index: 4; }
-
-  /* Cristo in FRONT of crates */
   .cristo{ z-index: 6; }
 
   /* ============================
@@ -323,10 +343,7 @@
   .bird    .floaty{ transform: scale(var(--s-bird)); }
   .toucan  .floaty{ transform: scale(var(--s-toucan)); }
   .cristo  .floaty{ transform: scale(var(--s-cristo)); }
-  .crates  .floaty{
-    transform-origin: bottom right;
-    transform: scale(var(--s-crates));
-  }
+  .crates  .floaty{ transform-origin: bottom right; transform: scale(var(--s-crates)); }
 
   /* Loop animations */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
@@ -355,7 +372,6 @@
     z-index: 20;
     pointer-events:none;
   }
-
   .heroText::before{
     content:"";
     position:absolute;
@@ -374,31 +390,26 @@
     animation: glowPulse 2.4s ease-in-out infinite;
     z-index:-1;
   }
-
   @keyframes glowPulse{
     0%,100%{ transform: translate(-50%,-55%) scale(1); opacity:.85; }
     50%{ transform: translate(-50%,-55%) scale(1.08); opacity:1; }
   }
-
   .heroText h1{
     font-family:'Bangers',cursive;
     font-size: clamp(90px, 10vw, 180px);
     margin: 0;
     letter-spacing: 2px;
     text-shadow: 6px 6px 0 #000;
-
     display:flex;
     align-items:center;
     justify-content:center;
     gap: 14px;
   }
-
   .heroText .age{
     font-size: 0.55em;
     color: #ff3d3d;
     line-height: 1;
   }
-
   .heroText h2{
     font-family:'Bangers',cursive;
     font-size: clamp(90px, 10vw, 180px);
@@ -431,13 +442,11 @@
     margin: 0 auto;
     padding: 40px;
     border-radius: 34px;
-
     background:
       radial-gradient(900px 420px at 20% 10%, rgba(255,0,127,.35), transparent 60%),
       radial-gradient(900px 420px at 85% 20%, rgba(0,176,255,.28), transparent 60%),
       radial-gradient(900px 420px at 50% 90%, rgba(0,200,83,.22), transparent 65%),
       rgba(0,0,0,.30);
-
     border: 1px solid rgba(255,255,255,.16);
     box-shadow: 0 35px 90px rgba(0,0,0,.55);
     backdrop-filter: blur(18px);
@@ -446,10 +455,7 @@
     transition: transform .6s ease, opacity .6s ease;
     overflow:hidden;
   }
-  .flyer.reveal{
-    transform: translateY(0);
-    opacity: 1;
-  }
+  .flyer.reveal{ transform: translateY(0); opacity: 1; }
 
   .flyer::before{
     content:"";
@@ -599,7 +605,6 @@
     font-weight: 900;
     line-height:1.25;
   }
-
   .flyValue small{
     display:block;
     margin-top: 6px;
@@ -640,11 +645,7 @@
     opacity: 0;
     transition: transform .6s ease, opacity .6s ease;
   }
-  .panel.reveal{
-    transform: translateY(0);
-    opacity: 1;
-  }
-
+  .panel.reveal{ transform: translateY(0); opacity: 1; }
   .panel h2{ margin: 0 0 14px 0; font-size: 2rem; }
 
   input, select{
@@ -689,27 +690,30 @@
 </style>
 </head>
 
-<!-- Add hue shift to background only by adding class "hue-bg" here if you want -->
 <body>
   <div class="topBar">
     <button class="pill" id="toggleTheme" aria-label="Cambiar tema">
       Modo: <small id="themeLabel">Noche Neón</small>
     </button>
 
-    <!-- NEW: background performance toggle -->
     <button class="pill" id="toggleBg" aria-label="Cambiar fondo">
-      Si Hay Lag Presiona Aqui: <small id="bgLabel">Vivo</small>
+      Fondo: <small id="bgLabel">Vivo</small>
     </button>
 
-    <!-- NEW: music toggle (under Fondo) -->
     <button class="pill" id="toggleMusic" aria-label="Música">
       Música: <small id="musicLabel">On</small>
     </button>
+
+    <!-- NEW: Countdown to March 21 -->
+    <div class="countdown" id="countdown">
+      <div class="label">Cuenta regresiva</div>
+      <div class="time" id="countdownTime"><strong>—</strong></div>
+      <div class="sub" id="countdownSub">hasta 21 de marzo</div>
+    </div>
   </div>
 
   <!-- AUDIO (put your mp3 filename here) -->
-  <!-- Example: src="music.mp3" -->
-  <audio id="bgMusic" src="music.mp3" preload="auto" playsinline></audio>
+  <audio id="bgMusic" src="carnaval.mp3" preload="auto" playsinline></audio>
 
   <!-- HERO -->
   <section class="hero" id="inicio">
@@ -843,7 +847,7 @@
   const toggleMusicBtn = document.getElementById("toggleMusic");
   const musicLabel = document.getElementById("musicLabel");
 
-  let musicEnabled = true;     // default On
+  let musicEnabled = true;
   let fading = false;
 
   function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
@@ -873,18 +877,15 @@
     if(!bgMusic) return;
 
     try{
-      // Jump to 7s (or as close as allowed)
       bgMusic.currentTime = MUSIC_START_AT;
-
       bgMusic.loop = true;
       bgMusic.volume = 0;
       await bgMusic.play();
 
-      fadeVolumeTo(1.0, 1400); // fade in
+      fadeVolumeTo(1.0, 1400);
       musicEnabled = true;
       musicLabel.textContent = "On";
     }catch(err){
-      // Autoplay might be blocked until user gesture.
       musicEnabled = false;
       musicLabel.textContent = "Tap";
     }
@@ -903,18 +904,14 @@
   toggleMusicBtn.addEventListener("click", async ()=>{
     if(!bgMusic) return;
 
-    // If currently playing -> fade out and stop
     if(!bgMusic.paused && musicEnabled){
       stopMusicWithFade();
       return;
     }
-
-    // Otherwise start from 7s with fade in
     await startMusicWithFade();
   });
 
-  // Try to autoplay on load (may fail on desktop browsers with strict policies)
-  // If blocked, it will show "Tap" and will start on first click/scroll/touch.
+  // Try to autoplay on load (may be blocked)
   startMusicWithFade();
 
   // If autoplay blocked, start when user interacts (first gesture)
@@ -931,6 +928,53 @@
   window.addEventListener("touchstart", oneGestureStart, {once:true, passive:true});
   window.addEventListener("keydown", oneGestureStart, {once:true});
   window.addEventListener("scroll", oneGestureStart, {once:true, passive:true});
+
+  /* ============================
+     COUNTDOWN to March 21
+     ============================ */
+  const countdownTimeEl = document.getElementById("countdownTime");
+  const countdownSubEl  = document.getElementById("countdownSub");
+
+  // Uses viewer's local time zone; March 21 at 00:00:00
+  function getNextMarch21(){
+    const now = new Date();
+    const year = now.getFullYear();
+
+    let target = new Date(year, 2, 21, 0, 0, 0); // month=2 => March
+    if(now > target){
+      target = new Date(year + 1, 2, 21, 0, 0, 0);
+    }
+    return target;
+  }
+
+  const targetDate = getNextMarch21();
+
+  function pad2(n){ return String(n).padStart(2, "0"); }
+
+  function updateCountdown(){
+    const now = new Date();
+    let diff = targetDate - now;
+
+    if(diff <= 0){
+      countdownTimeEl.innerHTML = `<strong>¡HOY!</strong>`;
+      countdownSubEl.textContent = "🎉 Es 21 de marzo";
+      return;
+    }
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+
+    countdownTimeEl.innerHTML =
+      `<strong>${days}d</strong> ${pad2(hours)}h ${pad2(mins)}m ${pad2(secs)}s`;
+
+    countdownSubEl.textContent = "hasta 21 de marzo";
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
 
   /* ============================
      Reveal panels/flyer smoothly
@@ -991,7 +1035,6 @@
       msg.textContent = "Escribe tu nombre 👀";
       return;
     }
-
     if(invitados.length !== plusCount){
       msg.textContent = "Escribe los nombres de tus invitados 👀";
       return;
@@ -1053,12 +1096,11 @@
   });
 
   /* ============================
-     NEW: Background performance toggle
+     Background performance toggle
      ============================ */
   const toggleBgBtn = document.getElementById("toggleBg");
   const bgLabel = document.getElementById("bgLabel");
 
-  // default is "Vivo" (animated). Click -> "Estático" (no lag)
   toggleBgBtn.addEventListener("click", ()=>{
     document.body.classList.toggle("bg-static");
     const isStatic = document.body.classList.contains("bg-static");
