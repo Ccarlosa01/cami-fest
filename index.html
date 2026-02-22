@@ -121,12 +121,20 @@
     transform-origin: center;
     filter: drop-shadow(0 16px 34px rgba(0,0,0,.35));
     transition: opacity .7s ease, filter .7s ease;
+    z-index: 6;                      /* base layer (in hero) */
   }
 
-  /* When Detalles appears: dim to 10% + blur */
+  /* Flyer + RSVP must always stay above ornaments */
+  .flyer, .panel{
+    position: relative;
+    z-index: 50;
+  }
+
+  /* When Detalles appears: dim to 10% + blur + send behind flyer + rsvp */
   body.dim-ornaments .parallax{
     opacity: 0.10;
     filter: blur(8px) drop-shadow(0 16px 34px rgba(0,0,0,.35));
+    z-index: 1 !important;           /* ✅ force behind content */
   }
 
   .floaty img{ width:100%; display:block; }
@@ -136,42 +144,37 @@
     left: 0;
     top: 0;
     width: clamp(220px, 32vw, 520px);
-    z-index: 5;
   }
 
   .toucan{
     left: 0;
     bottom: 0;
     width: clamp(160px, 22vw, 320px);
-    z-index: 6;
   }
 
   .crates{
     right: 0;
     bottom: 0;
     width: clamp(260px, 42vw, 620px);
-    z-index: 4;
   }
 
   .flower{
     right: 120px;     /* left of the toggle */
     top: 10px;
     width: clamp(160px, 22vw, 320px);
-    z-index: 7;
   }
 
   .glass{
     right: 18px;      /* below the toggle */
     top: 88px;
     width: clamp(110px, 16vw, 220px);
-    z-index: 7;
   }
 
-  /* The rest (now also viewport-anchored because .parallax is fixed) */
-  .stamp { left:6%;  top:18%;  width:18%; z-index: 6; }
-  .orange{ left:45%; top:4%;   width:22%; z-index: 6; }
-  .bird  { right:6%; top:28%;  width:20%; z-index: 6; }
-  .cristo{ left:35%; bottom:3%; width:22%; z-index: 6; }
+  /* Other assets (also viewport-anchored now) */
+  .stamp { left:6%;  top:18%;  width:18%; }
+  .orange{ left:45%; top:4%;   width:22%; }
+  .bird  { right:6%; top:28%;  width:20%; }
+  .cristo{ left:35%; bottom:3%; width:22%; }
 
   /* Loop animations (inner) */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
@@ -260,13 +263,11 @@
   /* ========================== */
 
   .flyer{
-    position: relative;
     width: min(920px, 95vw);
     margin: 0 auto;
     padding: 40px;
     border-radius: 34px;
 
-    /* layered neon glass */
     background:
       radial-gradient(900px 420px at 20% 10%, rgba(255,0,127,.35), transparent 60%),
       radial-gradient(900px 420px at 85% 20%, rgba(0,176,255,.28), transparent 60%),
@@ -286,7 +287,6 @@
     opacity: 1;
   }
 
-  /* Animated neon border */
   .flyer::before{
     content:"";
     position:absolute;
@@ -309,7 +309,6 @@
     100%{background-position:100% 50%}
   }
 
-  /* Sparkle particles (pure CSS) */
   .sparkle{
     position:absolute;
     inset:0;
@@ -362,18 +361,9 @@
     letter-spacing: .8px;
     font-size: .82rem;
   }
-  .tag.hot{
-    background: rgba(255,0,127,.18);
-    border-color: rgba(255,0,127,.35);
-  }
-  .tag.neon{
-    background: rgba(0,176,255,.16);
-    border-color: rgba(0,176,255,.34);
-  }
-  .tag.vip{
-    background: rgba(255,208,0,.16);
-    border-color: rgba(255,208,0,.34);
-  }
+  .tag.hot{ background: rgba(255,0,127,.18); border-color: rgba(255,0,127,.35); }
+  .tag.neon{ background: rgba(0,176,255,.16); border-color: rgba(0,176,255,.34); }
+  .tag.vip{ background: rgba(255,208,0,.16); border-color: rgba(255,208,0,.34); }
 
   .flyerBlurb{
     margin: 14px 0 0 0;
@@ -472,6 +462,7 @@
   }
   .flyBtn:hover{ transform: scale(1.05); }
 
+  /* RSVP panel (keep) */
   .panel{
     width: min(880px, 95vw);
     margin: 0 auto;
@@ -490,10 +481,7 @@
     opacity: 1;
   }
 
-  .panel h2{
-    margin: 0 0 14px 0;
-    font-size: 2rem;
-  }
+  .panel h2{ margin: 0 0 14px 0; font-size: 2rem; }
 
   input{
     width: 100%;
@@ -517,6 +505,7 @@
   }
   button:hover{ transform: scale(1.05); }
 
+  /* Confetti */
   .confetti{
     position:fixed;
     top:-10px;
@@ -657,7 +646,7 @@
   }, {threshold: .2});
   revealTargets.forEach(el => obs.observe(el));
 
-  // Dim + blur ornaments when "Detalles del Carnaval" starts showing
+  // Dim + blur ornaments + send behind when "Detalles del Carnaval" starts showing
   const detallesSection = document.querySelector("#detalles"); // or #flyerDetalles
 
   const detallesObserver = new IntersectionObserver(
@@ -697,7 +686,7 @@
     themeLabel.textContent = isParade ? "Parade" : "Noche Neón";
   });
 
-  // PARTY-ENERGY scroll parallax (still works on fixed layers)
+  // PARTY-ENERGY scroll parallax (works on fixed layers)
   const layers = Array.from(document.querySelectorAll(".parallax"));
   const heroText = document.getElementById("heroText");
   let latestY = 0;
