@@ -119,59 +119,52 @@
   }
   .floaty img{ width:100%; display:block; }
 
-  /* Positions (UPDATED — cleaner framing + less clipping) */
+  /* Positions (REQUESTED LAYOUT) */
+
+  /* Leaf: top-left */
   .leafTL{
     left:-8%;
     top:-14%;
     width:52%;
   }
-
-  .stamp{
-    left:8%;
-    top:20%;
-    width:16%;
-  }
-
-  .orange{
-    left:50%;
-    top:2%;
-    width:22%;
-  }
-
-  .flower{
-    right:6%;
-    top:-6%;
-    width:30%;
-  }
-
-  .glass{
-    right:-2%;
-    top:14%;
-    width:20%;
-  }
-
-  .bird{
-    right:10%;
-    top:30%;
-    width:18%;
-  }
-
+  
+  /* Toucan: bottom-left */
   .toucan{
-    left:-2%;
-    bottom:6%;
-    width:26%;
+    left:-4%;
+    bottom:-2%;
+    width:28%;
   }
-
-  .cristo{
-    left:38%;
-    bottom:6%;
-    width:20%;
-  }
-
+  
+  /* Crates: bottom-right */
   .crates{
     right:-6%;
     bottom:-6%;
     width:62%;
+  }
+  
+  /* Hibiscus: left of the modo switch (top-right area) */
+  .flower{
+    right:110px;      /* leaves room for the fixed toggle */
+    top:-6%;
+    width:30%;
+  }
+  
+  /* Glass: below the modo switch (top-right area) */
+  .glass{
+    right:22px;       /* close to the toggle */
+    top:88px;         /* sits below the toggle */
+    width:20%;
+  }
+  
+  /* Keep these where they are (or tweak later) */
+  .stamp { left:6%;  top:18%;  width:18%; }
+  .orange{ left:45%; top:4%;   width:22%; }
+  .bird  { right:6%; top:28%;  width:20%; }
+  .cristo{ left:35%; bottom:3%; width:22%; }
+
+  @media (max-width: 480px){
+    .flower{ right:95px; top:-4%; width:34%; }
+    .glass { right:16px; top:96px; width:22%; }
   }
 
   /* Loop animations (inner) */
