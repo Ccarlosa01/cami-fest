@@ -692,28 +692,28 @@
 
 <body>
   <div class="topBar">
+    <!-- NEW: Countdown to March 21 -->
+    <div class="countdown" id="countdown">
+      <div class="label">Cuenta regresiva</div>
+      <div class="time" id="countdownTime"><strong>—</strong></div>
+    </div>
+    
     <button class="pill" id="toggleTheme" aria-label="Cambiar tema">
-      Modo: <small id="themeLabel">Noche Neón</small>
+      Modo: <small id="themeLabel">Parade</small>
     </button>
 
     <button class="pill" id="toggleBg" aria-label="Cambiar fondo">
-      Fondo: <small id="bgLabel">Vivo</small>
+      Fondo: <small id="bgLabel">Estático</small>
     </button>
 
     <button class="pill" id="toggleMusic" aria-label="Música">
       Música: <small id="musicLabel">On</small>
     </button>
-
-    <!-- NEW: Countdown to March 21 -->
-    <div class="countdown" id="countdown">
-      <div class="label">Cuenta regresiva</div>
-      <div class="time" id="countdownTime"><strong>—</strong></div>
-      <div class="sub" id="countdownSub">hasta 21 de marzo</div>
-    </div>
+    
   </div>
 
   <!-- AUDIO (put your mp3 filename here) -->
-  <audio id="bgMusic" src="carnaval.mp3" preload="auto" playsinline></audio>
+  <audio id="bgMusic" src="music.mp3" preload="auto" playsinline></audio>
 
   <!-- HERO -->
   <section class="hero" id="inicio">
