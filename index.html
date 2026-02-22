@@ -8,317 +8,457 @@
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
 
 <style>
+  :root{
+    /* Neon Night (default) */
+    --bg1:#120018;
+    --bg2:#2b0059;
+    --bg3:#ff007f;
+    --bg4:#ff6a00;
+    --bg5:#00c853;
+    --bg6:#00b0ff;
 
-/* ============================= */
-/* GLOBAL + ANIMATED RIO GRADIENT */
-/* ============================= */
+    --panel: rgba(0,0,0,.28);
+    --panelBorder: rgba(255,255,255,.14);
+    --text: #ffffff;
 
-:root{
-  --pink:#ff007f;
-  --orange:#ff6a00;
-  --yellow:#ffd000;
-  --green:#00c853;
-  --blue:#00b0ff;
-  --purple:#8e24aa;
-}
+    --gold: linear-gradient(45deg,#ffd700,#ffb300);
+    --shadow: 0 25px 70px rgba(0,0,0,.45);
+  }
 
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
+  /* Optional: Parade (brighter) theme */
+  body.theme-parade{
+    --bg1:#ff007f;
+    --bg2:#ff6a00;
+    --bg3:#ffd000;
+    --bg4:#00c853;
+    --bg5:#00b0ff;
+    --bg6:#8e24aa;
 
-body{
-  font-family:'Montserrat',sans-serif;
-  color:white;
-  overflow-x:hidden;
-  scroll-behavior:smooth;
+    --panel: rgba(0,0,0,.22);
+    --panelBorder: rgba(255,255,255,.16);
+  }
 
-  background: linear-gradient(
-    135deg,
-    var(--pink),
-    var(--orange),
-    var(--yellow),
-    var(--green),
-    var(--blue),
-    var(--purple)
-  );
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    color: var(--text);
+    overflow-x:hidden;
+    scroll-behavior:smooth;
 
-  background-size:300% 300%;
-  animation:gradientMove 18s ease infinite;
-}
+    /* ONE CONTINUOUS ANIMATED RIO GRADIENT */
+    background: linear-gradient(
+      135deg,
+      var(--bg1),
+      var(--bg2),
+      var(--bg3),
+      var(--bg4),
+      var(--bg5),
+      var(--bg6)
+    );
+    background-size: 320% 320%;
+    animation: gradientMove 18s ease infinite;
+  }
 
-@keyframes gradientMove{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
+  @keyframes gradientMove{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
 
-/* ============================= */
-/* SECTION FLOW (NO BREAKS) */
-/* ============================= */
+  /* Continuous-flow sections (no “slides”) */
+  section{
+    padding: 120px 20px 80px 20px;
+    position: relative;
+  }
+  .hero{
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
-section{
-  padding:120px 20px 80px 20px;
-  position:relative;
-}
+  /* Top-right theme toggle */
+  .topBar{
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 9999;
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  .pill{
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(0,0,0,.25);
+    backdrop-filter: blur(12px);
+    color: #fff;
+    border-radius: 999px;
+    padding: 10px 12px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 10px 26px rgba(0,0,0,.25);
+    transition: transform .15s ease, background .15s ease;
+  }
+  .pill:hover{ transform: scale(1.04); }
+  .pill small{opacity:.85;font-weight:800}
 
-.hero{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+  /* HERO SCENE */
+  .scene{
+    position: relative;
+    width: min(1040px, 95vw);
+    height: min(82vh, 780px);
+  }
 
-/* ============================= */
-/* HERO SCENE */
-/* ============================= */
+  /* Each layer gets:
+     - OUTER .parallax  => scroll transform applied by JS
+     - INNER .floaty    => looping animation (transform) applied by CSS
+     This prevents transform conflicts.
+  */
+  .parallax{
+    position:absolute;
+    pointer-events:none;
+    will-change: transform;
+    transform-origin: center;
+    filter: drop-shadow(0 16px 34px rgba(0,0,0,.35));
+  }
+  .floaty img{ width:100%; display:block; }
 
-.scene{
-  position:relative;
-  width:min(1000px,95vw);
-  height:min(80vh,750px);
-}
+  /* Positions */
+  .leafTL{ left:-6%; top:-12%; width:48%; }
+  .stamp { left:6%;  top:18%;  width:18%; }
+  .orange{ left:45%; top:4%;   width:22%; }
+  .flower{ right:10%; top:-4%; width:30%; }
+  .glass { right:-3%; top:12%; width:22%; }
+  .bird  { right:6%; top:28%;  width:20%; }
+  .toucan{ left:-3%; bottom:5%; width:26%; }
+  .cristo{ left:35%; bottom:3%; width:22%; }
+  .crates{ right:-4%; bottom:-2%; width:58%; }
 
-.layer{
-  position:absolute;
-  pointer-events:none;
-  filter:drop-shadow(0 15px 30px rgba(0,0,0,.3));
-}
-.layer img{width:100%;display:block}
+  /* Loop animations (inner) */
+  @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
+  @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  @keyframes breathe{ 0%,100%{transform:scale(1) rotate(-1deg)} 50%{transform:scale(1.03) rotate(1deg)} }
+  @keyframes bob  { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-9px) rotate(-1deg)} }
+  @keyframes wobbleIn{ 0%{transform:scale(.6) rotate(-10deg);opacity:0} 70%{transform:scale(1.1) rotate(5deg);opacity:1} 100%{transform:scale(1) rotate(0)} }
+  @keyframes riseIn{ 0%{transform:translateY(40px);opacity:0} 100%{transform:translateY(0);opacity:1} }
 
-/* Positions */
-.leafTL{ left:-5%; top:-10%; width:48%; animation:sway 6s ease-in-out infinite; }
-.stamp{ left:6%; top:18%; width:18%; animation:wobbleIn 1s ease-out both; }
-.orange{ left:45%; top:4%; width:22%; animation:float 5s ease-in-out infinite; }
-.flower{ right:10%; top:-3%; width:30%; animation:breathe 7s ease-in-out infinite; }
-.glass{ right:-3%; top:12%; width:22%; animation:float 6s ease-in-out infinite; }
-.bird{ right:6%; top:28%; width:20%; animation:bob 4s ease-in-out infinite; }
-.toucan{ left:-3%; bottom:5%; width:26%; animation:bob 5s ease-in-out infinite; }
-.cristo{ left:35%; bottom:3%; width:22%; animation:riseIn 1.2s ease-out both; }
-.crates{ right:-4%; bottom:-2%; width:58%; }
+  .leafTL .floaty{ animation: sway 6s ease-in-out infinite; }
+  .orange .floaty{ animation: float 5s ease-in-out infinite; }
+  .flower .floaty{ animation: breathe 7s ease-in-out infinite; }
+  .glass  .floaty{ animation: float 6s ease-in-out infinite; }
+  .bird   .floaty{ animation: bob 4s ease-in-out infinite; }
+  .toucan .floaty{ animation: bob 5s ease-in-out infinite; }
+  .stamp  .floaty{ animation: wobbleIn 1s ease-out both; }
+  .cristo .floaty{ animation: riseIn 1.2s ease-out both; }
 
-/* Hero Text */
+  /* HERO TEXT + GLOW PULSE */
+  .heroText{
+    position:absolute;
+    left:0; right:0;
+    top:45%;
+    transform: translateY(-50%);
+    text-align:center;
+    z-index: 20;
+    pointer-events:none;
+  }
 
-.heroText{
-  position:absolute;
-  left:0; right:0;
-  top:45%;
-  transform:translateY(-50%);
-  text-align:center;
-}
+  /* Glow “blob” behind title */
+  .heroText::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width: min(560px, 86vw);
+    height: 240px;
+    transform: translate(-50%,-55%);
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(255,0,127,.55), transparent 55%),
+      radial-gradient(circle at 70% 30%, rgba(0,176,255,.45), transparent 55%),
+      radial-gradient(circle at 55% 75%, rgba(0,200,83,.35), transparent 60%);
+    filter: blur(18px);
+    opacity: .95;
+    animation: glowPulse 2.4s ease-in-out infinite;
+    z-index:-1;
+  }
 
-.heroText h1{
-  font-family:'Bangers',cursive;
-  font-size:clamp(55px,7vw,110px);
-  margin:0;
-  text-shadow:6px 6px 0 #000;
-}
+  @keyframes glowPulse{
+    0%,100%{ transform: translate(-50%,-55%) scale(1); opacity:.85; }
+    50%{ transform: translate(-50%,-55%) scale(1.08); opacity:1; }
+  }
 
-.heroText h2{
-  font-family:'Bangers',cursive;
-  font-size:clamp(45px,6vw,90px);
-  margin:10px 0 0 0;
-  text-shadow:6px 6px 0 #000;
-  color:#ffd000;
-}
+  .heroText h1{
+    font-family:'Bangers',cursive;
+    font-size: clamp(56px, 7vw, 118px);
+    margin: 0;
+    letter-spacing: 2px;
+    text-shadow: 6px 6px 0 #000;
+  }
+  .heroText h2{
+    font-family:'Bangers',cursive;
+    font-size: clamp(46px, 6vw, 96px);
+    margin: 10px 0 0 0;
+    letter-spacing: 2px;
+    color: #ffd000;
+    text-shadow: 6px 6px 0 #000;
+  }
 
-.scrollHint{
-  position:absolute;
-  bottom:10px;
-  left:0; right:0;
-  text-align:center;
-  font-weight:800;
-  animation:float 2s infinite;
-}
+  .scrollHint{
+    position:absolute;
+    bottom: 10px;
+    left:0; right:0;
+    text-align:center;
+    font-weight: 900;
+    opacity: .92;
+    animation: hintFloat 2s ease-in-out infinite;
+  }
+  @keyframes hintFloat{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-8px); }
+  }
 
-/* ============================= */
-/* PANELS */
-/* ============================= */
+  /* PANELS (glass, no harsh breaks) */
+  .panel{
+    width: min(880px, 95vw);
+    margin: 0 auto;
+    background: var(--panel);
+    border: 1px solid var(--panelBorder);
+    backdrop-filter: blur(16px);
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: var(--shadow);
+    transform: translateY(30px);
+    opacity: 0;
+    transition: transform .6s ease, opacity .6s ease;
+  }
+  .panel.reveal{
+    transform: translateY(0);
+    opacity: 1;
+  }
 
-.panel{
-  width:min(850px,95vw);
-  margin:auto;
-  background:rgba(0,0,0,.25);
-  backdrop-filter:blur(15px);
-  padding:40px;
-  border-radius:30px;
-  box-shadow:0 25px 60px rgba(0,0,0,.4);
-  transform:translateY(30px);
-  opacity:0;
-  transition:all .6s ease;
-}
+  .panel h2{
+    margin: 0 0 14px 0;
+    font-size: 2rem;
+  }
 
-.panel.reveal{
-  transform:translateY(0);
-  opacity:1;
-}
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 10px;
+  }
+  @media(min-width: 760px){
+    .grid{ grid-template-columns: 1fr 1fr; }
+  }
 
-.panel h2{
-  margin-top:0;
-  font-size:2rem;
-}
+  .card{
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 22px;
+    padding: 16px;
+  }
+  .card h3{ margin:0 0 6px 0; font-size: 1rem; }
+  .card p{ margin:0; font-size: 1.05rem; }
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:15px;
-}
-@media(min-width:750px){
-  .grid{grid-template-columns:1fr 1fr}
-}
+  /* RSVP */
+  input{
+    width: 100%;
+    padding: 14px 14px;
+    border-radius: 999px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    margin-top: 10px;
+  }
 
-.card{
-  background:rgba(255,255,255,.1);
-  padding:15px;
-  border-radius:20px;
-}
+  button{
+    margin-top: 15px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: none;
+    font-weight: 900;
+    background: var(--gold);
+    cursor: pointer;
+    transition: transform .18s ease;
+  }
+  button:hover{ transform: scale(1.05); }
 
-.card h3{margin:0 0 5px 0}
-
-/* ============================= */
-/* RSVP */
-/* ============================= */
-
-input{
-  width:100%;
-  padding:14px;
-  border-radius:999px;
-  border:none;
-  font-size:1rem;
-  margin-top:10px;
-}
-
-button{
-  margin-top:15px;
-  padding:14px 25px;
-  border-radius:999px;
-  border:none;
-  font-weight:900;
-  background:linear-gradient(45deg,#ffd700,#ffb300);
-  cursor:pointer;
-  transition:.2s;
-}
-button:hover{transform:scale(1.05)}
-
-.confetti{
-  position:fixed;
-  top:-10px;
-  width:8px;height:8px;
-  animation:fall 3.5s linear forwards;
-}
-@keyframes fall{
-  to{transform:translateY(110vh) rotate(720deg)}
-}
-
-/* ============================= */
-/* OBJECT ANIMATIONS */
-/* ============================= */
-
-@keyframes sway{
-  0%,100%{transform:rotate(-2deg)}
-  50%{transform:rotate(2deg)}
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
-@keyframes breathe{
-  0%,100%{transform:scale(1) rotate(-1deg)}
-  50%{transform:scale(1.03) rotate(1deg)}
-}
-@keyframes bob{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-8px)}
-}
-@keyframes wobbleIn{
-  0%{transform:scale(.6) rotate(-10deg);opacity:0}
-  70%{transform:scale(1.1) rotate(5deg);opacity:1}
-  100%{transform:scale(1) rotate(0deg)}
-}
-@keyframes riseIn{
-  0%{transform:translateY(40px);opacity:0}
-  100%{transform:translateY(0);opacity:1}
-}
-
+  /* Confetti */
+  .confetti{
+    position:fixed;
+    top:-10px;
+    width:8px;height:8px;
+    border-radius:2px;
+    animation: fall 3.5s linear forwards;
+    z-index: 9999;
+    pointer-events:none;
+    opacity:.95;
+  }
+  @keyframes fall{
+    to{ transform: translateY(110vh) rotate(720deg); }
+  }
 </style>
 </head>
 
-<body>
+<body class="theme-neon">
+  <div class="topBar">
+    <button class="pill" id="toggleTheme" aria-label="Cambiar tema">
+      Modo: <small id="themeLabel">Noche Neón</small>
+    </button>
+  </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="scene">
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="scene" id="scene">
+      <!-- Each object: outer .parallax + inner .floaty -->
+      <div class="parallax leafTL" data-speed="0.55" data-x="0.30" data-r="0.10">
+        <div class="floaty"><img src="leaf-top-left.png" alt=""></div>
+      </div>
 
-    <div class="layer leafTL"><img src="leaf-top-left.png"></div>
-    <div class="layer stamp"><img src="stamp-brasil.png"></div>
-    <div class="layer orange"><img src="orange-swoosh.png"></div>
-    <div class="layer flower"><img src="hibiscus.png"></div>
-    <div class="layer glass"><img src="lime-glass.png"></div>
-    <div class="layer bird"><img src="blue-bird.png"></div>
-    <div class="layer toucan"><img src="toucan.png"></div>
-    <div class="layer cristo"><img src="cristo.png"></div>
-    <div class="layer crates"><img src="beer-crates.png"></div>
+      <div class="parallax stamp" data-speed="0.95" data-x="-0.25" data-r="-0.18">
+        <div class="floaty"><img src="stamp-brasil.png" alt=""></div>
+      </div>
 
-    <div class="heroText">
-      <h1>Camila <span style="color:#ff3d3d">#22</span></h1>
-      <h2>CARNAVAL</h2>
+      <div class="parallax orange" data-speed="0.65" data-x="0.20" data-r="0.12">
+        <div class="floaty"><img src="orange-swoosh.png" alt=""></div>
+      </div>
+
+      <div class="parallax flower" data-speed="0.85" data-x="-0.18" data-r="-0.10">
+        <div class="floaty"><img src="hibiscus.png" alt=""></div>
+      </div>
+
+      <div class="parallax glass" data-speed="1.05" data-x="-0.22" data-r="0.14">
+        <div class="floaty"><img src="lime-glass.png" alt=""></div>
+      </div>
+
+      <div class="parallax bird" data-speed="1.15" data-x="0.28" data-r="-0.16">
+        <div class="floaty"><img src="blue-bird.png" alt=""></div>
+      </div>
+
+      <div class="heroText" id="heroText">
+        <h1>Camila <span style="color:#ff3d3d">#22</span></h1>
+        <h2>CARNAVAL</h2>
+      </div>
+
+      <div class="parallax toucan" data-speed="1.25" data-x="0.35" data-r="0.18">
+        <div class="floaty"><img src="toucan.png" alt=""></div>
+      </div>
+
+      <div class="parallax cristo" data-speed="0.55" data-x="-0.08" data-r="-0.06">
+        <div class="floaty"><img src="cristo.png" alt=""></div>
+      </div>
+
+      <div class="parallax crates" data-speed="1.55" data-x="-0.40" data-r="-0.12">
+        <div class="floaty"><img src="beer-crates.png" alt=""></div>
+      </div>
+
+      <div class="scrollHint">Desliza ↓</div>
     </div>
+  </section>
 
-    <div class="scrollHint">Desliza ↓</div>
-
-  </div>
-</section>
-
-<!-- DETAILS -->
-<section id="detalles">
-  <div class="panel">
-    <h2>📍 Detalles del Carnaval</h2>
-    <div class="grid">
-      <div class="card"><h3>🗓 Fecha</h3><p>REEMPLAZA</p></div>
-      <div class="card"><h3>⏰ Hora</h3><p>REEMPLAZA</p></div>
-      <div class="card"><h3>📌 Lugar</h3><p>REEMPLAZA</p></div>
-      <div class="card"><h3>👗 Dress Code</h3><p>Brillo, colores, plumas, glitter 🔥</p></div>
+  <!-- DETAILS -->
+  <section id="detalles">
+    <div class="panel">
+      <h2>📍 Detalles del Carnaval</h2>
+      <div class="grid">
+        <div class="card"><h3>🗓 Fecha</h3><p>REEMPLAZA</p></div>
+        <div class="card"><h3>⏰ Hora</h3><p>REEMPLAZA</p></div>
+        <div class="card"><h3>📌 Lugar</h3><p>REEMPLAZA</p></div>
+        <div class="card"><h3>👗 Dress Code</h3><p>Brillo, colores, plumas, glitter 🔥</p></div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- RSVP -->
-<section id="rsvp">
-  <div class="panel">
-    <h2>🎟️ RSVP</h2>
-    <input id="nombre" placeholder="Tu nombre">
-    <button onclick="confirmar()">🔥 YO VOY A SAMBAREAR</button>
-    <div id="mensaje" style="margin-top:10px;font-weight:900"></div>
-  </div>
-</section>
+  <!-- RSVP -->
+  <section id="rsvp">
+    <div class="panel">
+      <h2>🎟️ RSVP</h2>
+      <input id="nombre" placeholder="Tu nombre">
+      <button onclick="confirmar()">🔥 YO VOY A SAMBAREAR</button>
+      <div id="mensaje" style="margin-top:10px;font-weight:900"></div>
+    </div>
+  </section>
 
 <script>
+  // Reveal panels smoothly
+  const panels = document.querySelectorAll(".panel");
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add("reveal");
+    });
+  }, {threshold: .2});
+  panels.forEach(p => observer.observe(p));
 
-/* Reveal panels smoothly */
-const panels=document.querySelectorAll(".panel");
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){e.target.classList.add("reveal")}
-  })
-},{threshold:.2});
-panels.forEach(p=>observer.observe(p));
+  // RSVP confetti (visual only)
+  function confirmar(){
+    const nombre = document.getElementById("nombre").value.trim();
+    const msg = document.getElementById("mensaje");
+    if(!nombre){ msg.textContent="Escribe tu nombre 👀"; return; }
+    msg.textContent = "🔥 " + nombre + " oficialmente está en el CARNAVAL 🔥";
 
-/* Confetti RSVP */
-function confirmar(){
-  const nombre=document.getElementById("nombre").value.trim();
-  const msg=document.getElementById("mensaje");
-  if(!nombre){msg.textContent="Escribe tu nombre 👀";return}
-  msg.textContent="🔥 "+nombre+" oficialmente está en el CARNAVAL 🔥";
-  const colors=["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
-  for(let i=0;i<80;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.background=colors[Math.floor(Math.random()*colors.length)];
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3500);
+    const colors = ["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
+    for(let i=0;i<90;i++){
+      const c=document.createElement("div");
+      c.className="confetti";
+      c.style.left = (Math.random()*100) + "vw";
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration = (Math.random()*1.6 + 2.4) + "s";
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(), 3800);
+    }
   }
-}
 
+  // Theme toggle: Noche Neón <-> Parade
+  const toggleBtn = document.getElementById("toggleTheme");
+  const themeLabel = document.getElementById("themeLabel");
+  toggleBtn.addEventListener("click", ()=>{
+    document.body.classList.toggle("theme-parade");
+    const isParade = document.body.classList.contains("theme-parade");
+    themeLabel.textContent = isParade ? "Parade" : "Noche Neón";
+  });
+
+  // PARTY-ENERGY scroll parallax:
+  // Each element drifts with scroll at its own speed + slight x + slight rotation.
+  const layers = Array.from(document.querySelectorAll(".parallax"));
+  const heroText = document.getElementById("heroText");
+
+  let latestY = 0;
+  let ticking = false;
+
+  function applyParallax(){
+    const y = latestY;
+
+    layers.forEach(el=>{
+      const speed = parseFloat(el.dataset.speed || "1");
+      const xAmt  = parseFloat(el.dataset.x || "0.2");
+      const rAmt  = parseFloat(el.dataset.r || "0.1");
+
+      // Party energy = more noticeable multipliers (but still safe on mobile)
+      const ty = (y * speed) * 0.10;          // vertical drift
+      const tx = Math.sin(y * 0.004) * 18 * xAmt; // side-to-side groove
+      const rot = Math.sin(y * 0.003) * 6 * rAmt; // tiny rotation
+
+      el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg)`;
+    });
+
+    // Title gently fades as you scroll down from hero
+    const fade = Math.max(0, 1 - (y / 520));
+    heroText.style.opacity = (fade).toFixed(3);
+
+    ticking = false;
+  }
+
+  window.addEventListener("scroll", ()=>{
+    latestY = window.scrollY;
+    if(!ticking){
+      window.requestAnimationFrame(applyParallax);
+      ticking = true;
+    }
+  }, {passive:true});
+
+  // Initial run
+  applyParallax();
 </script>
-
 </body>
 </html>
