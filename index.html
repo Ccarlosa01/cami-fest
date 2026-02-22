@@ -24,10 +24,7 @@
     --gold: linear-gradient(45deg,#ffd700,#ffb300);
     --shadow: 0 25px 70px rgba(0,0,0,.45);
 
-    /* ============================
-       EASY SCALE CONTROLS
-       Adjust these anytime 🔧
-       ============================ */
+    /* EASY SCALE CONTROLS */
     --s-leaf: 1.00;
     --s-stamp: 1.00;
     --s-orange: 0.75;
@@ -38,13 +35,7 @@
     --s-cristo: 1.25;
     --s-crates: 0.75;
 
-    /* ============================
-       WhatsApp RSVP (HOST)
-       Put your number here in international format (NO +, NO spaces)
-       Examples:
-       US: 13475551234
-       Peru: 51987654321
-       ============================ */
+    /* WhatsApp RSVP (HOST) */
     --wa-host: 17183507066;
   }
 
@@ -80,10 +71,9 @@
       var(--bg6)
     );
     background-size: 420% 420%;
-    animation: gradientMove 10s ease-in-out infinite; /* faster */
+    animation: gradientMove 10s ease-in-out infinite;
   }
 
-  /* Organic gradient motion */
   @keyframes gradientMove{
     0%   { background-position: 0% 50%; }
     25%  { background-position: 100% 40%; }
@@ -91,11 +81,6 @@
     75%  { background-position: 20% 60%; }
     100% { background-position: 0% 50%; }
   }
-
-  /* ============================
-     ALIVE BACKGROUND LAYERS ONLY
-     (does NOT affect content)
-     ============================ */
 
   /* A) drifting neon lights */
   body::after{
@@ -115,16 +100,15 @@
     mix-blend-mode: screen;
     opacity: .95;
 
-    animation: lightDrift 16s ease-in-out infinite alternate; /* slightly faster */
+    animation: lightDrift 16s ease-in-out infinite alternate;
   }
-
   @keyframes lightDrift{
     0%   { transform: translate3d(0,0,0) scale(1); }
     50%  { transform: translate3d(0,-28px,0) scale(1.06); }
     100% { transform: translate3d(0,18px,0) scale(1.10); }
   }
 
-  /* B) subtle moving grain (no external image) */
+  /* B) subtle moving grain */
   body::before{
     content:"";
     position: fixed;
@@ -149,27 +133,23 @@
         rgba(0,0,0,0) 7px
       );
 
-    animation: grainMove 7s steps(10) infinite; /* slightly faster */
+    animation: grainMove 7s steps(10) infinite;
   }
-
   @keyframes grainMove{
     0%   { transform: translate3d(0,0,0); }
     100% { transform: translate3d(-30px,18px,0); }
   }
 
-  /* C) OPTIONAL: hue shift ONLY on background layers */
+  /* OPTIONAL hue shift on bg layers */
   body.hue-bg::after{
-    animation: lightDrift 16s ease-in-out infinite alternate, hueShift 26s linear infinite; /* faster */
+    animation: lightDrift 16s ease-in-out infinite alternate, hueShift 26s linear infinite;
   }
   @keyframes hueShift{
     0%{ filter: hue-rotate(0deg) blur(2px); }
     100%{ filter: hue-rotate(360deg) blur(2px); }
   }
 
-  /* ============================
-     STATIC BACKGROUND MODE
-     (to reduce lag)
-     ============================ */
+  /* STATIC BACKGROUND MODE (reduce lag) */
   body.bg-static{
     animation: none;
     background-size: 100% 100%;
@@ -181,25 +161,15 @@
     opacity: 0 !important;
   }
 
-  /* D) Reduce Motion support (iOS/Accessibility) */
   @media (prefers-reduced-motion: reduce){
     body{ animation: none; background-size: 320% 320%; }
     body::after, body::before{ animation: none; }
   }
 
-  /* Continuous-flow sections */
-  section{
-    padding: 120px 20px 80px 20px;
-    position: relative;
-  }
-  .hero{
-    min-height: 100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
+  section{ padding: 120px 20px 80px 20px; position: relative; }
+  .hero{ min-height: 100vh; display:flex; align-items:center; justify-content:center; }
 
-  /* Top-right buttons */
+  /* Top-right UI */
   .topBar{
     position: fixed;
     top: 14px;
@@ -210,6 +180,7 @@
     gap:10px;
     align-items:flex-end;
   }
+
   .pill{
     border: 1px solid rgba(255,255,255,.22);
     background: rgba(0,0,0,.25);
@@ -227,7 +198,7 @@
   .pill:hover{ transform: scale(1.04); }
   .pill small{opacity:.85;font-weight:800}
 
-  /* NEW: countdown chip (under Música) */
+  /* Countdown */
   .countdown{
     border: 1px solid rgba(255,255,255,.22);
     background: rgba(0,0,0,.22);
@@ -264,16 +235,35 @@
     font-weight: 800;
   }
 
-  /* HERO SCENE */
-  .scene{
-    position: relative;
-    width: min(1040px, 95vw);
-    height: min(82vh, 780px);
+  /* Controls tab (dropdown panel) */
+  .controlsPanel{
+    width: min(260px, 78vw);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(0,0,0,.22);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 18px 50px rgba(0,0,0,.32);
+    padding: 10px;
+    transform-origin: top right;
+    transform: translateY(-6px) scale(.96);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .controlsPanel.open{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .controlsPanel .pill{
+    width: 100%;
+    margin: 6px 0;
+    text-align: left;
   }
 
-  /* =========================================
-     ALL IMAGES VIEWPORT-ANCHORED + DIM/BLUR
-     ========================================= */
+  /* HERO SCENE */
+  .scene{ position: relative; width: min(1040px, 95vw); height: min(82vh, 780px); }
+
   .parallax{
     position: fixed;
     pointer-events:none;
@@ -284,31 +274,17 @@
     z-index: 6;
   }
 
-  /* Flyer + RSVP must always stay above ornaments */
-  .flyer, .panel{
-    position: relative;
-    z-index: 50;
-  }
+  .flyer, .panel{ position: relative; z-index: 50; }
 
-  /* When Detalles appears: dim to 10% + blur + send behind flyer + rsvp */
   body.dim-ornaments .parallax{
     opacity: 0.10;
     filter: blur(10px) drop-shadow(0 16px 34px rgba(0,0,0,.35));
     z-index: 1 !important;
   }
 
-  /* Wrapper that holds the image */
-  .floaty{
-    width:100%;
-    height:auto;
-    transform-origin:center;
-    will-change: transform;
-  }
+  .floaty{ width:100%; height:auto; transform-origin:center; will-change: transform; }
   .floaty img{ width:100%; display:block; }
 
-  /* ============================
-     POSITIONING (VIEWPORT) + clamp
-     ============================ */
   .leafTL{ left: 0; top: 0; width: clamp(220px, 32vw, 520px); }
   .stamp{ left: 16%; top: 18%; width: clamp(120px, 14vw, 220px); }
   .orange{ left: 45%; top: 4%; width: clamp(180px, 22vw, 360px); }
@@ -319,9 +295,6 @@
   .cristo{ left: 35%; bottom: 3%; width: clamp(140px, 18vw, 280px); }
   .crates{ right: 0; bottom: 0; width: clamp(260px, 42vw, 620px); }
 
-  /* ============================
-     LAYERING HIERARCHY
-     ============================ */
   .stamp{ z-index: 3; }
   .leafTL{ z-index: 5; }
   .flower{ z-index: 6; }
@@ -332,9 +305,6 @@
   .crates{ z-index: 4; }
   .cristo{ z-index: 6; }
 
-  /* ============================
-     SCALE PER IMAGE
-     ============================ */
   .leafTL  .floaty{ transform: scale(var(--s-leaf)); }
   .stamp   .floaty{ transform: scale(var(--s-stamp)); }
   .orange  .floaty{ transform: scale(var(--s-orange)); }
@@ -345,7 +315,6 @@
   .cristo  .floaty{ transform: scale(var(--s-cristo)); }
   .crates  .floaty{ transform-origin: bottom right; transform: scale(var(--s-crates)); }
 
-  /* Loop animations */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
   @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
   @keyframes breathe{ 0%,100%{transform:scale(1) rotate(-1deg)} 50%{transform:scale(1.03) rotate(1deg)} }
@@ -362,7 +331,6 @@
   .stamp   .wiggle{ animation: wobbleIn 1s ease-out both; }
   .cristo  .wiggle{ animation: riseIn 1.2s ease-out both; }
 
-  /* HERO TEXT + GLOW PULSE */
   .heroText{
     position:absolute;
     left:0; right:0;
@@ -405,11 +373,7 @@
     justify-content:center;
     gap: 14px;
   }
-  .heroText .age{
-    font-size: 0.55em;
-    color: #ff3d3d;
-    line-height: 1;
-  }
+  .heroText .age{ font-size: 0.55em; color: #ff3d3d; line-height: 1; }
   .heroText h2{
     font-family:'Bangers',cursive;
     font-size: clamp(90px, 10vw, 180px);
@@ -433,9 +397,7 @@
     50%{ transform: translateY(-8px); }
   }
 
-  /* ========================== */
-  /* NIGHTCLUB FLYER: DETALLES  */
-  /* ========================== */
+  /* Flyer */
   .flyer{
     position: relative;
     width: min(920px, 95vw);
@@ -505,7 +467,6 @@
     justify-content:space-between;
     flex-wrap:wrap;
   }
-
   .flyerTitle{
     margin:0;
     font-family:'Bangers',cursive;
@@ -514,12 +475,7 @@
     text-shadow: 6px 6px 0 #000;
   }
 
-  .tagRow{
-    margin-top: 8px;
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-  }
+  .tagRow{ margin-top: 8px; display:flex; gap:10px; flex-wrap:wrap; }
   .tag{
     font-weight: 900;
     border-radius: 999px;
@@ -535,13 +491,7 @@
   .tag.neon{ background: rgba(0,176,255,.16); border-color: rgba(0,176,255,.34); }
   .tag.vip{ background: rgba(255,208,0,.16); border-color: rgba(255,208,0,.34); }
 
-  .flyerBlurb{
-    margin: 14px 0 0 0;
-    opacity:.95;
-    font-weight:700;
-    line-height:1.45;
-    max-width: 640px;
-  }
+  .flyerBlurb{ margin: 14px 0 0 0; opacity:.95; font-weight:700; line-height:1.45; max-width: 640px; }
 
   .flyerDivider{
     height: 2px;
@@ -562,15 +512,8 @@
     filter: blur(6px);
   }
 
-  .infoGrid{
-    display:grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-    margin-top: 6px;
-  }
-  @media (min-width: 780px){
-    .infoGrid{ grid-template-columns: 1fr 1fr; }
-  }
+  .infoGrid{ display:grid; grid-template-columns: 1fr; gap: 14px; margin-top: 6px; }
+  @media (min-width: 780px){ .infoGrid{ grid-template-columns: 1fr 1fr; } }
 
   .flyCard{
     background: rgba(0,0,0,.22);
@@ -592,31 +535,11 @@
     filter: blur(14px);
   }
 
-  .flyLabel{
-    font-size:.86rem;
-    letter-spacing:.9px;
-    text-transform:uppercase;
-    opacity:.9;
-    font-weight:900;
-  }
-  .flyValue{
-    margin-top:6px;
-    font-size: 1.15rem;
-    font-weight: 900;
-    line-height:1.25;
-  }
-  .flyValue small{
-    display:block;
-    margin-top: 6px;
-    font-weight:700;
-    opacity:.9;
-  }
+  .flyLabel{ font-size:.86rem; letter-spacing:.9px; text-transform:uppercase; opacity:.9; font-weight:900; }
+  .flyValue{ margin-top:6px; font-size: 1.15rem; font-weight: 900; line-height:1.25; }
+  .flyValue small{ display:block; margin-top: 6px; font-weight:700; opacity:.9; }
 
-  .flyCTA{
-    display:flex;
-    justify-content:center;
-    margin-top: 18px;
-  }
+  .flyCTA{ display:flex; justify-content:center; margin-top: 18px; }
   .flyBtn{
     display:inline-block;
     border:none;
@@ -631,7 +554,6 @@
   }
   .flyBtn:hover{ transform: scale(1.05); }
 
-  /* RSVP panel */
   .panel{
     width: min(880px, 95vw);
     margin: 0 auto;
@@ -670,10 +592,8 @@
   }
   button:hover{ transform: scale(1.05); }
 
-  /* WhatsApp fallback link */
   #waLinkWrap a{ color:#ffd700; text-decoration:underline; }
 
-  /* Confetti */
   .confetti{
     position:fixed;
     top:-10px;
@@ -690,30 +610,37 @@
 </style>
 </head>
 
-<body>
+<body class="bg-static">
   <div class="topBar">
-    <!-- NEW: Countdown to March 21 -->
+    <!-- Countdown stays OUTSIDE controls tab -->
     <div class="countdown" id="countdown">
       <div class="label">Cuenta regresiva</div>
       <div class="time" id="countdownTime"><strong>—</strong></div>
       <div class="sub" id="countdownSub">hasta 21 de marzo</div>
     </div>
-    
-    <button class="pill" id="toggleTheme" aria-label="Cambiar tema">
-      Modo: <small id="themeLabel">Noche Neón</small>
+
+    <!-- Controls tab button -->
+    <button class="pill" id="toggleControls" aria-label="Controles">
+      Controles: <small id="controlsLabel">Abrir</small>
     </button>
 
-    <button class="pill" id="toggleBg" aria-label="Cambiar fondo">
-      Fondo: <small id="bgLabel">Vivo</small>
-    </button>
+    <!-- Controls panel (contains Modo/Fondo/Música) -->
+    <div class="controlsPanel" id="controlsPanel" aria-hidden="true">
+      <button class="pill" id="toggleTheme" aria-label="Cambiar tema">
+        Modo: <small id="themeLabel">Noche Neón</small>
+      </button>
 
-    <button class="pill" id="toggleMusic" aria-label="Música">
-      Música: <small id="musicLabel">On</small>
-    </button>
-    
+      <button class="pill" id="toggleBg" aria-label="Cambiar fondo">
+        Fondo: <small id="bgLabel">Estático</small>
+      </button>
+
+      <button class="pill" id="toggleMusic" aria-label="Música">
+        Música: <small id="musicLabel">On</small>
+      </button>
+    </div>
   </div>
 
-  <!-- AUDIO (put your mp3 filename here) -->
+  <!-- AUDIO -->
   <audio id="bgMusic" src="music.mp3" preload="auto" playsinline></audio>
 
   <!-- HERO -->
@@ -744,10 +671,7 @@
       </div>
 
       <div class="heroText" id="heroText">
-        <h1>
-          Camila
-          <span class="age">#22</span>
-        </h1>
+        <h1>Camila <span class="age">#22</span></h1>
         <h2>CARNAVAL</h2>
       </div>
 
@@ -840,10 +764,41 @@
 
 <script>
   /* ============================
+     CONTROLS TAB (open/close)
+     ============================ */
+  const toggleControlsBtn = document.getElementById("toggleControls");
+  const controlsLabel = document.getElementById("controlsLabel");
+  const controlsPanel = document.getElementById("controlsPanel");
+
+  function setControlsOpen(open){
+    controlsPanel.classList.toggle("open", open);
+    controlsPanel.setAttribute("aria-hidden", String(!open));
+    controlsLabel.textContent = open ? "Cerrar" : "Abrir";
+  }
+
+  let controlsOpen = false;
+  toggleControlsBtn.addEventListener("click", ()=>{
+    controlsOpen = !controlsOpen;
+    setControlsOpen(controlsOpen);
+  });
+
+  // Close controls if you tap outside
+  document.addEventListener("pointerdown", (e)=>{
+    const inPanel = controlsPanel.contains(e.target);
+    const inBtn = toggleControlsBtn.contains(e.target);
+    if(!inPanel && !inBtn && controlsOpen){
+      controlsOpen = false;
+      setControlsOpen(false);
+    }
+  });
+
+  // Default: closed
+  setControlsOpen(false);
+
+  /* ============================
      MUSIC SETTINGS
      ============================ */
-  const MUSIC_START_AT = 7; // seconds (starts at 7s)
-
+  const MUSIC_START_AT = 7; // seconds
   const bgMusic = document.getElementById("bgMusic");
   const toggleMusicBtn = document.getElementById("toggleMusic");
   const musicLabel = document.getElementById("musicLabel");
@@ -865,24 +820,19 @@
     function step(t){
       const p = clamp((t - start) / dur, 0, 1);
       bgMusic.volume = startVol + (targetVol - startVol) * p;
-      if(p < 1){
-        requestAnimationFrame(step);
-      }else{
-        fading = false;
-      }
+      if(p < 1) requestAnimationFrame(step);
+      else fading = false;
     }
     requestAnimationFrame(step);
   }
 
   async function startMusicWithFade(){
     if(!bgMusic) return;
-
     try{
       bgMusic.currentTime = MUSIC_START_AT;
       bgMusic.loop = true;
       bgMusic.volume = 0;
       await bgMusic.play();
-
       fadeVolumeTo(1.0, 1400);
       musicEnabled = true;
       musicLabel.textContent = "On";
@@ -895,31 +845,23 @@
   function stopMusicWithFade(){
     if(!bgMusic) return;
     fadeVolumeTo(0.0, 700);
-    setTimeout(()=>{
-      try{ bgMusic.pause(); }catch(e){}
-    }, 750);
+    setTimeout(()=>{ try{ bgMusic.pause(); }catch(e){} }, 750);
     musicEnabled = false;
     musicLabel.textContent = "Off";
   }
 
   toggleMusicBtn.addEventListener("click", async ()=>{
     if(!bgMusic) return;
-
-    if(!bgMusic.paused && musicEnabled){
-      stopMusicWithFade();
-      return;
-    }
+    if(!bgMusic.paused && musicEnabled){ stopMusicWithFade(); return; }
     await startMusicWithFade();
   });
 
-  // Try to autoplay on load (may be blocked)
+  // Try autoplay (may be blocked)
   startMusicWithFade();
 
-  // If autoplay blocked, start when user interacts (first gesture)
+  // If autoplay blocked, start on first gesture
   function oneGestureStart(){
-    if(bgMusic && (bgMusic.paused || !musicEnabled)){
-      startMusicWithFade();
-    }
+    if(bgMusic && (bgMusic.paused || !musicEnabled)) startMusicWithFade();
     window.removeEventListener("pointerdown", oneGestureStart);
     window.removeEventListener("touchstart", oneGestureStart);
     window.removeEventListener("keydown", oneGestureStart);
@@ -936,29 +878,24 @@
   const countdownTimeEl = document.getElementById("countdownTime");
   const countdownSubEl  = document.getElementById("countdownSub");
 
-  // Uses viewer's local time zone; March 21 at 00:00:00
   function getNextMarch21(){
     const now = new Date();
     const year = now.getFullYear();
-
-    let target = new Date(year, 2, 21, 0, 0, 0); // month=2 => March
-    if(now > target){
-      target = new Date(year + 1, 2, 21, 0, 0, 0);
-    }
+    let target = new Date(year, 2, 21, 0, 0, 0); // March 21
+    if(now > target) target = new Date(year + 1, 2, 21, 0, 0, 0);
     return target;
   }
-
   const targetDate = getNextMarch21();
 
   function pad2(n){ return String(n).padStart(2, "0"); }
 
   function updateCountdown(){
     const now = new Date();
-    let diff = targetDate - now;
+    const diff = targetDate - now;
 
     if(diff <= 0){
-      countdownTimeEl.innerHTML = `<strong>¡HOY!</strong>`;
-      countdownSubEl.textContent = "🎉 Es 21 de marzo";
+      if(countdownTimeEl) countdownTimeEl.innerHTML = `<strong>¡HOY!</strong>`;
+      if(countdownSubEl) countdownSubEl.textContent = "🎉 Es 21 de marzo";
       return;
     }
 
@@ -968,10 +905,10 @@
     const mins = Math.floor((totalSeconds % 3600) / 60);
     const secs = totalSeconds % 60;
 
-    countdownTimeEl.innerHTML =
-      `<strong>${days}d</strong> ${pad2(hours)}h ${pad2(mins)}m ${pad2(secs)}s`;
-
-    countdownSubEl.textContent = "hasta 21 de marzo";
+    if(countdownTimeEl){
+      countdownTimeEl.innerHTML = `<strong>${days}d</strong> ${pad2(hours)}h ${pad2(mins)}m ${pad2(secs)}s`;
+    }
+    if(countdownSubEl) countdownSubEl.textContent = "hasta 21 de marzo";
   }
 
   updateCountdown();
@@ -993,9 +930,7 @@
      ============================ */
   const detallesSection = document.querySelector("#detalles");
   const detallesObserver = new IntersectionObserver(
-    ([entry]) => {
-      document.body.classList.toggle("dim-ornaments", entry.isIntersecting);
-    },
+    ([entry]) => { document.body.classList.toggle("dim-ornaments", entry.isIntersecting); },
     { threshold: 0.15 }
   );
   if (detallesSection) detallesObserver.observe(detallesSection);
@@ -1007,7 +942,6 @@
     const count = parseInt(document.getElementById("plusOnes").value, 10);
     const container = document.getElementById("plusOneFields");
     container.innerHTML = "";
-
     for(let i = 1; i <= count; i++){
       const input = document.createElement("input");
       input.placeholder = "Nombre del invitado " + i;
@@ -1024,28 +958,19 @@
   function confirmar(){
     const nombre = document.getElementById("nombre").value.trim();
     const plusCount = parseInt(document.getElementById("plusOnes").value, 10);
-    const guestInputs = document.querySelectorAll(".plusGuest");
-    const invitados = Array.from(guestInputs).map(i => i.value.trim()).filter(Boolean);
+    const invitados = Array.from(document.querySelectorAll(".plusGuest")).map(i => i.value.trim()).filter(Boolean);
 
     const msg = document.getElementById("mensaje");
     const waWrap = document.getElementById("waLinkWrap");
     waWrap.style.display = "none";
     waWrap.innerHTML = "";
 
-    if(!nombre){
-      msg.textContent = "Escribe tu nombre 👀";
-      return;
-    }
-    if(invitados.length !== plusCount){
-      msg.textContent = "Escribe los nombres de tus invitados 👀";
-      return;
-    }
+    if(!nombre){ msg.textContent = "Escribe tu nombre 👀"; return; }
+    if(invitados.length !== plusCount){ msg.textContent = "Escribe los nombres de tus invitados 👀"; return; }
 
     msg.textContent = "🔥 " + nombre + " oficialmente está en el CARNAVAL 🔥";
 
-    const invitadosTxt = plusCount === 0
-      ? "0 acompañantes"
-      : `Acompañantes (${plusCount}): ${invitados.join(", ")}`;
+    const invitadosTxt = plusCount === 0 ? "0 acompañantes" : `Acompañantes (${plusCount}): ${invitados.join(", ")}`;
 
     const detalles = [
       "🎭 *RSVP CARNAVAL — CAMILA #22*",
@@ -1056,18 +981,12 @@
     ].join("\n");
 
     const encoded = encodeURIComponent(detalles);
-
     const host = getCssVar("--wa-host").replace(/[^0-9]/g, "");
-    let waUrl = "";
-
-    if(host && host.length >= 8){
-      waUrl = `https://wa.me/${host}?text=${encoded}`;
-    } else {
-      waUrl = `https://api.whatsapp.com/send?text=${encoded}`;
-    }
+    const waUrl = (host && host.length >= 8)
+      ? `https://wa.me/${host}?text=${encoded}`
+      : `https://api.whatsapp.com/send?text=${encoded}`;
 
     const opened = window.open(waUrl, "_blank");
-
     if(!opened){
       waWrap.style.display = "block";
       waWrap.innerHTML = `No se abrió WhatsApp automáticamente. Toca aquí: <a href="${waUrl}" target="_blank">Enviar RSVP por WhatsApp</a>`;
@@ -1086,21 +1005,24 @@
   }
 
   /* ============================
-     Theme toggle
+     Theme toggle (Modo)
      ============================ */
-  const toggleBtn = document.getElementById("toggleTheme");
+  const toggleThemeBtn = document.getElementById("toggleTheme");
   const themeLabel = document.getElementById("themeLabel");
-  toggleBtn.addEventListener("click", ()=>{
+  toggleThemeBtn.addEventListener("click", ()=>{
     document.body.classList.toggle("theme-parade");
     const isParade = document.body.classList.contains("theme-parade");
     themeLabel.textContent = isParade ? "Parade" : "Noche Neón";
   });
 
   /* ============================
-     Background performance toggle
+     Background toggle (Fondo)
      ============================ */
   const toggleBgBtn = document.getElementById("toggleBg");
   const bgLabel = document.getElementById("bgLabel");
+
+  // Default already static via body class
+  bgLabel.textContent = document.body.classList.contains("bg-static") ? "Estático" : "Vivo";
 
   toggleBgBtn.addEventListener("click", ()=>{
     document.body.classList.toggle("bg-static");
@@ -1132,7 +1054,7 @@
     });
 
     const fade = Math.max(0, 1 - (y / 520));
-    heroText.style.opacity = (fade).toFixed(3);
+    if(heroText) heroText.style.opacity = (fade).toFixed(3);
 
     ticking = false;
   }
