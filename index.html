@@ -66,7 +66,7 @@
     100%{background-position:0% 50%}
   }
 
-  /* Continuous-flow sections (no “slides”) */
+  /* Continuous-flow sections */
   section{
     padding: 120px 20px 80px 20px;
     position: relative;
@@ -110,11 +110,6 @@
     height: min(82vh, 780px);
   }
 
-  /* Each layer gets:
-     - OUTER .parallax  => scroll transform applied by JS
-     - INNER .floaty    => looping animation (transform) applied by CSS
-     This prevents transform conflicts.
-  */
   .parallax{
     position:absolute;
     pointer-events:none;
@@ -163,7 +158,6 @@
     pointer-events:none;
   }
 
-  /* Glow “blob” behind title */
   .heroText::before{
     content:"";
     position:absolute;
@@ -218,7 +212,225 @@
     50%{ transform: translateY(-8px); }
   }
 
-  /* PANELS (glass, no harsh breaks) */
+  /* ========================== */
+  /* NIGHTCLUB FLYER: DETALLES  */
+  /* ========================== */
+
+  .flyer{
+    position: relative;
+    width: min(920px, 95vw);
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 34px;
+
+    /* layered neon glass */
+    background:
+      radial-gradient(900px 420px at 20% 10%, rgba(255,0,127,.35), transparent 60%),
+      radial-gradient(900px 420px at 85% 20%, rgba(0,176,255,.28), transparent 60%),
+      radial-gradient(900px 420px at 50% 90%, rgba(0,200,83,.22), transparent 65%),
+      rgba(0,0,0,.30);
+
+    border: 1px solid rgba(255,255,255,.16);
+    box-shadow: 0 35px 90px rgba(0,0,0,.55);
+    backdrop-filter: blur(18px);
+    transform: translateY(30px);
+    opacity: 0;
+    transition: transform .6s ease, opacity .6s ease;
+    overflow:hidden;
+  }
+  .flyer.reveal{
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Animated neon border */
+  .flyer::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius: 36px;
+    padding:2px;
+    background: linear-gradient(90deg, rgba(255,0,127,.9), rgba(0,176,255,.9), rgba(0,200,83,.85), rgba(255,106,0,.9));
+    background-size: 300% 300%;
+    animation: borderMove 4.5s linear infinite;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity:.9;
+    pointer-events:none;
+  }
+  @keyframes borderMove{
+    0%{background-position:0% 50%}
+    100%{background-position:100% 50%}
+  }
+
+  /* Sparkle particles (pure CSS) */
+  .sparkle{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.55;
+    background:
+      radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,.9), transparent 60%),
+      radial-gradient(1px 1px at 25% 70%, rgba(255,255,255,.7), transparent 60%),
+      radial-gradient(2px 2px at 60% 30%, rgba(255,255,255,.8), transparent 60%),
+      radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,.7), transparent 60%),
+      radial-gradient(2px 2px at 90% 15%, rgba(255,255,255,.8), transparent 60%),
+      radial-gradient(1px 1px at 45% 90%, rgba(255,255,255,.7), transparent 60%);
+    animation: sparkleDrift 6s ease-in-out infinite;
+  }
+  @keyframes sparkleDrift{
+    0%,100%{ transform: translateY(0); opacity:.45; }
+    50%{ transform: translateY(-10px); opacity:.7; }
+  }
+
+  .flyerTop{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+
+  .flyerTitle{
+    margin:0;
+    font-family:'Bangers',cursive;
+    font-size: clamp(40px, 4.8vw, 64px);
+    letter-spacing: 2px;
+    text-shadow: 6px 6px 0 #000;
+  }
+
+  .tagRow{
+    margin-top: 8px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .tag{
+    font-weight: 900;
+    border-radius: 999px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.14);
+    box-shadow: 0 10px 26px rgba(0,0,0,.25);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    font-size: .82rem;
+  }
+  .tag.hot{
+    background: rgba(255,0,127,.18);
+    border-color: rgba(255,0,127,.35);
+  }
+  .tag.neon{
+    background: rgba(0,176,255,.16);
+    border-color: rgba(0,176,255,.34);
+  }
+  .tag.vip{
+    background: rgba(255,208,0,.16);
+    border-color: rgba(255,208,0,.34);
+  }
+
+  .flyerBlurb{
+    margin: 14px 0 0 0;
+    opacity:.95;
+    font-weight:700;
+    line-height:1.45;
+    max-width: 640px;
+  }
+
+  /* Divider like a club flyer */
+  .flyerDivider{
+    height: 2px;
+    margin: 18px 0 16px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+    position: relative;
+  }
+  .flyerDivider::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width: 120px;
+    height: 10px;
+    transform: translate(-50%,-50%);
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(255,0,127,.55), transparent 65%);
+    filter: blur(6px);
+  }
+
+  .infoGrid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 6px;
+  }
+  @media (min-width: 780px){
+    .infoGrid{ grid-template-columns: 1fr 1fr; }
+  }
+
+  .flyCard{
+    background: rgba(0,0,0,.22);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 22px;
+    padding: 16px 16px 14px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.28);
+    position: relative;
+    overflow:hidden;
+  }
+  .flyCard::before{
+    content:"";
+    position:absolute;
+    inset:-60px -40px auto auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,176,255,.22), transparent 60%);
+    filter: blur(14px);
+  }
+
+  .flyLabel{
+    font-size:.86rem;
+    letter-spacing:.9px;
+    text-transform:uppercase;
+    opacity:.9;
+    font-weight:900;
+  }
+  .flyValue{
+    margin-top:6px;
+    font-size: 1.15rem;
+    font-weight: 900;
+    line-height:1.25;
+  }
+
+  .flyValue small{
+    display:block;
+    margin-top: 6px;
+    font-weight:700;
+    opacity:.9;
+  }
+
+  .flyCTA{
+    display:flex;
+    justify-content:center;
+    margin-top: 18px;
+  }
+  .flyBtn{
+    display:inline-block;
+    border:none;
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-weight: 900;
+    color: #111;
+    background: var(--gold);
+    cursor:pointer;
+    text-decoration:none;
+    transition: transform .18s ease;
+  }
+  .flyBtn:hover{ transform: scale(1.05); }
+
+  /* RSVP panel (keep) */
   .panel{
     width: min(880px, 95vw);
     margin: 0 auto;
@@ -242,26 +454,6 @@
     font-size: 2rem;
   }
 
-  .grid{
-    display:grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-    margin-top: 10px;
-  }
-  @media(min-width: 760px){
-    .grid{ grid-template-columns: 1fr 1fr; }
-  }
-
-  .card{
-    background: rgba(255,255,255,.10);
-    border: 1px solid rgba(255,255,255,.10);
-    border-radius: 22px;
-    padding: 16px;
-  }
-  .card h3{ margin:0 0 6px 0; font-size: 1rem; }
-  .card p{ margin:0; font-size: 1.05rem; }
-
-  /* RSVP */
   input{
     width: 100%;
     padding: 14px 14px;
@@ -301,7 +493,7 @@
 </style>
 </head>
 
-<body class="theme-neon">
+<body>
   <div class="topBar">
     <button class="pill" id="toggleTheme" aria-label="Cambiar tema">
       Modo: <small id="themeLabel">Noche Neón</small>
@@ -311,7 +503,6 @@
   <!-- HERO -->
   <section class="hero" id="inicio">
     <div class="scene" id="scene">
-      <!-- Each object: outer .parallax + inner .floaty -->
       <div class="parallax leafTL" data-speed="0.55" data-x="0.30" data-r="0.10">
         <div class="floaty"><img src="leaf-top-left.png" alt=""></div>
       </div>
@@ -357,15 +548,51 @@
     </div>
   </section>
 
-  <!-- DETAILS -->
+  <!-- DETALLES (Nightclub flyer) -->
   <section id="detalles">
-    <div class="panel">
-      <h2>📍 Detalles del Carnaval</h2>
-      <div class="grid">
-        <div class="card"><h3>🗓 Fecha</h3><p>REEMPLAZA</p></div>
-        <div class="card"><h3>⏰ Hora</h3><p>REEMPLAZA</p></div>
-        <div class="card"><h3>📌 Lugar</h3><p>REEMPLAZA</p></div>
-        <div class="card"><h3>👗 Dress Code</h3><p>Brillo, colores, plumas, glitter 🔥</p></div>
+    <div class="flyer" id="flyerDetalles">
+      <div class="sparkle"></div>
+
+      <div class="flyerTop">
+        <div>
+          <h2 class="flyerTitle">DETALLES DEL CARNAVAL</h2>
+          <div class="tagRow">
+            <span class="tag hot">RIO NIGHT</span>
+            <span class="tag neon">NEÓN</span>
+            <span class="tag vip">BRILLO O NADA</span>
+          </div>
+          <p class="flyerBlurb">
+            Esta noche no se camina… <strong>se desfila</strong>. Trae tu energía, tu glitter y tu mejor vibe. 💃🔥
+          </p>
+        </div>
+      </div>
+
+      <div class="flyerDivider"></div>
+
+      <div class="infoGrid">
+        <div class="flyCard">
+          <div class="flyLabel">🗓 Fecha</div>
+          <div class="flyValue">REEMPLAZA <small>(ej: Sábado, 20 de julio)</small></div>
+        </div>
+
+        <div class="flyCard">
+          <div class="flyLabel">⏰ Hora</div>
+          <div class="flyValue">REEMPLAZA <small>(ej: 9:00 PM)</small></div>
+        </div>
+
+        <div class="flyCard">
+          <div class="flyLabel">📍 Lugar</div>
+          <div class="flyValue">REEMPLAZA <small>(ej: Dirección / “Te la mando al confirmar”)</small></div>
+        </div>
+
+        <div class="flyCard">
+          <div class="flyLabel">👗 Dress Code</div>
+          <div class="flyValue">CARNAVAL GLAM <small>Plumas • brillo • colores • glitter (FULL RÍO)</small></div>
+        </div>
+      </div>
+
+      <div class="flyCTA">
+        <a class="flyBtn" href="#rsvp">🎟️ CONFIRMAR RSVP</a>
       </div>
     </div>
   </section>
@@ -381,16 +608,16 @@
   </section>
 
 <script>
-  // Reveal panels smoothly
-  const panels = document.querySelectorAll(".panel");
-  const observer = new IntersectionObserver(entries=>{
+  // Reveal panels/flyer smoothly
+  const revealTargets = [ ...document.querySelectorAll(".panel"), document.getElementById("flyerDetalles") ].filter(Boolean);
+  const obs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{
       if(e.isIntersecting) e.target.classList.add("reveal");
     });
   }, {threshold: .2});
-  panels.forEach(p => observer.observe(p));
+  revealTargets.forEach(el => obs.observe(el));
 
-  // RSVP confetti (visual only)
+  // RSVP confetti
   function confirmar(){
     const nombre = document.getElementById("nombre").value.trim();
     const msg = document.getElementById("mensaje");
@@ -418,11 +645,9 @@
     themeLabel.textContent = isParade ? "Parade" : "Noche Neón";
   });
 
-  // PARTY-ENERGY scroll parallax:
-  // Each element drifts with scroll at its own speed + slight x + slight rotation.
+  // PARTY-ENERGY scroll parallax
   const layers = Array.from(document.querySelectorAll(".parallax"));
   const heroText = document.getElementById("heroText");
-
   let latestY = 0;
   let ticking = false;
 
@@ -434,15 +659,13 @@
       const xAmt  = parseFloat(el.dataset.x || "0.2");
       const rAmt  = parseFloat(el.dataset.r || "0.1");
 
-      // Party energy = more noticeable multipliers (but still safe on mobile)
-      const ty = (y * speed) * 0.10;          // vertical drift
-      const tx = Math.sin(y * 0.004) * 18 * xAmt; // side-to-side groove
-      const rot = Math.sin(y * 0.003) * 6 * rAmt; // tiny rotation
+      const ty = (y * speed) * 0.10;
+      const tx = Math.sin(y * 0.004) * 18 * xAmt;
+      const rot = Math.sin(y * 0.003) * 6 * rAmt;
 
       el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg)`;
     });
 
-    // Title gently fades as you scroll down from hero
     const fade = Math.max(0, 1 - (y / 520));
     heroText.style.opacity = (fade).toFixed(3);
 
@@ -457,7 +680,6 @@
     }
   }, {passive:true});
 
-  // Initial run
   applyParallax();
 </script>
 </body>
