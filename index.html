@@ -37,6 +37,15 @@
     --s-toucan: 1.75;
     --s-cristo: 1.25;
     --s-crates: 0.75;
+
+    /* ============================
+       WhatsApp RSVP (HOST)
+       Put your number here in international format (NO +, NO spaces)
+       Examples:
+       US: 13475551234
+       Peru: 51987654321
+       ============================ */
+    --wa-host: 17183507066;
   }
 
   /* Optional: Parade (brighter) theme */
@@ -71,7 +80,7 @@
       var(--bg6)
     );
     background-size: 420% 420%;
-    animation: gradientMove 12s ease-in-out infinite;
+    animation: gradientMove 10s ease-in-out infinite; /* faster */
   }
 
   /* Organic gradient motion */
@@ -106,7 +115,7 @@
     mix-blend-mode: screen;
     opacity: .95;
 
-    animation: lightDrift 18s ease-in-out infinite alternate;
+    animation: lightDrift 16s ease-in-out infinite alternate; /* slightly faster */
   }
 
   @keyframes lightDrift{
@@ -140,7 +149,7 @@
         rgba(0,0,0,0) 7px
       );
 
-    animation: grainMove 8s steps(10) infinite;
+    animation: grainMove 7s steps(10) infinite; /* slightly faster */
   }
 
   @keyframes grainMove{
@@ -150,7 +159,7 @@
 
   /* C) OPTIONAL: hue shift ONLY on background layers */
   body.hue-bg::after{
-    animation: lightDrift 18s ease-in-out infinite alternate, hueShift 30s linear infinite;
+    animation: lightDrift 16s ease-in-out infinite alternate, hueShift 26s linear infinite; /* faster */
   }
   @keyframes hueShift{
     0%{ filter: hue-rotate(0deg) blur(2px); }
@@ -319,7 +328,7 @@
   .toucan{ z-index: 6; }
   .crates{ z-index: 4; }
 
-  /* Cristo in FRONT of crates (you asked) */
+  /* Cristo in FRONT of crates */
   .cristo{ z-index: 6; }
 
   /* ============================
@@ -406,7 +415,7 @@
   .heroText .age{
     font-size: 0.55em;
     color: #ff3d3d;
-    line-height: 1; /* helps vertical centering */
+    line-height: 1;
   }
 
   .heroText h2{
@@ -658,17 +667,7 @@
 
   .panel h2{ margin: 0 0 14px 0; font-size: 2rem; }
 
-  input{
-    width: 100%;
-    padding: 14px 14px;
-    border-radius: 999px;
-    border: none;
-    outline: none;
-    font-size: 1rem;
-    margin-top: 10px;
-  }
-
-  select{
+  input, select{
     width: 100%;
     padding: 14px 14px;
     border-radius: 999px;
@@ -689,6 +688,9 @@
     transition: transform .18s ease;
   }
   button:hover{ transform: scale(1.05); }
+
+  /* WhatsApp fallback link */
+  #waLinkWrap a{ color:#ffd700; text-decoration:underline; }
 
   /* Confetti */
   .confetti{
@@ -819,20 +821,21 @@
   <section id="rsvp">
     <div class="panel">
       <h2>🎟️ RSVP</h2>
-  
+
       <input id="nombre" placeholder="Tu nombre">
-  
+
       <select id="plusOnes" onchange="updatePlusOnes()">
         <option value="0">No traigo invitados</option>
         <option value="1">+1 invitado</option>
         <option value="2">+2 invitados</option>
       </select>
-  
+
       <div id="plusOneFields"></div>
-  
-      <button onclick="confirmar()">🔥 YO VOY A SAMBAREAR</button>
-  
+
+      <button onclick="confirmar()">📲 ENVIAR POR WHATSAPP</button>
+
       <div id="mensaje" style="margin-top:10px;font-weight:900"></div>
+      <div id="waLinkWrap" style="margin-top:10px; display:none; font-weight:900;"></div>
     </div>
   </section>
 
@@ -856,41 +859,86 @@
   );
   if (detallesSection) detallesObserver.observe(detallesSection);
 
-  // RSVP confetti
+  // RSVP plus-one fields
   function updatePlusOnes(){
-    const count = parseInt(document.getElementById("plusOnes").value);
+    const count = parseInt(document.getElementById("plusOnes").value, 10);
     const container = document.getElementById("plusOneFields");
     container.innerHTML = "";
-  
+
     for(let i = 1; i <= count; i++){
       const input = document.createElement("input");
       input.placeholder = "Nombre del invitado " + i;
       input.className = "plusGuest";
-      input.style.marginTop = "10px";
       container.appendChild(input);
     }
   }
-  
+  updatePlusOnes();
+
+  // Read CSS var from :root
+  function getCssVar(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  // RSVP -> WhatsApp message
   function confirmar(){
     const nombre = document.getElementById("nombre").value.trim();
-    const plusCount = parseInt(document.getElementById("plusOnes").value);
+    const plusCount = parseInt(document.getElementById("plusOnes").value, 10);
     const guestInputs = document.querySelectorAll(".plusGuest");
+    const invitados = Array.from(guestInputs).map(i => i.value.trim()).filter(Boolean);
+
     const msg = document.getElementById("mensaje");
-  
+    const waWrap = document.getElementById("waLinkWrap");
+    waWrap.style.display = "none";
+    waWrap.innerHTML = "";
+
     if(!nombre){
       msg.textContent = "Escribe tu nombre 👀";
       return;
     }
-  
-    for(let input of guestInputs){
-      if(!input.value.trim()){
-        msg.textContent = "Escribe los nombres de tus invitados 👀";
-        return;
-      }
+
+    if(invitados.length !== plusCount){
+      msg.textContent = "Escribe los nombres de tus invitados 👀";
+      return;
     }
-  
+
     msg.textContent = "🔥 " + nombre + " oficialmente está en el CARNAVAL 🔥";
-  
+
+    // Build WhatsApp text
+    const invitadosTxt = plusCount === 0
+      ? "0 acompañantes"
+      : `Acompañantes (${plusCount}): ${invitados.join(", ")}`;
+
+    const detalles = [
+      "🎭 *RSVP CARNAVAL — CAMILA #22*",
+      `✅ Confirmo: *${nombre}*`,
+      `👥 ${invitadosTxt}`,
+      "",
+      "💃 Lista para sambarear 🔥"
+    ].join("\n");
+
+    const encoded = encodeURIComponent(detalles);
+
+    // Host number from CSS var
+    const host = getCssVar("--wa-host").replace(/[^0-9]/g, "");
+    let waUrl = "";
+
+    if(host && host.length >= 8){
+      waUrl = `https://wa.me/${host}?text=${encoded}`;
+    } else {
+      // fallback: user chooses recipient
+      waUrl = `https://api.whatsapp.com/send?text=${encoded}`;
+    }
+
+    // Try opening automatically
+    const opened = window.open(waUrl, "_blank");
+
+    // If blocked, show clickable link
+    if(!opened){
+      waWrap.style.display = "block";
+      waWrap.innerHTML = `No se abrió WhatsApp automáticamente. Toca aquí: <a href="${waUrl}" target="_blank">Enviar RSVP por WhatsApp</a>`;
+    }
+
+    // Confetti
     const colors = ["#ff007f","#ffd000","#00c853","#00b0ff","#8e24aa","#ff6a00"];
     for(let i=0;i<90;i++){
       const c=document.createElement("div");
