@@ -884,6 +884,7 @@
   const bgMusic = document.getElementById("bgMusic");
   const musicBtn = document.getElementById("toggleMusic");
   const musicLabel = document.getElementById("musicLabel");
+  const MUSIC_START_AT = 7; // seconds
 
   // Set your file from CSS var --music-file
   function getCssVar(name){
@@ -922,11 +923,21 @@
   async function startMusicWithFade(){
     try{
       bgMusic.volume = 0;
-      await bgMusic.play();                 // may be blocked unless user tapped/clicked
-      fadeTo(1, 1200);                      // fade in to full volume
+  
+      // jump to 7s once metadata is ready (more reliable on some browsers)
+      const seekToStart = () => {
+        try { bgMusic.currentTime = MUSIC_START_AT; } catch(e) {}
+      };
+      if (bgMusic.readyState >= 1) { // HAVE_METADATA
+        seekToStart();
+      } else {
+        bgMusic.addEventListener("loadedmetadata", seekToStart, { once:true });
+      }
+  
+      await bgMusic.play();          // may be blocked unless user tapped/clicked
+      fadeTo(1, 1200);               // fade in to full volume
       setMusicUI(true);
     }catch(err){
-      // If blocked, keep OFF and let user tap button again after interacting
       setMusicUI(false);
     }
   }
