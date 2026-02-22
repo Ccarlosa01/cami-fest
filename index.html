@@ -24,10 +24,11 @@
     --gold: linear-gradient(45deg,#ffd700,#ffb300);
     --shadow: 0 25px 70px rgba(0,0,0,.45);
 
-    /* ============================
-       EASY SCALE CONTROLS (NEW)
-       Adjust these anytime 🔧
-       ============================ */
+    /* ==========================================================
+       CLAMP-ONLY RESPONSIVE SIZING + EASY SCALE CONTROLS 🔧
+       You ONLY touch the --s-* numbers to scale each image.
+       Positions will NOT drift when scaling.
+       ========================================================== */
     --s-leaf: 1.00;
     --s-stamp: 1.00;
     --s-orange: 0.75;
@@ -37,6 +38,10 @@
     --s-toucan: 1.75;
     --s-cristo: 1.25;
     --s-crates: 0.75;
+
+    /* Dim/blur tuning (when Detalles shows) */
+    --dim-opacity: 0.10;  /* <-- requested 10% */
+    --dim-blur: 8px;
   }
 
   /* Optional: Parade (brighter) theme */
@@ -145,116 +150,109 @@
 
   /* When Detalles appears: dim to 10% + blur + send behind flyer + rsvp */
   body.dim-ornaments .parallax{
-    opacity: 0.30;
-    filter: blur(8px) drop-shadow(0 16px 34px rgba(0,0,0,.35));
+    opacity: var(--dim-opacity);
+    filter: blur(var(--dim-blur)) drop-shadow(0 16px 34px rgba(0,0,0,.35));
     z-index: 1 !important;
   }
 
-  /* Wrapper that holds the image */
-  .floaty{
-    width:100%;
-    height:auto;
-    transform-origin:center;
-    will-change: transform;
-  }
+  /* Wrapper / image */
+  .floaty{ width:100%; height:auto; }
   .floaty img{ width:100%; display:block; }
 
-  /* ============================
-     POSITIONING (VIEWPORT)
-     ============================ */
+  /* ==========================================================
+     CLAMP-ONLY SIZING SYSTEM ✅
+     - We set each image's width using clamp() and multiply the
+       "ideal" (vw) term by its scale variable.
+     - No transform: scale() is used for sizing anymore.
+     ========================================================== */
 
+  /* Leaf: top-left */
   .leafTL{
     left: 0;
     top: 0;
-    width: clamp(220px, 32vw, 520px);
+    width: clamp(220px, calc(32vw * var(--s-leaf)), 520px);
   }
 
   /* Stamp: behind leaf AND moved more right */
-  .stamp {
-    left: 16%;             /* was 6% -> pushed right */
+  .stamp{
+    left: 16%;
     top: 18%;
-    width: 18%;
+    width: clamp(120px, calc(14vw * var(--s-stamp)), 260px);
   }
 
-  .orange{ left:45%; top:4%; width:22%; }
+  /* Orange swoosh */
+  .orange{
+    left: 45%;
+    top: 4%;
+    width: clamp(160px, calc(22vw * var(--s-orange)), 420px);
+  }
 
   /* Hibiscus: behind glass */
   .flower{
     right: 120px;
     top: 10px;
-    width: clamp(160px, 22vw, 320px);
+    width: clamp(160px, calc(22vw * var(--s-flower)), 320px);
   }
 
   /* Glass: above hibiscus */
   .glass{
     right: 18px;
     top: 88px;
-    width: clamp(110px, 16vw, 220px);
+    width: clamp(90px, calc(16vw * var(--s-glass)), 220px);
   }
 
   /* Blue bird: in front of hibiscus + glass */
   .bird{
     right: 6%;
     top: 28%;
-    width: 20%;
+    width: clamp(140px, calc(16vw * var(--s-bird)), 300px);
   }
 
+  /* Toucan: bottom-left */
   .toucan{
     left: 0;
     bottom: 0;
-    width: clamp(160px, 22vw, 320px);
+    width: clamp(160px, calc(22vw * var(--s-toucan)), 360px);
   }
 
+  /* Cristo */
   .cristo{
-    left:35%;
-    bottom:3%;
-    width:22%;
+    left: 35%;
+    bottom: 3%;
+    width: clamp(140px, calc(20vw * var(--s-cristo)), 320px);
   }
 
+  /* Crates: bottom-right */
   .crates{
     right: 0;
     bottom: 0;
-    width: clamp(260px, 42vw, 620px);
+    width: clamp(260px, calc(42vw * var(--s-crates)), 680px);
   }
 
   /* ============================
-     LAYERING HIERARCHY (NEW)
+     LAYERING HIERARCHY
      Rules:
      - stamp behind leaf
      - hibiscus behind glass
      - blue-bird in front of hibiscus & glass
      ============================ */
-  .stamp{ z-index: 3; }   /* behind leaf */
+  .stamp{ z-index: 3; }
   .leafTL{ z-index: 5; }
 
+  .orange{ z-index: 4; }
+  .cristo{ z-index: 4; }
+  .crates{ z-index: 4; }
+
   .flower{ z-index: 6; } /* hibiscus */
+  .toucan{ z-index: 6; }
+
   .glass{  z-index: 7; } /* glass above hibiscus */
   .bird{   z-index: 8; } /* bird above both */
 
-  /* Other sensible ordering */
-  .orange{ z-index: 4; }
-  .cristo{ z-index: 4; }
-  .toucan{ z-index: 6; }
-  .crates{ z-index: 4; }
-
-  /* ============================
-     SCALE PER IMAGE (NEW)
-     Adjust via :root variables
-     ============================ */
-  .leafTL  .floaty{ transform: scale(var(--s-leaf)); }
-  .stamp   .floaty{ transform: scale(var(--s-stamp)); }
-  .orange  .floaty{ transform: scale(var(--s-orange)); }
-  .flower  .floaty{ transform: scale(var(--s-flower)); }
-  .glass   .floaty{ transform: scale(var(--s-glass)); }
-  .bird    .floaty{ transform: scale(var(--s-bird)); }
-  .toucan  .floaty{ transform: scale(var(--s-toucan)); }
-  .cristo  .floaty{ transform: scale(var(--s-cristo)); }
-  .crates .floaty{
-    transform-origin: bottom right;   /* 👈 anchor point */
-    transform: scale(var(--s-crates));
-  }
-
-  /* Loop animations (inner) */
+  /* ==========================================================
+     MOTION ANIMATIONS (unchanged)
+     These animate the inner .wiggle only (not sizing).
+     ========================================================== */
   @keyframes sway { 0%,100%{transform:rotate(-2deg) translateY(0)} 50%{transform:rotate(2deg) translateY(4px)} }
   @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
   @keyframes breathe{ 0%,100%{transform:scale(1) rotate(-1deg)} 50%{transform:scale(1.03) rotate(1deg)} }
@@ -262,7 +260,6 @@
   @keyframes wobbleIn{ 0%{transform:scale(.6) rotate(-10deg);opacity:0} 70%{transform:scale(1.1) rotate(5deg);opacity:1} 100%{transform:scale(1) rotate(0)} }
   @keyframes riseIn{ 0%{transform:translateY(40px);opacity:0} 100%{transform:translateY(0);opacity:1} }
 
-  /* NOTE: these animate the wrapper INSIDE .floaty via an extra inner div */
   .leafTL  .wiggle{ animation: sway 6s ease-in-out infinite; }
   .orange  .wiggle{ animation: float 5s ease-in-out infinite; }
   .flower  .wiggle{ animation: breathe 7s ease-in-out infinite; }
@@ -271,6 +268,7 @@
   .toucan  .wiggle{ animation: bob 5s ease-in-out infinite; }
   .stamp   .wiggle{ animation: wobbleIn 1s ease-out both; }
   .cristo  .wiggle{ animation: riseIn 1.2s ease-out both; }
+  .crates  .wiggle{ animation: bob 6s ease-in-out infinite; } /* subtle life */
 
   /* HERO TEXT + GLOW PULSE */
   .heroText{
@@ -313,18 +311,18 @@
     margin: 0;
     letter-spacing: 2px;
     text-shadow: 6px 6px 0 #000;
-  
-    display: flex;          /* 👈 NEW */
-    align-items: center;    /* 👈 centers #22 vertically */
+
+    display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 14px;              /* spacing between Camila and #22 */
+    gap: 14px;
   }
-  
-  /* Make #22 smaller */
+
   .heroText .age{
-    font-size: 0.55em;   /* 👈 relative to Camila size */
+    font-size: 0.55em;
     color: #ff3d3d;
   }
+
   .heroText h2{
     font-family:'Bangers',cursive;
     font-size: clamp(90px, 10vw, 180px);
